@@ -28,9 +28,9 @@ class AppServiceProvider extends ServiceProvider
         $this->configureDates();
     }
 
-    protected function configureModels(): void
+    private function configureModels(): void
     {
-        Model::shouldBeStrict(); //prevents accessing missing attributes n Prevent lazy loading
+        Model::shouldBeStrict(); // prevents accessing missing attributes n Prevent lazy loading
 
         Model::unguard();
     }
@@ -44,6 +44,6 @@ class AppServiceProvider extends ServiceProvider
 
     private function configureDates(): void
     {
-        Date::use(CarbonImmutable::class);   
+        Date::use(CarbonImmutable::class);
     }
 }
