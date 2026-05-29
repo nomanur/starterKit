@@ -25,3 +25,13 @@ _ide_helper.php
 Homestead.json
 Homestead.yaml
 Thumbs.db
+
+# Laravel specific exclusions
+/storage/logs/*
+/storage/framework/cache/data/*
+/storage/framework/sessions/*
+/storage/framework/views/*
+/storage/framework/testing/*
+*.sqlite
+/database/database.sqlite
+
