@@ -5,6 +5,7 @@ namespace Database\Seeders;
 use App\Models\User;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\Artisan;
 
 class DatabaseSeeder extends Seeder
 {
@@ -15,11 +16,30 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        // User::factory(10)->create();
-
-        User::factory()->create([
-            'name' => 'Test User',
-            'email' => 'test@example.com',
+        // 1. Generate/Install Filament Shield setup and permissions
+        Artisan::call('shield:generate', [
+            '--all' => true,
+            '--option' => 'policies_and_permissions',
+            '--panel' => 'admin',
+            '--no-interaction' => true,
         ]);
+
+        // 2. Create the Admin user
+        $admin = User::create([
+            'name' => 'Admin User',
+            'email' => 'admin@admin.com',
+            'password' => bcrypt('12345678'),
+            'email_verified_at' => now(),
+        ]);
+
+        // 3. Assign the super_admin role to the Admin user
+        Artisan::call('shield:super-admin', [
+            '--user' => $admin->id,
+            '--panel' => 'admin',
+            '--no-interaction' => true,
+        ]);
+
+        // 4. Create 2 additional fake users
+        User::factory()->count(2)->create();
     }
 }
