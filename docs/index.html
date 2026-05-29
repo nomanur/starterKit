@@ -608,6 +608,69 @@
                 </div>
             </div>
 
+            <!-- Core Application Configurations -->
+            <div class="card col-12">
+                <div class="card-content">
+                    <h2 class="card-title">
+                        <span class="card-icon">⚙️</span> Core Application Configurations
+                    </h2>
+                    <p>The <code>AppServiceProvider</code> is meticulously tuned for developer productivity, data integrity, and production safety. We encapsulate these configurations into dedicated, descriptive methods (<code>configureModels</code>, <code>configureCommands</code>, <code>configureDates</code>) to ensure global application behavior is predictable, centralized, and easy to maintain.</p>
+
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 2rem; margin-top: 1.5rem;">
+                        <div>
+                            <ul>
+                                <li>
+                                    <span class="bullet"></span>
+                                    <div>
+                                        <strong>Strict Eloquent Models</strong>
+                                        <p style="margin: 0; font-size: 0.875rem;">Enforced via <code>Model::shouldBeStrict()</code>. This prevents lazy loading, accessing missing attributes, and silent failures, catching common bugs early in development.</p>
+                                    </div>
+                                </li>
+                                <li style="margin-top: 1rem;">
+                                    <span class="bullet"></span>
+                                    <div>
+                                        <strong>Unguarded Models</strong>
+                                        <p style="margin: 0; font-size: 0.875rem;">Models are unguarded to streamline data handling. We shift safety responsibility to the entry points like <strong>Form Requests</strong> and <strong>Filament Schemas</strong>.</p>
+                                    </div>
+                                </li>
+                                <li style="margin-top: 1rem;">
+                                    <span class="bullet"></span>
+                                    <div>
+                                        <strong>Super Admin Permissions</strong>
+                                        <p style="margin: 0; font-size: 0.875rem;">An implicit <code>Gate::before</code> check ensures that any user with the <code>super_admin</code> role bypasses all permission checks, simplifying admin access management.</p>
+                                    </div>
+                                </li>
+                            </ul>
+                        </div>
+                        <div>
+                            <ul>
+                                <li>
+                                    <span class="bullet"></span>
+                                    <div>
+                                        <strong>Production Protection</strong>
+                                        <p style="margin: 0; font-size: 0.875rem;">We use <code>DB::prohibitDestructiveCommands()</code> to lock down commands like <code>migrate:fresh</code> in production, adding a critical safety layer against data loss.</p>
+                                    </div>
+                                </li>
+                                <li style="margin-top: 1rem;">
+                                    <span class="bullet"></span>
+                                    <div>
+                                        <strong>Immutable Dates</strong>
+                                        <p style="margin: 0; font-size: 0.875rem;">By defaulting to <code>CarbonImmutable</code>, we eliminate entire classes of bugs where date objects are accidentally mutated during formatting or math.</p>
+                                    </div>
+                                </li>
+                                <li style="margin-top: 1rem;">
+                                    <span class="bullet"></span>
+                                    <div>
+                                        <strong>Architectural Clarity</strong>
+                                        <p style="margin: 0; font-size: 0.875rem;">Centralizing these defaults in <code>AppServiceProvider</code> ensures every developer on the team follows the same rigorous standards without manual overhead.</p>
+                                    </div>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
         </div>
 
         <!-- Footer -->
