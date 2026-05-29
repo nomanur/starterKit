@@ -1,0 +1,637 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nomanur Starter Kit - Documentation 🚀</title>
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap"
+        rel="stylesheet">
+
+    <style>
+        /* Modern Design System with Harmonious HSL Palette */
+        :root {
+            --bg-base: #06070b;
+            --bg-surface: rgba(15, 17, 26, 0.7);
+            --bg-card: rgba(22, 25, 38, 0.85);
+            --border-glow: rgba(147, 51, 234, 0.15);
+            --border-hover: rgba(147, 51, 234, 0.4);
+
+            --color-primary: hsl(263, 75%, 62%);
+            --color-primary-glow: rgba(147, 51, 234, 0.4);
+            --color-cyan: hsl(190, 95%, 55%);
+            --color-cyan-glow: rgba(6, 182, 212, 0.35);
+            --color-emerald: hsl(142, 70%, 50%);
+
+            --text-main: #f3f4f6;
+            --text-muted: #9ca3af;
+            --text-glow: #e9d5ff;
+
+            --font-outfit: 'Outfit', sans-serif;
+            --font-inter: 'Inter', sans-serif;
+            --font-mono: 'JetBrains Mono', monospace;
+
+            --shadow-glow: 0 0 35px -5px var(--color-primary-glow);
+            --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        /* Base Styles */
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            background-color: var(--bg-base);
+            color: var(--text-main);
+            font-family: var(--font-inter);
+            line-height: 1.6;
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        /* Gorgeous Glowing Background Accents */
+        body::before {
+            content: '';
+            position: absolute;
+            top: -200px;
+            left: -150px;
+            width: 600px;
+            height: 600px;
+            background: radial-gradient(circle, var(--color-primary-glow) 0%, rgba(0, 0, 0, 0) 70%);
+            z-index: -1;
+            filter: blur(80px);
+        }
+
+        body::after {
+            content: '';
+            position: absolute;
+            top: 400px;
+            right: -200px;
+            width: 700px;
+            height: 700px;
+            background: radial-gradient(circle, var(--color-cyan-glow) 0%, rgba(0, 0, 0, 0) 70%);
+            z-index: -1;
+            filter: blur(100px);
+        }
+
+        /* Container Layout */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 4rem 2rem;
+        }
+
+        /* Premium Header Styling */
+        header {
+            text-align: center;
+            margin-bottom: 5rem;
+            position: relative;
+        }
+
+        .logo-wrapper {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 100px;
+            height: 100px;
+            border-radius: 24px;
+            background: linear-gradient(135deg, var(--color-primary), var(--color-cyan));
+            box-shadow: 0 10px 40px -10px var(--color-primary-glow);
+            margin-bottom: 2rem;
+            animation: bounce 6s ease-in-out infinite;
+        }
+
+        .logo-icon {
+            font-size: 3rem;
+        }
+
+        h1 {
+            font-family: var(--font-outfit);
+            font-size: 3.5rem;
+            font-weight: 800;
+            background: linear-gradient(to right, #ffffff 30%, var(--text-glow) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 0.75rem;
+            letter-spacing: -0.03em;
+        }
+
+        .subtitle {
+            font-size: 1.25rem;
+            color: var(--text-muted);
+            max-width: 600px;
+            margin: 0 auto 1.5rem auto;
+            font-weight: 400;
+        }
+
+        .badge-list {
+            display: flex;
+            justify-content: center;
+            gap: 0.75rem;
+            flex-wrap: wrap;
+        }
+
+        .badge {
+            background-color: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            color: var(--text-main);
+            padding: 0.4rem 1rem;
+            border-radius: 50px;
+            font-size: 0.85rem;
+            font-weight: 500;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            backdrop-filter: blur(10px);
+        }
+
+        .badge.primary {
+            background: linear-gradient(to right, rgba(147, 51, 234, 0.2), rgba(6, 182, 212, 0.2));
+            border-color: var(--border-hover);
+            color: #e9d5ff;
+        }
+
+        /* Glassmorphism Cards Layout */
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(12, 1fr);
+            gap: 2rem;
+            margin-bottom: 4rem;
+        }
+
+        .card {
+            background: var(--bg-card);
+            border: 1px solid var(--border-glow);
+            border-radius: 20px;
+            padding: 2.25rem;
+            backdrop-filter: blur(12px);
+            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.4);
+            transition: var(--transition);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, rgba(147, 51, 234, 0.05) 0%, rgba(6, 182, 212, 0.05) 100%);
+            opacity: 0;
+            transition: var(--transition);
+            z-index: 0;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            border-color: var(--border-hover);
+            box-shadow: var(--shadow-glow);
+        }
+
+        .card:hover::before {
+            opacity: 1;
+        }
+
+        .card-content {
+            position: relative;
+            z-index: 1;
+        }
+
+        .col-12 {
+            grid-column: span 12;
+        }
+
+        .col-8 {
+            grid-column: span 8;
+        }
+
+        .col-6 {
+            grid-column: span 6;
+        }
+
+        .col-4 {
+            grid-column: span 4;
+        }
+
+        @media (max-width: 900px) {
+
+            .col-8,
+            .col-6,
+            .col-4 {
+                grid-column: span 12;
+            }
+        }
+
+        .card-title {
+            font-family: var(--font-outfit);
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 1.25rem;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            color: #ffffff;
+        }
+
+        .card-icon {
+            color: var(--color-primary);
+            font-size: 1.5rem;
+        }
+
+        /* Typography & Content Lists */
+        p {
+            color: var(--text-muted);
+            margin-bottom: 1rem;
+            font-size: 0.975rem;
+        }
+
+        ul {
+            list-style: none;
+            margin-bottom: 1.5rem;
+        }
+
+        li {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            margin-bottom: 0.75rem;
+            color: var(--text-main);
+            font-size: 0.95rem;
+        }
+
+        .bullet {
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            background-color: var(--color-cyan);
+            box-shadow: 0 0 10px var(--color-cyan);
+        }
+
+        /* Default Credentials Highlight Panel */
+        .credentials-box {
+            background-color: rgba(6, 182, 212, 0.04);
+            border: 1px dashed rgba(6, 182, 212, 0.3);
+            border-radius: 14px;
+            padding: 1.5rem;
+            margin-top: 1.5rem;
+        }
+
+        .credential-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0.5rem 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .credential-row:last-child {
+            border-bottom: none;
+        }
+
+        .cred-label {
+            color: var(--text-muted);
+            font-size: 0.9rem;
+        }
+
+        .cred-val {
+            font-family: var(--font-mono);
+            font-weight: 600;
+            color: var(--color-cyan);
+            background-color: rgba(6, 182, 212, 0.1);
+            padding: 0.25rem 0.6rem;
+            border-radius: 6px;
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .cred-val:hover {
+            background-color: rgba(6, 182, 212, 0.2);
+        }
+
+        /* Glow Terminal Block */
+        .terminal {
+            background-color: #0b0c14;
+            border: 1px solid rgba(255, 255, 255, 0.07);
+            border-radius: 12px;
+            padding: 1.25rem;
+            font-family: var(--font-mono);
+            font-size: 0.9rem;
+            color: #d1d5db;
+            position: relative;
+            margin-top: 1.25rem;
+            box-shadow: inset 0 0 15px rgba(0, 0, 0, 0.8);
+        }
+
+        .terminal-header {
+            display: flex;
+            gap: 6px;
+            margin-bottom: 1rem;
+        }
+
+        .dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+        }
+
+        .dot.red {
+            background-color: #ef4444;
+        }
+
+        .dot.yellow {
+            background-color: #f59e0b;
+        }
+
+        .dot.green {
+            background-color: #10b981;
+        }
+
+        .terminal-code {
+            color: #10b981;
+            user-select: text;
+        }
+
+        .terminal-comment {
+            color: #6b7280;
+        }
+
+        /* Quality Checks Dashboard Panel */
+        .checks-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 1.5rem;
+            margin-top: 1.5rem;
+        }
+
+        .check-item {
+            background-color: rgba(255, 255, 255, 0.02);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            border-radius: 16px;
+            padding: 1.25rem;
+            text-align: center;
+            transition: var(--transition);
+        }
+
+        .check-item:hover {
+            border-color: rgba(16, 185, 129, 0.3);
+            background-color: rgba(16, 185, 129, 0.02);
+        }
+
+        .check-status {
+            color: var(--color-emerald);
+            font-size: 1.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .check-name {
+            font-weight: 600;
+            font-size: 0.95rem;
+            margin-bottom: 0.25rem;
+        }
+
+        .check-detail {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+        }
+
+        /* Footer styling */
+        footer {
+            text-align: center;
+            padding-top: 4rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.05);
+            color: var(--text-muted);
+            font-size: 0.9rem;
+        }
+
+        /* Animations */
+        @keyframes bounce {
+
+            0%,
+            100% {
+                transform: translateY(0);
+            }
+
+            50% {
+                transform: translateY(-10px);
+            }
+        }
+
+        /* Click to copy notification toast */
+        .toast {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            background: linear-gradient(135deg, var(--color-primary), var(--color-cyan));
+            color: #ffffff;
+            padding: 0.75rem 1.5rem;
+            border-radius: 12px;
+            font-weight: 600;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+            transform: translateY(150%);
+            opacity: 0;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            z-index: 100;
+        }
+
+        .toast.show {
+            transform: translateY(0);
+            opacity: 1;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="container">
+
+        <!-- Header -->
+        <header>
+            <div class="logo-wrapper">
+                <span class="logo-icon">🛡️</span>
+            </div>
+            <h1>Nomanur Laravel Starter Kit</h1>
+            <p class="subtitle">A premium, highly secure, and pre-integrated Laravel blueprint for speed-of-light
+                administrative development.</p>
+
+            <div class="badge-list">
+                <span class="badge primary">Filament v5</span>
+                <span class="badge primary">Shield v4</span>
+                <span class="badge primary">Pest v4</span>
+                <span class="badge">PHP 8.4</span>
+                <span class="badge">Laravel 13</span>
+            </div>
+        </header>
+
+        <!-- Main Content Board -->
+        <div class="grid">
+
+            <!-- Setup & Quick Start -->
+            <div class="card col-8">
+                <div class="card-content">
+                    <h2 class="card-title">
+                        <span class="card-icon">⚡</span> Quick Installation & Seeding
+                    </h2>
+                    <p>Setting up your new application is completely automated. Run a single command to touch databases,
+                        install packages, and seed administrative access control:</p>
+
+                    <div class="terminal">
+                        <div class="terminal-header">
+                            <span class="dot red"></span>
+                            <span class="dot yellow"></span>
+                            <span class="dot green"></span>
+                        </div>
+                        <span class="terminal-comment"># Create and boot a new project blueprint</span><br>
+                        <span class="terminal-code">composer create-project nomanur/nomanur-starter-kit
+                            my-app</span><br><br>
+                        <span class="terminal-comment"># Boot up the concurrent dev environment (HTTP server, queues,
+                            pail log tailing)</span><br>
+                        <span class="terminal-code">composer run dev</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Credentials Card -->
+            <div class="card col-4">
+                <div class="card-content">
+                    <h2 class="card-title">
+                        <span class="card-icon">🔑</span> Admin Login
+                    </h2>
+                    <p>The installation seeder creates a pre-configured Super Admin account for instant administrative
+                        dashboard access.</p>
+
+                    <div class="credentials-box">
+                        <div class="credential-row">
+                            <span class="cred-label">Login URL</span>
+                            <span class="cred-val" onclick="copyText('/admin')">/admin</span>
+                        </div>
+                        <div class="credential-row">
+                            <span class="cred-label">Username</span>
+                            <span class="cred-val" onclick="copyText('admin@admin.com')">admin@admin.com</span>
+                        </div>
+                        <div class="credential-row">
+                            <span class="cred-label">Password</span>
+                            <span class="cred-val" onclick="copyText('12345678')">12345678</span>
+                        </div>
+                    </div>
+
+                    <p style="margin-top: 1.25rem; font-size: 0.85rem;">*Click any value above to copy it instantly to
+                        your clipboard.</p>
+                </div>
+            </div>
+
+            <!-- Pre-integrated Stack Architecture -->
+            <div class="card col-6">
+                <div class="card-content">
+                    <h2 class="card-title">
+                        <span class="card-icon">📦</span> Built-in Stack Features
+                    </h2>
+                    <p>The starter kit combines modern packages configured with security best practices:</p>
+
+                    <ul>
+                        <li>
+                            <span class="bullet"></span>
+                            <div>
+                                <strong>Filament PHP Panel</strong>
+                                <p style="margin: 0; font-size: 0.875rem;">A responsive dashboard designed with Filament
+                                    v5.</p>
+                            </div>
+                        </li>
+                        <li>
+                            <span class="bullet"></span>
+                            <div>
+                                <strong>Filament Shield Integration</strong>
+                                <p style="margin: 0; font-size: 0.875rem;">Dynamic role & permission management. Secured
+                                    by Spatie under the hood.</p>
+                            </div>
+                        </li>
+                        <li>
+                            <span class="bullet"></span>
+                            <div>
+                                <strong>Jobs & Queue Monitor</strong>
+                                <p style="margin: 0; font-size: 0.875rem;">Real-time queue job monitoring using
+                                    Croustibat Jobs Monitor.</p>
+                            </div>
+                        </li>
+                        <li>
+                            <span class="bullet"></span>
+                            <div>
+                                <strong>Premium User Resource</strong>
+                                <p style="margin: 0; font-size: 0.875rem;">Form-level role management and table display
+                                    with primary badges.</p>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Quality & Standard Audits Dashboard -->
+            <div class="card col-6">
+                <div class="card-content">
+                    <h2 class="card-title">
+                        <span class="card-icon">🛡️</span> Standard Auditing & Verification
+                    </h2>
+                    <p>We ensure that the starter kit stays perfectly healthy, styled, and secure. Run
+                        <code>composer test</code> to trigger all audits:</p>
+
+                    <div class="checks-grid">
+                        <div class="check-item">
+                            <div class="check-status">✓</div>
+                            <div class="check-name">Pint Linting</div>
+                            <div class="check-detail">Clean style structures</div>
+                        </div>
+                        <div class="check-item">
+                            <div class="check-status">✓</div>
+                            <div class="check-name">Rector Upgrades</div>
+                            <div class="check-detail">PHP 8.4 compliance</div>
+                        </div>
+                        <div class="check-item">
+                            <div class="check-status">✓</div>
+                            <div class="check-name">PHPStan</div>
+                            <div class="check-detail">0 errors level analysis</div>
+                        </div>
+                        <div class="check-item">
+                            <div class="check-status">✓</div>
+                            <div class="check-name">Pest Tests</div>
+                            <div class="check-detail">100% type coverage</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- Footer -->
+        <footer>
+            <p>&copy; 2026 Nomanur Starter Kit. Open-sourced under the MIT license.</p>
+        </footer>
+
+    </div>
+
+    <!-- Notification Toast -->
+    <div id="toast" class="toast">Copied to clipboard! 📋</div>
+
+    <script>
+        function copyText(text) {
+            navigator.clipboard.writeText(text).then(() => {
+                const toast = document.getElementById('toast');
+                toast.classList.add('show');
+
+                setTimeout(() => {
+                    toast.classList.remove('show');
+                }, 2000);
+            });
+        }
+    </script>
+</body>
+
+</html>
