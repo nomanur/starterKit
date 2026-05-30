@@ -31,6 +31,7 @@ This starter kit comes pre-integrated with premium, industry-standard packages, 
 *   **Pest Testing 4**: Fully configured test suite with type coverage, architecture rules, and functional feature tests.
 *   **Laravel Boost v2**: Advanced AI agent capabilities for streamlined copilot development.
 *   **Spatie Laravel Media Library v11**: Battle-tested file attachments, uploads, and media collection associations on Eloquent models (e.g. User Profile Avatars).
+*   **Opcodes Log Viewer v3**: A beautiful, highly secure log-monitoring interface integrated into the Filament sidebar. Restricts access natively to Super Admins.
 
 ---
 
@@ -42,6 +43,7 @@ This starter kit comes pre-integrated with premium, industry-standard packages, 
 *   **Documentation Site**: Initialized a local documentation site accessible via `docs/index.html`.
 *   **Livewire Modernization**: Standardized on the **Livewire V3 class format** to ensure long-term maintainability and performance.
 *   **Media Library Demo Page**: Fully functional Livewire and Spatie Media Library upload/gallery demo integrated at `/photo` with a premium glassmorphic UI.
+*   **Secure Log Viewer**: Integrated the **Opcodes Log Viewer** package, exposing it only to `super_admin` users via dynamic navigation sidebar elements in the Filament admin panel.
 
 ---
 
@@ -110,6 +112,22 @@ class Test extends Component
     }
 }
 ```
+
+---
+
+## 🪵 Opcodes Log Viewer Integration 📄
+
+The starter kit comes with **Opcodes Log Viewer** pre-installed and secured. It enables real-time visual inspection of application logs directly inside the Filament Admin Sidebar or at `/log-viewer`.
+
+### Security & Authentication
+By default, the route is secured in `AppServiceProvider` and only accessible to users with the `super_admin` role. In addition, the Sidebar Navigation link is governed by Filament Shield's granular permission framework.
+
+*   **Custom Permission**: `view_log_viewer` is registered in Filament Shield config.
+*   **Sidebar Visibility**: The navigation link is hidden unless the user has the explicit `view_log_viewer` permission (which Super Admins inherit implicitly).
+
+### Direct Access
+Log in to Filament as the default administrator (`admin@admin.com`) and navigate to **System > Log Viewer** in the sidebar, or go directly to:
+`http://127.0.0.1:8000/log-viewer`
 
 ---
 

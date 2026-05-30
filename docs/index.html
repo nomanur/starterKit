@@ -698,6 +698,62 @@ class Test extends Component {<br>
                 </div>
             </div>
 
+            <!-- Opcodes Log Viewer Integration -->
+            <div class="card col-12">
+                <div class="card-content">
+                    <h2 class="card-title">
+                        <span class="card-icon">🪵</span> Opcodes Log Viewer Integration
+                    </h2>
+                    <p>Opcodes Log Viewer provides a comprehensive, interactive administrative interface for inspecting application log files in real-time. Access is secured natively at the service level and dynamic in Filament sidebars.</p>
+                    
+                    <div style="display: flex; gap: 1rem; align-items: center; margin-bottom: 1.5rem; flex-wrap: wrap;">
+                        <span class="badge primary">Restricted to Super Admin</span>
+                        <span class="badge">Spatie Permissions Integration</span>
+                        <span class="badge">Sidebar Link: System > Log Viewer</span>
+                    </div>
+
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 2rem; margin-top: 1.5rem;">
+                        <div>
+                            <h3 style="font-size: 1.1rem; margin-bottom: 0.75rem; color: var(--color-cyan);">1. Route Authorization</h3>
+                            <p style="font-size: 0.9rem; margin-bottom: 1rem;">Authorized exclusively for the <code>super_admin</code> role inside the <code>AppServiceProvider</code> class:</p>
+                            
+                            <div class="terminal" style="margin-top: 0.5rem;">
+                                <div class="terminal-header">
+                                    <span class="dot red"></span><span class="dot yellow"></span><span class="dot green"></span>
+                                </div>
+                                <span class="terminal-comment">// app/Providers/AppServiceProvider.php</span><br>
+                                <span class="terminal-code" style="font-size: 0.8rem; line-height: 1.4;">
+private function configureLogViewer(): void {<br>
+&nbsp;&nbsp;&nbsp;&nbsp;LogViewer::auth(function (Request $request): bool {<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;return $request->user()?->hasRole('super_admin') ?? false;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;});<br>
+}
+                                </span>
+                            </div>
+                        </div>
+
+                        <div>
+                            <h3 style="font-size: 1.1rem; margin-bottom: 0.75rem; color: var(--color-cyan);">2. Filament Sidebar Permission</h3>
+                            <p style="font-size: 0.9rem; margin-bottom: 1rem;">Visible in Filament via the <code>view_log_viewer</code> custom permission inside the admin panel provider:</p>
+                            
+                            <div class="terminal" style="margin-top: 0.5rem;">
+                                <div class="terminal-header">
+                                    <span class="dot red"></span><span class="dot yellow"></span><span class="dot green"></span>
+                                </div>
+                                <span class="terminal-comment">// app/Providers/Filament/AdminPanelProvider.php</span><br>
+                                <span class="terminal-code" style="font-size: 0.8rem; line-height: 1.4;">
+NavigationItem::make('Log Viewer')<br>
+&nbsp;&nbsp;&nbsp;&nbsp;->url(fn (): string => url('log-viewer'))<br>
+&nbsp;&nbsp;&nbsp;&nbsp;->icon('heroicon-o-document-text')<br>
+&nbsp;&nbsp;&nbsp;&nbsp;->group('System')<br>
+&nbsp;&nbsp;&nbsp;&nbsp;->visible(fn (): bool => auth()->user()?->can('view_log_viewer') ?? false)
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
             <!-- Core Application Configurations -->
             <div class="card col-12">
                 <div class="card-content">
