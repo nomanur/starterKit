@@ -26,9 +26,20 @@ This starter kit comes pre-integrated with premium, industry-standard packages, 
 *   **Filament PHP v5**: A beautiful, blazing-fast, and responsive administrative panel.
 *   **Filament Shield v4**: Granular role-based access control (RBAC) powered by Spatie Laravel Permission, managed entirely from the Filament dashboard.
 *   **Filament Jobs Monitor v4**: Real-time visualization and log tracking of background jobs and queue workers.
+*   **Livewire v4 (V3 Class Format)**: Utilizing the stable and familiar Livewire V3 class-based component structure for dynamic interfaces.
 *   **Pre-Built User Resource**: A custom, fully secure admin interface for user accounts. Displays active roles as styled primary badges in the user table, and allows assigning/revoking roles with a multi-select interface in the user editor form.
 *   **Pest Testing 4**: Fully configured test suite with type coverage, architecture rules, and functional feature tests.
 *   **Laravel Boost v2**: Advanced AI agent capabilities for streamlined copilot development.
+
+---
+
+## 🚀 Recent Updates
+
+*   **Role Management Integration**: Successfully integrated **Filament Shield**, enabling dynamic permission and role management directly through the UI.
+*   **Queue Monitoring**: Added **Filament Jobs Monitor** to provide a real-time dashboard for background job execution and failure tracking.
+*   **Enhanced User Administration**: Refactored the User Resource to support multi-role assignments and improved visual representation of user status in the dashboard.
+*   **Documentation Site**: Initialized a local documentation site accessible via `docs/index.html`.
+*   **Livewire Modernization**: Standardized on the **Livewire V3 class format** to ensure long-term maintainability and performance.
 
 ---
 
