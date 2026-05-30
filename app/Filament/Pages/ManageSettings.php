@@ -77,6 +77,9 @@ class ManageSettings extends Page
 
         $formData['custom_vars'] = $customVars;
 
+        $formData['maintenance_mode'] = app()->isDownForMaintenance();
+        $formData['maintenance_secret'] = $this->getMaintenanceSecret();
+
         $this->form->fill($formData);
     }
 
@@ -185,6 +188,33 @@ class ManageSettings extends Page
                             ->reorderable(false)
                             ->addActionLabel('Add Custom Env Variable'),
                     ]),
+
+                Section::make('Maintenance Mode')
+                    ->description('Place your application into maintenance mode for updates.')
+                    ->schema([
+                        Grid::make(2)
+                            ->schema([
+                                Toggle::make('maintenance_mode')
+                                    ->label('Enable Maintenance Mode')
+                                    ->helperText('When enabled, the application will return a 503 Service Unavailable response.')
+                                    ->live()
+                                    ->inline(false),
+                                TextInput::make('maintenance_secret')
+                                    ->label('Bypass Secret Key')
+                                    ->placeholder('e.g., maintenance-bypass-token')
+                                    ->helperText(function (callable $get) {
+                                        if (! $get('maintenance_mode')) {
+                                            return 'Only required when maintenance mode is active.';
+                                        }
+                                        $secret = $get('maintenance_secret') ?: 'maintenance-bypass';
+                                        $url = url($secret);
+
+                                        return "Visit this URL to bypass maintenance mode: {$url}";
+                                    })
+                                    ->required(fn (callable $get) => $get('maintenance_mode'))
+                                    ->visible(fn (callable $get) => $get('maintenance_mode')),
+                            ]),
+                    ]),
             ])
             ->statePath('data');
     }
@@ -236,6 +266,26 @@ class ManageSettings extends Page
         }
 
         $this->saveEnv($variables);
+
+        // Handle Maintenance Mode
+        $maintenanceMode = $state['maintenance_mode'] ?? false;
+        $isDown = app()->isDownForMaintenance();
+
+        if ($maintenanceMode && ! $isDown) {
+            $secret = trim((string) ($state['maintenance_secret'] ?? ''));
+            if (empty($secret)) {
+                $secret = 'maintenance-bypass';
+            }
+            Artisan::call('down', ['--secret' => $secret]);
+        } elseif (! $maintenanceMode && $isDown) {
+            Artisan::call('up');
+        } elseif ($maintenanceMode && $isDown) {
+            $currentSecret = $this->getMaintenanceSecret();
+            $newSecret = trim((string) ($state['maintenance_secret'] ?? ''));
+            if (! empty($newSecret) && $newSecret !== $currentSecret) {
+                Artisan::call('down', ['--secret' => $newSecret]);
+            }
+        }
 
         // Clear configurations so changes take effect
         Artisan::call('config:clear');
@@ -341,5 +391,17 @@ class ManageSettings extends Page
         }
 
         file_put_contents($path, implode("\n", $newLines)."\n");
+    }
+
+    private function getMaintenanceSecret(): string
+    {
+        $path = storage_path('framework/down');
+        if (file_exists($path)) {
+            $data = json_decode((string) file_get_contents($path), true);
+
+            return is_array($data) ? ($data['secret'] ?? '') : '';
+        }
+
+        return '';
     }
 }

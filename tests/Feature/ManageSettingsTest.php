@@ -46,3 +46,51 @@ test('super admin can view manage settings page and edit env values', function (
         unlink($backupPath);
     }
 });
+
+test('super admin can toggle maintenance mode', function (): void {
+    $role = Role::firstOrCreate(['name' => 'super_admin', 'guard_name' => 'web']);
+    $user = User::factory()->create();
+    $user->assignRole($role);
+    app(PermissionRegistrar::class)->forgetCachedPermissions();
+
+    // Backup current down file if it exists
+    $downPath = storage_path('framework/down');
+    $backupDownPath = storage_path('framework/down.backup');
+    if (file_exists($downPath)) {
+        copy($downPath, $backupDownPath);
+        unlink($downPath);
+    }
+
+    try {
+        Livewire::actingAs($user)
+            ->test(ManageSettings::class)
+            ->assertFormSet([
+                'maintenance_mode' => false,
+            ])
+            ->set('data.maintenance_mode', true)
+            ->set('data.maintenance_secret', 'test-bypass')
+            ->call('save')
+            ->assertHasNoErrors();
+
+        expect(app()->isDownForMaintenance())->toBeTrue();
+
+        // Turn it off
+        Livewire::actingAs($user)
+            ->test(ManageSettings::class)
+            ->set('data.maintenance_mode', false)
+            ->call('save')
+            ->assertHasNoErrors();
+
+        expect(app()->isDownForMaintenance())->toBeFalse();
+    } finally {
+        // Clean up down state
+        if (file_exists($downPath)) {
+            unlink($downPath);
+        }
+        // Restore backup down state
+        if (file_exists($backupDownPath)) {
+            copy($backupDownPath, $downPath);
+            unlink($backupDownPath);
+        }
+    }
+});
