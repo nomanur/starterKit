@@ -636,6 +636,68 @@
                 </div>
             </div>
 
+            <!-- Spatie Media Library Integration -->
+            <div class="card col-12">
+                <div class="card-content">
+                    <h2 class="card-title">
+                        <span class="card-icon">📸</span> Spatie Media Library Integration
+                    </h2>
+                    <p>Spatie Media Library is fully configured and integrated into the starter kit. The storage symlink is automatically generated on installation via automated composer scripts, making media immediately visualizable.</p>
+                    
+                    <div style="display: flex; gap: 1rem; align-items: center; margin-bottom: 1.5rem; flex-wrap: wrap;">
+                        <span class="badge primary">Public Previews Enabled</span>
+                        <span class="badge">Autolinked Symlink</span>
+                        <span class="badge">Demo Route: <a href="/photo" style="color: var(--color-cyan); font-weight: 600; text-decoration: none;">/photo</a></span>
+                    </div>
+
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 2rem; margin-top: 1.5rem;">
+                        <div>
+                            <h3 style="font-size: 1.1rem; margin-bottom: 0.75rem; color: var(--color-cyan);">1. Enable Your Model</h3>
+                            <p style="font-size: 0.9rem; margin-bottom: 1rem;">Implement <code>HasMedia</code> and use <code>InteractsWithMedia</code> on any Eloquent model:</p>
+                            
+                            <div class="terminal" style="margin-top: 0.5rem;">
+                                <div class="terminal-header">
+                                    <span class="dot red"></span><span class="dot yellow"></span><span class="dot green"></span>
+                                </div>
+                                <span class="terminal-comment">// app/Models/User.php</span><br>
+                                <span class="terminal-code" style="font-size: 0.8rem; line-height: 1.4;">
+class User extends Authenticatable implements HasMedia {<br>
+&nbsp;&nbsp;&nbsp;&nbsp;use InteractsWithMedia;<br><br>
+&nbsp;&nbsp;&nbsp;&nbsp;public function registerMediaCollections(): void {<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;$this->addMediaCollection('avatars')<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;->singleFile();<br>
+&nbsp;&nbsp;&nbsp;&nbsp;}<br>
+}
+                                </span>
+                            </div>
+                        </div>
+
+                        <div>
+                            <h3 style="font-size: 1.1rem; margin-bottom: 0.75rem; color: var(--color-cyan);">2. Upload Files via Livewire</h3>
+                            <p style="font-size: 0.9rem; margin-bottom: 1rem;">Handle temporary files easily and attach them directly to media collections:</p>
+                            
+                            <div class="terminal" style="margin-top: 0.5rem;">
+                                <div class="terminal-header">
+                                    <span class="dot red"></span><span class="dot yellow"></span><span class="dot green"></span>
+                                </div>
+                                <span class="terminal-comment">// app/Livewire/Test.php</span><br>
+                                <span class="terminal-code" style="font-size: 0.8rem; line-height: 1.4;">
+class Test extends Component {<br>
+&nbsp;&nbsp;&nbsp;&nbsp;use WithFileUploads;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;public $photo;<br><br>
+&nbsp;&nbsp;&nbsp;&nbsp;public function save(): void {<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;$this->validate(['photo' => 'image|max:5120']);<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;$this->user->addMedia($this->photo->getRealPath())<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;->toMediaCollection('avatars');<br>
+&nbsp;&nbsp;&nbsp;&nbsp;}<br>
+}
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
             <!-- Core Application Configurations -->
             <div class="card col-12">
                 <div class="card-content">

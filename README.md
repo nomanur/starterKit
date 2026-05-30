@@ -30,6 +30,7 @@ This starter kit comes pre-integrated with premium, industry-standard packages, 
 *   **Pre-Built User Resource**: A custom, fully secure admin interface for user accounts. Displays active roles as styled primary badges in the user table, and allows assigning/revoking roles with a multi-select interface in the user editor form.
 *   **Pest Testing 4**: Fully configured test suite with type coverage, architecture rules, and functional feature tests.
 *   **Laravel Boost v2**: Advanced AI agent capabilities for streamlined copilot development.
+*   **Spatie Laravel Media Library v11**: Battle-tested file attachments, uploads, and media collection associations on Eloquent models (e.g. User Profile Avatars).
 
 ---
 
@@ -40,6 +41,75 @@ This starter kit comes pre-integrated with premium, industry-standard packages, 
 *   **Enhanced User Administration**: Refactored the User Resource to support multi-role assignments and improved visual representation of user status in the dashboard.
 *   **Documentation Site**: Initialized a local documentation site accessible via `docs/index.html`.
 *   **Livewire Modernization**: Standardized on the **Livewire V3 class format** to ensure long-term maintainability and performance.
+*   **Media Library Demo Page**: Fully functional Livewire and Spatie Media Library upload/gallery demo integrated at `/photo` with a premium glassmorphic UI.
+
+---
+
+## 📂 Spatie Media Library Integration & Demo 📸
+
+The starter kit comes with Spatie Media Library pre-configured and automated out of the box. The symbolic storage link (`php artisan storage:link`) is automatically created during installation via composer scripts.
+
+### Live Demo
+Visit the route `/photo` on your local server to experience a premium, glassmorphic dark-theme UI featuring real-time drag-and-drop file uploads, image previews, size/mime inspections, and deletion hooks.
+
+### Implementation Guide & Example
+
+#### 1. Prepare your Eloquent Model
+To allow a model to accept file attachments, implement `HasMedia` and use the `InteractsWithMedia` trait:
+
+```php
+namespace App\Models;
+
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Foundation\Auth\User as Authenticatable;
+use Spatie\MediaLibrary\HasMedia;
+use Spatie\MediaLibrary\InteractsWithMedia;
+
+class User extends Authenticatable implements HasMedia
+{
+    use HasFactory, InteractsWithMedia;
+    
+    // Optional: Define collections
+    public function registerMediaCollections(): void
+    {
+        $this->addMediaCollection('avatars')
+            ->singleFile(); // Replaces old avatars with new uploads automatically
+    }
+}
+```
+
+#### 2. Livewire Component Usage
+Handle incoming temporary uploads and attach them directly to your model's media collection:
+
+```php
+namespace App\Livewire;
+
+use App\Models\User;
+use Livewire\Component;
+use Livewire\WithFileUploads;
+
+class Test extends Component
+{
+    use WithFileUploads;
+
+    public $photo; // Holds the TemporaryUploadedFile
+    public User $user;
+
+    public function save(): void
+    {
+        $this->validate([
+            'photo' => ['required', 'image', 'max:5120'], // 5MB Limit
+        ]);
+
+        // Attach file to Spatie Media Library
+        $this->user->addMedia($this->photo->getRealPath())
+            ->usingFileName($this->photo->getClientOriginalName())
+            ->toMediaCollection('avatars');
+
+        $this->photo = null; // Clear state
+    }
+}
+```
 
 ---
 
