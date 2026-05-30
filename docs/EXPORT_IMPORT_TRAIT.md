@@ -1,22 +1,26 @@
 # Export/Import Trait for Filament Resources
 
-This trait adds Excel/CSV import and export functionality to any Filament resource.
+This trait (`app/Traits/ExportImport.php`) adds Excel/CSV import and export functionality to any Filament resource. It uses native PHP `fputcsv`/`fgetcsv` for CSV handling and `PhpOffice\PhpSpreadsheet` for XLSX support.
+
+---
 
 ## Installation
 
-The trait is located at `app/Traits/ExportImport.php`.
+The trait is located at `app/Traits/ExportImport.php`. No additional setup is required for CSV support.
 
-### Optional: Install PhpSpreadsheet for Excel Support
+### Excel (XLSX) Support
 
-For Excel (XLSX) file support, install the required package:
+For Excel support, install PhpSpreadsheet:
 
 ```bash
 composer require phpoffice/phpspreadsheet
 ```
 
-Without this package, the system will still work but will fallback to CSV format for Excel exports.
+Without this package, Excel export falls back to CSV with a notification. Excel import throws a clear error message.
 
-## Usage
+---
+
+## Quick Start
 
 ### 1. Add the Trait to Your Resource
 
@@ -26,14 +30,14 @@ use App\Traits\ExportImport;
 class PostResource extends Resource
 {
     use ExportImport;
-    
-    // ... rest of your resource
+
+    protected static ?string $model = Post::class;
 }
 ```
 
-### 2. Add Actions to Your Table
+### 2. Wire Actions to Your Table
 
-In your table configuration file (e.g., `PostsTable.php`):
+In your table configuration:
 
 ```php
 use App\Filament\Resources\Posts\PostResource;
@@ -49,9 +53,27 @@ public static function configure(Table $table): Table
 }
 ```
 
-### 3. Customize Export Columns (Optional)
+This adds **Export** and **Import** buttons above the table.
 
-Override the `getExportColumns()` method in your resource:
+---
+
+## How Export Works
+
+1. User clicks **Export** → a modal opens with:
+   - **Format** select: CSV or Excel (XLSX)
+   - **Columns** checklist: populated from `getExportColumns()`
+
+2. User selects format + columns and confirms.
+
+3. The trait fetches records via `getExportQuery()` and generates the file.
+
+4. The browser downloads the file as a `StreamedResponse`.
+
+### Overridable Methods
+
+#### `getExportColumns(): array`
+
+Returns `array<string, string>` mapping column names to display labels.
 
 ```php
 public static function getExportColumns(): array
@@ -66,9 +88,11 @@ public static function getExportColumns(): array
 }
 ```
 
-### 4. Customize Export Query (Optional)
+Default: if the model has `$fillable`, returns the fillable columns as both key and label.
 
-Override the `getExportQuery()` method to filter which records are exported:
+#### `getExportQuery(): Builder`
+
+Returns the query builder for records to export.
 
 ```php
 public static function getExportQuery()
@@ -77,32 +101,115 @@ public static function getExportQuery()
 }
 ```
 
-## Features
+Default: `Model::query()` (exports all records).
 
-### Export
-- **Formats**: CSV and Excel (XLSX)
-- **Column Selection**: Users can choose which columns to export
-- **UTF-8 Support**: CSV files include BOM for proper UTF-8 encoding
-- **Styled Excel**: Excel files include styled headers with bold text and background color
+---
 
-### Import
-- **Formats**: CSV and Excel (XLSX)
-- **Automatic Mapping**: Headers are automatically mapped to database columns
-- **Error Handling**: Failed imports are counted and reported
-- **Notifications**: Success/failure notifications after import completes
+## How Import Works
 
-## Example CSV Format
+1. User clicks **Import** → a modal opens with:
+   - **File upload**: accepts `.csv`, `.xlsx` (MIME-typed)
+   - **Format** select: CSV or Excel (XLSX)
 
-For importing posts, create a CSV with headers matching your model's fillable fields:
+2. User uploads a file and selects format, then confirms.
+
+3. The trait parses the file:
+   - First row = column headers (auto-mapped to database columns)
+   - Each subsequent row = one record
+
+4. Records are created one by one with individual try/catch blocks.
+
+5. A notification reports the count of successful and failed imports.
+
+---
+
+## Architecture
+
+| Layer | Detail |
+|---|---|
+| **Trait** | `App\Traits\ExportImport` — reusable across any Filament resource |
+| **CSV Engine** | Native PHP `fputcsv` / `fgetcsv` (zero dependencies) |
+| **Excel Engine** | `PhpOffice\PhpSpreadsheet` (composer optional) |
+| **Model Resolution** | Via `static::getModel()` from the owning Filament Resource |
+| **Export Delivery** | `Symfony\Component\HttpFoundation\StreamedResponse` |
+| **Import Flow** | File upload → parse → `Model::create()` per row |
+
+### File Structure
+
+```
+app/
+├── Traits/
+│   └── ExportImport.php          # Core trait
+└── Filament/
+    └── Resources/
+        └── Posts/
+            ├── PostResource.php   # Uses ExportImport trait
+            └── Tables/
+                └── PostsTable.php # Wires export/import actions
+```
+
+---
+
+## Export Format Details
+
+### CSV
+- UTF-8 BOM prepended for correct Excel encoding
+- Headers as the first row
+- One record per row
+- Content-Type: `text/csv; charset=UTF-8`
+- Filename pattern: `{resource}_export_{date}.csv`
+
+### Excel (XLSX)
+- Auto-sized column widths
+- Bold header row with gray (`#CCCCCC`) background fill
+- Content-Type: `application/vnd.openxmlformats-officedocument.spreadsheetml.sheet`
+- Filename pattern: `{resource}_export_{date}.xlsx`
+
+---
+
+## Import File Format
+
+Headers must match your model's database columns (or fillable attributes).
+
+**Example CSV (`posts.csv`):**
+```csv
+title,content
+My First Post,This is the content of the post.
+My Second Post,More content here.
+```
+
+**Example Excel:**
+| title | content |
+|---|---|
+| My First Post | This is the content of the post. |
+| My Second Post | More content here. |
+
+---
+
+## Handling Translatable Columns
+
+When exporting models that use Spatie `laravel-translatable`, the JSON-encoded translation value is exported as-is. For imports, provide the JSON value in the expected format:
 
 ```csv
-id,title,content,created_at,updated_at
-1,My First Post,This is the content...,2024-01-01 00:00:00,2024-01-01 00:00:00
-2,My Second Post,More content here...,2024-01-02 00:00:00,2024-01-02 00:00:00
+title,content
+"{"en":""Hello"",""es"":""Hola""}","{"en"":""English content"",""es"":""Contenido español""}"
 ```
+
+---
+
+## Adding to a New Resource
+
+To add export/import to another resource:
+
+1. Add `use ExportImport;` to the resource class.
+2. Optionally override `getExportColumns()` and `getExportQuery()`.
+3. Add `Resource::getExportAction()` and `Resource::getImportAction()` to the table's `toolbarActions`.
+
+---
 
 ## Notes
 
-- The import function creates new records. For updating existing records, customize the import action.
+- Import **creates** new records only. For updating existing records, customize the import action.
+- The trait uses `static::getModel()` to resolve the model. Ensure `$model` is set on your resource.
+- Relationship fields can be exported using dot notation (e.g. `author.name`).
 - For large datasets, consider implementing queued exports/imports.
-- Relationship fields can be exported using dot notation (e.g., `author.name`).

@@ -867,6 +867,74 @@ Translatable::make(function (string $locale): array {<br>
                 </div>
             </div>
 
+            <!-- Export Import Trait -->
+            <div class="card col-12">
+                <div class="card-content">
+                    <h2 class="card-title">
+                        <span class="card-icon">📥</span> CSV/Excel Export & Import
+                    </h2>
+                    <p>The starter kit ships with a reusable <code>ExportImport</code> trait that adds export and import buttons to any Filament resource table. It supports <strong>CSV</strong> and <strong>Excel (XLSX)</strong> formats with styled output and column selection—no additional setup required for CSV.</p>
+
+                    <div style="display: flex; gap: 1rem; align-items: center; margin-bottom: 1.5rem; flex-wrap: wrap;">
+                        <span class="badge primary">Zero-Dependency CSV</span>
+                        <span class="badge">Column Selection Modal</span>
+                        <span class="badge">Styled XLSX Headers</span>
+                        <span class="badge">Auto-Sized Columns</span>
+                    </div>
+
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 2rem; margin-top: 1.5rem;">
+                        <div>
+                            <h3 style="font-size: 1.1rem; margin-bottom: 0.75rem; color: var(--color-cyan);">1. Add Trait to Resource</h3>
+                            <p style="font-size: 0.9rem; margin-bottom: 1rem;">Use the trait in any Filament resource and override columns/query if needed:</p>
+
+                            <div class="terminal" style="margin-top: 0.5rem;">
+                                <div class="terminal-header">
+                                    <span class="dot red"></span><span class="dot yellow"></span><span class="dot green"></span>
+                                </div>
+                                <span class="terminal-comment">// app/Filament/Resources/Posts/PostResource.php</span><br>
+                                <span class="terminal-code" style="font-size: 0.8rem; line-height: 1.4;">
+class PostResource extends Resource {<br>
+&nbsp;&nbsp;&nbsp;&nbsp;use ExportImport;<br><br>
+&nbsp;&nbsp;&nbsp;&nbsp;public static function getExportColumns(): array {<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;return [<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'id' => 'ID',<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'title' => 'Title',<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'content' => 'Content',<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;];<br>
+&nbsp;&nbsp;&nbsp;&nbsp;}<br>
+}
+                                </span>
+                            </div>
+                        </div>
+
+                        <div>
+                            <h3 style="font-size: 1.1rem; margin-bottom: 0.75rem; color: var(--color-cyan);">2. Wire Actions to Table</h3>
+                            <p style="font-size: 0.9rem; margin-bottom: 1rem;">Add export and import action buttons to the table toolbar in your table schema:</p>
+
+                            <div class="terminal" style="margin-top: 0.5rem;">
+                                <div class="terminal-header">
+                                    <span class="dot red"></span><span class="dot yellow"></span><span class="dot green"></span>
+                                </div>
+                                <span class="terminal-comment">// app/Filament/Resources/Posts/Tables/PostsTable.php</span><br>
+                                <span class="terminal-code" style="font-size: 0.8rem; line-height: 1.4;">
+public static function configure(Table $table): Table {<br>
+&nbsp;&nbsp;&nbsp;&nbsp;return $table<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;->toolbarActions([<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;PostResource::getExportAction(),<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;PostResource::getImportAction(),<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;]);<br>
+}
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <p style="margin-top: 1.5rem; font-size: 0.9rem;">
+                        See <a href="EXPORT_IMPORT_TRAIT.md" style="color: var(--color-cyan);">EXPORT_IMPORT_TRAIT.md</a> for full documentation, including custom query filters, import file format specs, and handling translatable columns.
+                    </p>
+                </div>
+            </div>
+
             <!-- Core Application Configurations -->
 
             <div class="card col-12">

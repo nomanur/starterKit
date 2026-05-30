@@ -32,6 +32,7 @@ This starter kit comes pre-integrated with premium, industry-standard packages, 
 *   **Laravel Boost v2**: Advanced AI agent capabilities for streamlined copilot development.
 *   **Spatie Laravel Media Library v11**: Battle-tested file attachments, uploads, and media collection associations on Eloquent models (e.g. User Profile Avatars).
 *   **Opcodes Log Viewer v3**: A beautiful, highly secure log-monitoring interface integrated into the Filament sidebar. Restricts access natively to Super Admins.
+*   **CSV/Excel Export & Import**: A reusable trait that adds export/import buttons to any Filament resource table, supporting CSV and XLSX formats with column selection and styled output.
 
 ---
 
@@ -44,6 +45,7 @@ This starter kit comes pre-integrated with premium, industry-standard packages, 
 *   **Livewire Modernization**: Standardized on the **Livewire V3 class format** to ensure long-term maintainability and performance.
 *   **Media Library Demo Page**: Fully functional Livewire and Spatie Media Library upload/gallery demo integrated at `/photo` with a premium glassmorphic UI.
 *   **Secure Log Viewer**: Integrated the **Opcodes Log Viewer** package, exposing it only to `super_admin` users via dynamic navigation sidebar elements in the Filament admin panel.
+*   **CSV/Excel Export & Import**: Added a reusable `ExportImport` trait for Filament resources. Export supports CSV/XLSX with column selection; import parses uploaded files into new records with success/failure notifications.
 
 ---
 
@@ -259,6 +261,83 @@ TextColumn::make('title')
     ->searchable(query: function (Builder $query, string $search): Builder {
         return $query->where('title->' . app()->getLocale(), 'like', "%{$search}%");
     })
+```
+
+---
+
+## 📥 CSV/Excel Export & Import 📤
+
+The starter kit includes a reusable `ExportImport` trait (`app/Traits/ExportImport.php`) that adds export and import buttons to any Filament resource table. It supports **CSV** and **Excel (XLSX)** formats with styled output and column selection.
+
+### 🚀 Key Features
+
+*   **Export**: Modal dialog with format selection (CSV/XLSX) and column checklist. Exported rows are streamed directly to the browser.
+*   **Import**: File upload modal supporting CSV and XLSX files. Headers auto-map to database columns. Records are created with per-row error handling.
+*   **Customizable Columns**: Override `getExportColumns()` to define which columns appear in the export modal.
+*   **Customizable Query**: Override `getExportQuery()` to filter which records are exported (e.g. only published posts).
+*   **UTF-8 & Styling**: CSV files include a UTF-8 BOM; Excel files get auto-sized columns with styled headers (bold + gray background).
+*   **Excel Fallback**: If `phpoffice/phpspreadsheet` is not installed, Excel exports gracefully fall back to CSV.
+
+### 🎨 How to Use
+
+#### 1. Add the Trait to Your Resource
+
+```php
+use App\Traits\ExportImport;
+
+class PostResource extends Resource
+{
+    use ExportImport;
+}
+```
+
+#### 2. Wire Actions to Your Table
+
+```php
+use App\Filament\Resources\Posts\PostResource;
+
+public static function configure(Table $table): Table
+{
+    return $table
+        ->toolbarActions([
+            PostResource::getExportAction(),
+            PostResource::getImportAction(),
+        ]);
+}
+```
+
+#### 3. Customize Export Columns (Optional)
+
+```php
+public static function getExportColumns(): array
+{
+    return [
+        'id' => 'ID',
+        'title' => 'Title',
+        'content' => 'Content',
+        'created_at' => 'Created At',
+        'updated_at' => 'Updated At',
+    ];
+}
+```
+
+#### 4. Customize Export Query (Optional)
+
+```php
+public static function getExportQuery()
+{
+    return static::getModel()::query()->where('status', 'published');
+}
+```
+
+### 📄 Import CSV Format
+
+Headers in your CSV/XLSX file should match the database column names. Example:
+
+```csv
+title,content
+My First Post,This is the content of the post.
+My Second Post,More content here.
 ```
 
 ---
