@@ -131,6 +131,74 @@ Log in to Filament as the default administrator (`admin@admin.com`) and navigate
 
 ---
 
+## 🌐 Laravel Socialite OAuth Integration 🔑
+
+The starter kit comes with **Laravel Socialite** pre-installed and seamlessly integrated to support modern OAuth authentication. Out of the box, we support a wide range of social login providers with fully-secured backend controller handling, a dynamic `SocialiteProvider` Enum, and a premium Livewire utility component that auto-detects active integrations.
+
+### Supported Providers
+*   **GitHub** (`github`)
+*   **Google** (`google`)
+*   **Facebook** (`facebook`)
+*   **X / Twitter** (`twitter-oauth-2`)
+*   **LinkedIn** (`linkedin-openid`)
+*   **GitLab** (`gitlab`)
+*   **Bitbucket** (`bitbucket`)
+*   **Slack** (`slack-openid`)
+
+---
+
+### 🚀 Setup & Activation in 2 Steps
+
+#### 1. Add API Credentials to `.env`
+Uncomment and populate the client IDs and secrets in your local `.env` file (based on the templates provided in `.env.example`):
+```env
+# Example: Enabling GitHub Login
+GITHUB_CLIENT_ID=your_github_client_id
+GITHUB_CLIENT_SECRET=your_github_client_secret
+```
+
+#### 2. Uncomment Services Configuration
+Open [services.php](file:///Users/nomanur/Herd/starterKit/config/services.php) and uncomment the relevant provider array. The starter kit automatically manages redirect paths to standard callback endpoints (`/auth/{provider}/callback`):
+```php
+'github' => [
+    'client_id' => env('GITHUB_CLIENT_ID'),
+    'client_secret' => env('GITHUB_CLIENT_SECRET'),
+    'redirect' => '/auth/github/callback',
+],
+```
+
+---
+
+### 🎨 Livewire Component Usage
+To display a stunning, fully-styled list of all configured and activated social login buttons, simply drop the Livewire component into any Blade login view:
+
+```blade
+<livewire:socialite />
+```
+
+#### Customization Options:
+Customize visual layouts directly via Livewire properties:
+```blade
+<livewire:socialite 
+    heading="Login with your social profile" 
+    :showLabels="true" 
+    :columns="2" 
+    size="lg" 
+/>
+```
+
+---
+
+### 🛠️ Architecture & Under the Hood
+
+1. **Auto-Detection**: The `SocialiteProvider` enum checks `services.php` dynamically via `$provider->isConfigured()`. Active providers are collected automatically using `SocialiteProvider::configuredProviders()`.
+2. **Unified Routing**: Pre-wired routes manage the entire authentication cycle cleanly:
+   * **Redirect Route**: `/auth/{provider}/redirect` invokes `SocialiteController@redirect`
+   * **Callback Route**: `/auth/{provider}/callback` invokes `SocialiteController@callback`
+3. **Database Schema**: The `users` table contains nullable `socialite_id` and `socialite_type` fields to support passwordless logins, mapping social logins safely to verified email addresses.
+
+---
+
 ## ⚡ Quick Installation
 
 You can create a new project using this starter kit with a single Composer command:
