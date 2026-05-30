@@ -5,10 +5,12 @@ namespace App\Providers;
 use App\Models\User;
 use Carbon\CarbonImmutable;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Date;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\ServiceProvider;
+use Opcodes\LogViewer\Facades\LogViewer;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -28,10 +30,18 @@ class AppServiceProvider extends ServiceProvider
         $this->configureModels();
         $this->configureCommands();
         $this->configureDates();
+        $this->configureLogViewer();
 
         // Implicitly grant "super_admin" role all permissions
         Gate::before(function (User $user, string $ability): ?bool {
             return $user->hasRole('super_admin') ? true : null;
+        });
+    }
+
+    private function configureLogViewer(): void
+    {
+        LogViewer::auth(function (Request $request): bool {
+            return $request->user()?->hasRole('super_admin') ?? false;
         });
     }
 

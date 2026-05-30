@@ -8,6 +8,7 @@ use Filament\Http\Middleware\Authenticate;
 use Filament\Http\Middleware\AuthenticateSession;
 use Filament\Http\Middleware\DisableBladeIconComponents;
 use Filament\Http\Middleware\DispatchServingFilamentEvent;
+use Filament\Navigation\NavigationItem;
 use Filament\Pages\Dashboard;
 use Filament\Panel;
 use Filament\PanelProvider;
@@ -53,6 +54,13 @@ class AdminPanelProvider extends PanelProvider
                 SubstituteBindings::class,
                 DisableBladeIconComponents::class,
                 DispatchServingFilamentEvent::class,
+            ])
+            ->navigationItems([
+                NavigationItem::make('Log Viewer')
+                    ->url(fn (): string => url('log-viewer'))
+                    ->icon('heroicon-o-document-text')
+                    ->group('System')
+                    ->visible(fn (): bool => auth()->user()?->can('view_log_viewer') ?? false),
             ])
             ->plugins([
                 FilamentShieldPlugin::make(),
