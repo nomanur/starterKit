@@ -754,6 +754,63 @@ NavigationItem::make('Log Viewer')<br>
                 </div>
             </div>
 
+            <!-- Laravel Socialite OAuth Integration -->
+            <div class="card col-12">
+                <div class="card-content">
+                    <h2 class="card-title">
+                        <span class="card-icon">🌐</span> Laravel Socialite OAuth Integration
+                    </h2>
+                    <p>The starter kit is fully integrated with Laravel Socialite to enable passwordless OAuth logins. The system dynamically auto-detects active providers via the <code>SocialiteProvider</code> enum and renders a styled list of options using a premium Livewire component.</p>
+                    
+                    <div style="display: flex; gap: 1rem; align-items: center; margin-bottom: 1.5rem; flex-wrap: wrap;">
+                        <span class="badge primary">Dynamic Auto-Detection</span>
+                        <span class="badge">Passwordless Login Ready</span>
+                        <span class="badge">Component: <code>&lt;livewire:socialite /&gt;</code></span>
+                    </div>
+
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 2rem; margin-top: 1.5rem;">
+                        <div>
+                            <h3 style="font-size: 1.1rem; margin-bottom: 0.75rem; color: var(--color-cyan);">1. Add Credentials & Config</h3>
+                            <p style="font-size: 0.9rem; margin-bottom: 1rem;">Fill in credentials inside your <code>.env</code> file, then uncomment the matching array inside <code>config/services.php</code>:</p>
+                            
+                            <div class="terminal" style="margin-top: 0.5rem;">
+                                <div class="terminal-header">
+                                    <span class="dot red"></span><span class="dot yellow"></span><span class="dot green"></span>
+                                </div>
+                                <span class="terminal-comment">// config/services.php</span><br>
+                                <span class="terminal-code" style="font-size: 0.8rem; line-height: 1.4;">
+'github' => [<br>
+&nbsp;&nbsp;&nbsp;&nbsp;'client_id' => env('GITHUB_CLIENT_ID'),<br>
+&nbsp;&nbsp;&nbsp;&nbsp;'client_secret' => env('GITHUB_CLIENT_SECRET'),<br>
+&nbsp;&nbsp;&nbsp;&nbsp;'redirect' => '/auth/github/callback',<br>
+],
+                                </span>
+                            </div>
+                        </div>
+
+                        <div>
+                            <h3 style="font-size: 1.1rem; margin-bottom: 0.75rem; color: var(--color-cyan);">2. Drop Into Any Blade View</h3>
+                            <p style="font-size: 0.9rem; margin-bottom: 1rem;">Use the Livewire component anywhere on your login/register pages with options to customize columns, size, and labels:</p>
+                            
+                            <div class="terminal" style="margin-top: 0.5rem;">
+                                <div class="terminal-header">
+                                    <span class="dot red"></span><span class="dot yellow"></span><span class="dot green"></span>
+                                </div>
+                                <span class="terminal-comment">// resources/views/auth/login.blade.php</span><br>
+                                <span class="terminal-code" style="font-size: 0.8rem; line-height: 1.4;">
+&lt;livewire:socialite <br>
+&nbsp;&nbsp;&nbsp;&nbsp;heading="Or continue with"<br>
+&nbsp;&nbsp;&nbsp;&nbsp;:columns="2"<br>
+&nbsp;&nbsp;&nbsp;&nbsp;size="md"<br>
+&nbsp;&nbsp;&nbsp;&nbsp;:showLabels="true" <br>
+/&gt;
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
             <!-- Core Application Configurations -->
             <div class="card col-12">
                 <div class="card-content">
