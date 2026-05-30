@@ -55,6 +55,7 @@ class ManageSettings extends Page
             'DB_CONNECTION',
             'LOG_CHANNEL',
             'QUEUE_CONNECTION',
+            'TRANSLATABLE_LOCALES',
         ];
 
         $formData = [];
@@ -136,6 +137,21 @@ class ManageSettings extends Page
                                     ->label('Queue Driver')
                                     ->required()
                                     ->placeholder('sync'),
+                            ]),
+                    ]),
+
+                Section::make('Translatable Locales')
+                    ->description('Manage the languages supported by translatable models (e.g. posts).')
+                    ->aside()
+                    ->schema([
+                        TextInput::make('TRANSLATABLE_LOCALES')
+                            ->label('Available Locales')
+                            ->helperText('Comma-separated list of locale codes, e.g. "en,es,fr,de".')
+                            ->placeholder('en,es')
+                            ->required()
+                            ->regex('/^[a-zA-Z\-, ]+$/')
+                            ->validationMessages([
+                                'regex' => 'The locales must consist of a comma-separated list of letters, hyphens, and spaces (e.g. en, es, zh-CN).',
                             ]),
                     ]),
 
@@ -246,13 +262,21 @@ class ManageSettings extends Page
             'DB_CONNECTION',
             'LOG_CHANNEL',
             'QUEUE_CONNECTION',
+            'TRANSLATABLE_LOCALES',
         ];
 
         foreach ($standardKeys as $key) {
             if ($key === 'APP_DEBUG') {
                 $variables[$key] = $state[$key] ? 'true' : 'false';
             } else {
-                $variables[$key] = $state[$key] ?? '';
+                $value = $state[$key] ?? '';
+                if ($key === 'TRANSLATABLE_LOCALES') {
+                    $locales = explode(',', (string) $value);
+                    $locales = array_map(fn (string $locale): string => strtolower(trim($locale)), $locales);
+                    $locales = array_filter(array_unique($locales));
+                    $value = implode(',', $locales);
+                }
+                $variables[$key] = $value;
             }
         }
 

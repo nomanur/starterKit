@@ -190,12 +190,76 @@ Customize visual layouts directly via Livewire properties:
 ---
 
 ### 🛠️ Architecture & Under the Hood
+Key database updates and unified routing patterns power the passwordless authentication lifecycle cleanly. Active integrations are listed dynamically in view elements.
 
-1. **Auto-Detection**: The `SocialiteProvider` enum checks `services.php` dynamically via `$provider->isConfigured()`. Active providers are collected automatically using `SocialiteProvider::configuredProviders()`.
-2. **Unified Routing**: Pre-wired routes manage the entire authentication cycle cleanly:
-   * **Redirect Route**: `/auth/{provider}/redirect` invokes `SocialiteController@redirect`
-   * **Callback Route**: `/auth/{provider}/callback` invokes `SocialiteController@callback`
-3. **Database Schema**: The `users` table contains nullable `socialite_id` and `socialite_type` fields to support passwordless logins, mapping social logins safely to verified email addresses.
+---
+
+## 🌍 Multilingual Spatie Translatable System 📚
+
+The starter kit features a pre-wired, high-performance multilingual translation architecture leveraging Spatie's `laravel-translatable` under the hood. It allows managing content in any set of languages dynamically via tabbed forms in Filament resources, backed by advanced locale-scoped database querying.
+
+### 🚀 Key Features
+
+*   **Tabbed Form Interface**: The custom `Translatable` component automatically partitions inputs (like Title, Content) into beautiful language tabs based on the active available locales.
+*   **Settings-Driven Locales**: Manage the list of active translation languages dynamically inside `.env` or from **System > Settings > Translatable Locales** in the Filament Sidebar.
+*   **Locale-Scoped Search**: Column search is fully localized. Searching in Filament tables scopes filters to the current user's active locale's JSON database path (`title->en`), preventing invalid language matches and SQL performance issues.
+
+---
+
+### 🎨 How to Use
+
+#### 1. Define Translatable Models
+Use the `HasTranslations` trait and specify which columns support translations in your Eloquent model:
+```php
+namespace App\Models;
+
+use Illuminate\Database\Eloquent\Model;
+use Spatie\Translatable\HasTranslations;
+
+class Post extends Model
+{
+    use HasTranslations;
+
+    protected $fillable = ['title', 'content'];
+
+    // Define translatable columns
+    public array $translatable = ['title', 'content'];
+}
+```
+
+#### 2. Configure Form Fields
+Wrap your input fields inside the custom `Translatable::make` component in your Filament form schema:
+```php
+use App\Filament\Forms\Components\Translatable;
+use Filament\Forms\Components\Textarea;
+use Filament\Forms\Components\TextInput;
+
+Translatable::make(function (string $locale): array {
+    $suffix = ' (' . strtoupper($locale) . ')';
+
+    return [
+        TextInput::make("title.{$locale}")
+            ->label('Title' . $suffix)
+            ->required()
+            ->maxLength(255),
+        Textarea::make("content.{$locale}")
+            ->label('Content' . $suffix)
+            ->rows(5),
+    ];
+})
+```
+
+#### 3. Enable Locale-Scoped Search in Tables
+To ensure high-performance, locale-isolated table searches, configure the `searchable` method with a scoped query:
+```php
+use Filament\Tables\Columns\TextColumn;
+use Illuminate\Database\Eloquent\Builder;
+
+TextColumn::make('title')
+    ->searchable(query: function (Builder $query, string $search): Builder {
+        return $query->where('title->' . app()->getLocale(), 'like', "%{$search}%");
+    })
+```
 
 ---
 
