@@ -56,6 +56,121 @@ The starter kit comes with Spatie Media Library pre-configured and automated out
 ### Live Demo
 Visit the route `/photo` on your local server to experience a premium, glassmorphic dark-theme UI featuring real-time drag-and-drop file uploads, image previews, size/mime inspections, and deletion hooks.
 
+---
+
+## ✂️ Image Cropping System
+
+The starter kit ships with a fully integrated **client-side image cropping system** powered by [Cropper.js](https://github.com/fengyuanchen/cropperjs) and Alpine.js. Users can select an image, crop it to a desired aspect ratio, and upload the cropped result — all before the file touches the server.
+
+### 🚀 Key Features
+
+- **Client-Side Cropping**: Images are cropped entirely in the browser using Canvas API — no server round-trip needed.
+- **Alpine.js Integration**: The cropping logic is encapsulated in a reusable `imageCropper` Alpine component, making it trivial to add to any Livewire form.
+- **Cropper.js Powered**: Full-featured crop control with drag handles, zoom, aspect ratio locking, and rotation support.
+- **Custom Aspect Ratio**: Pass any aspect ratio (e.g., `1` for square, `16/9` for landscape) via the Alpine component config.
+- **Seamless Livewire Upload**: The cropped file is dispatched as a standard `File` blob via a custom `image-cropped` event, which Livewire's `@this.upload()` picks up effortlessly.
+- **Beautiful Crop Modal**: A glassmorphic dark-theme modal overlay with smooth transitions for the crop interface.
+
+### 🎨 How It Works
+
+1. User selects an image file via `<input type="file">`.
+2. The `imageCropper` Alpine component reads the file as a Data URL and initializes Cropper.js on it inside a full-screen modal.
+3. User adjusts the crop area and clicks **Apply Crop**.
+4. `saveCrop()` uses `Cropper.getCroppedCanvas().toBlob()` to produce a cropped JPEG `File` blob.
+5. The component dispatches an `image-cropped` event with the cropped file.
+6. Livewire's `@this.upload('photo', $event.detail.file)` uploads the cropped temporary file to the server.
+7. The Livewire `save()` method validates and persists the file to Spatie Media Library.
+
+### ⚡ Quick Usage
+
+Drop the Alpine component into any Livewire Blade view. The minimal setup:
+
+```blade
+<div
+    x-data="imageCropper({ cropping: true, aspectRatio: 1 })"
+    @image-cropped.window="@this.upload('photo', $event.detail.file)"
+    wire:ignore
+>
+    <input type="file" x-ref="fileInput" @change="onFileChange" />
+
+    <x-cropping-modal />
+</div>
+```
+
+> The crop modal is a reusable Blade component at [`resources/views/components/cropping-modal.blade.php`](resources/views/components/cropping-modal.blade.php) with customizable `title`, `cancelText`, and `applyText` props.
+
+### 🧩 Alpine Component API
+
+The `imageCropper` component accepts a config object and exposes the following:
+
+| Config       | Type    | Default | Description                              |
+|-------------|---------|---------|------------------------------------------|
+| `cropping`   | boolean | `false` | Whether to show the crop modal on load   |
+| `aspectRatio`| number  | `NaN`   | Aspect ratio for the crop box (freeform) |
+
+| Method       | Description                                      |
+|-------------|--------------------------------------------------|
+| `onFileChange(event)` | Read a file input and show the crop modal      |
+| `saveCrop()` | Apply the crop, dispatch `image-cropped` event, close modal |
+| `cancelCrop()` | Discard the crop, close modal, clear input       |
+| `clearInput()` | Reset the file input value                       |
+
+| Event               | Detail                          | Description                            |
+|---------------------|---------------------------------|----------------------------------------|
+| `image-cropped`     | `{ file: File, dataUrl: string }` | Dispatched after crop is applied       |
+
+### 🗺️ Livewire Integration
+
+In your Livewire component, listen for the `image-cropped` event and save to Spatie Media Library:
+
+```php
+use Livewire\WithFileUploads;
+use Livewire\Component;
+
+class Test extends Component
+{
+    use WithFileUploads;
+
+    public ?TemporaryUploadedFile $photo = null;
+
+    public function save(): void
+    {
+        $this->validate([
+            'photo' => ['required', 'image', 'max:5120'],
+        ]);
+
+        $this->user->addMedia($this->photo->getRealPath())
+            ->usingFileName($this->photo->getClientOriginalName())
+            ->toMediaCollection('avatars');
+    }
+}
+```
+
+### 🔧 Under the Hood
+
+**Alpine Plugin** (`resources/js/alpine-cropper.js`):
+- Registers an `imageCropper` Alpine data component.
+- Manages `cropping`, `imageUrl`, and `cropper` reactive state.
+- `init()` watches `cropping` — when `true` and `imageUrl` is set, it calls `initCropper()` which instantiates a new `Cropper` instance on the `<img x-ref="cropperImage">` element.
+- `onFileChange(event)` reads the selected file via `FileReader`, sets `imageUrl`, and triggers the crop modal.
+- `saveCrop()` calls `cropper.getCroppedCanvas()`, converts to blob, creates a `File`, then dispatches the `image-cropped` custom event with `{ file, dataUrl }`.
+- `cancelCrop()` destroys the cropper, hides the modal, and clears the input.
+
+**JavaScript Bootstrap** (`resources/js/app.js`):
+- Imports and registers the `imageCropperPlugin` via `Alpine.plugin(imageCropperPlugin)`.
+
+**Blade Component** (`resources/views/components/cropping-modal.blade.php`):
+- Encapsulates the glassmorphic crop modal as a reusable Laravel Blade component.
+- Accepts customizable props: `title` (default: "Crop Your Profile Photo"), `cancelText` (default: "Cancel"), `applyText` (default: "Apply Crop").
+- Wire it into any form with `<x-cropping-modal />` inside the Alpine `x-data="imageCropper(...)"` scope.
+
+**NPM Dependency** (`package.json`):
+- `"cropperjs": "^1.6.2"` — the underlying crop library.
+
+### 🖼️ Live Demo
+
+Visit `/photo` on your local server to see the full cropping + upload workflow in action with a polished glassmorphic UI.
+
 ### Implementation Guide & Example
 
 #### 1. Prepare your Eloquent Model

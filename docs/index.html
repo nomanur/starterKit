@@ -698,6 +698,170 @@ class Test extends Component {<br>
                 </div>
             </div>
 
+            <!-- Image Cropper Integration -->
+            <div class="card col-12">
+                <div class="card-content">
+                    <h2 class="card-title">
+                        <span class="card-icon">✂️</span> Image Cropping System
+                    </h2>
+                    <p>The starter kit ships with a fully integrated <strong>client-side image cropping system</strong> powered by <a href="https://github.com/fengyuanchen/cropperjs" style="color: var(--color-cyan);">Cropper.js</a> and Alpine.js. Users can select an image, crop it to a desired aspect ratio, and upload the cropped result — all before the file ever touches the server.</p>
+
+                    <div style="display: flex; gap: 1rem; align-items: center; margin-bottom: 1.5rem; flex-wrap: wrap;">
+                        <span class="badge primary">Client-Side Cropping</span>
+                        <span class="badge">Cropper.js v1.6</span>
+                        <span class="badge">Alpine.js Plugin</span>
+                        <span class="badge">Livewire Upload Ready</span>
+                    </div>
+
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 2rem; margin-top: 1.5rem;">
+                        <div style="grid-column: 1 / -1;">
+                            <h3 style="font-size: 1.1rem; margin-bottom: 0.75rem; color: var(--color-cyan);">How It Works</h3>
+                            <p style="font-size: 0.9rem; margin-bottom: 1rem;">The cropping pipeline runs entirely on the client side:</p>
+                            <ul style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem 2rem;">
+                                <li>
+                                    <span class="bullet"></span>
+                                    <div>
+                                        <strong>File Selection</strong>
+                                        <p style="margin: 0; font-size: 0.875rem;">User picks an image via a file input.</p>
+                                    </div>
+                                </li>
+                                <li>
+                                    <span class="bullet"></span>
+                                    <div>
+                                        <strong>Crop Interface</strong>
+                                        <p style="margin: 0; font-size: 0.875rem;">A glassmorphic modal opens with the image loaded into Cropper.js. User adjusts the crop area.</p>
+                                    </div>
+                                </li>
+                                <li>
+                                    <span class="bullet"></span>
+                                    <div>
+                                        <strong>Canvas Extraction</strong>
+                                        <p style="margin: 0; font-size: 0.875rem;">On "Apply Crop", <code>getCroppedCanvas()</code> extracts the selection as a canvas, then <code>toBlob()</code> produces a JPEG <code>File</code> blob.</p>
+                                    </div>
+                                </li>
+                                <li>
+                                    <span class="bullet"></span>
+                                    <div>
+                                        <strong>Livewire Upload</strong>
+                                        <p style="margin: 0; font-size: 0.875rem;">An <code>image-cropped</code> custom event dispatches the file. Livewire's <code>@this.upload()</code> receives it as a temporary upload.</p>
+                                    </div>
+                                </li>
+                                <li>
+                                    <span class="bullet"></span>
+                                    <div>
+                                        <strong>Media Library Save</strong>
+                                        <p style="margin: 0; font-size: 0.875rem;">The Livewire component validates and persists the cropped file to Spatie Media Library.</p>
+                                    </div>
+                                </li>
+                            </ul>
+                        </div>
+
+                        <div>
+                            <h3 style="font-size: 1.1rem; margin-bottom: 0.75rem; color: var(--color-cyan);">Quick Usage</h3>
+                            <p style="font-size: 0.9rem; margin-bottom: 1rem;">Drop the Alpine component into any Livewire Blade view. The minimal setup:</p>
+
+                            <div class="terminal" style="margin-top: 0.5rem; position: relative;">
+                                <button onclick="copyCropCode()" style="position: absolute; top: 0.5rem; right: 0.5rem; background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.1); color: #9ca3af; padding: 0.25rem 0.6rem; border-radius: 6px; font-size: 0.7rem; cursor: pointer; transition: all 0.2s; z-index: 1;">Copy full code</button>
+                                <div class="terminal-header">
+                                    <span class="dot red"></span><span class="dot yellow"></span><span class="dot green"></span>
+                                </div>
+                                <span class="terminal-comment">&lt;!-- resources/views/livewire/test.blade.php --&gt;</span><br>
+                                <span class="terminal-code" style="font-size: 0.75rem; line-height: 1.3;">
+&lt;div<br>
+&nbsp;&nbsp;&nbsp;&nbsp;x-data="imageCropper({ cropping: true, aspectRatio: 1 })"<br>
+&nbsp;&nbsp;&nbsp;&nbsp;@image-cropped.window="@this.upload('photo', $event.detail.file)"<br>
+&nbsp;&nbsp;&nbsp;&nbsp;wire:ignore<br>
+&gt;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&lt;input type="file" x-ref="fileInput" @change="onFileChange" /&gt;<br>
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&lt;x-cropping-modal /&gt;<br>
+&lt;/div&gt;
+                                </span>
+                            </div>
+                            <p style="font-size: 0.8rem; color: var(--text-muted); margin-top: 0.5rem;">Click <strong>Copy full code</strong> above to copy the complete code including the reusable <code>&lt;x-cropping-modal /&gt;</code> component.</p>
+                        </div>
+
+                        <div>
+                            <h3 style="font-size: 1.1rem; margin-bottom: 0.75rem; color: var(--color-cyan);">Alpine Component API</h3>
+                            <p style="font-size: 0.9rem; margin-bottom: 1rem;">The <code>imageCropper</code> component accepts a config object:</p>
+
+                            <div class="terminal" style="margin-top: 0.5rem;">
+                                <div class="terminal-header">
+                                    <span class="dot red"></span><span class="dot yellow"></span><span class="dot green"></span>
+                                </div>
+                                <span class="terminal-comment">// Config properties</span><br>
+                                <span class="terminal-code" style="font-size: 0.8rem; line-height: 1.4;">
+{<br>
+&nbsp;&nbsp;cropping: true,&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="terminal-comment">// bool, default false</span><br>
+&nbsp;&nbsp;aspectRatio: 1,&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="terminal-comment">// number, default NaN (freeform)</span><br>
+}
+                                </span>
+                            </div>
+
+                            <div class="terminal" style="margin-top: 0.5rem;">
+                                <div class="terminal-header">
+                                    <span class="dot red"></span><span class="dot yellow"></span><span class="dot green"></span>
+                                </div>
+                                <span class="terminal-comment">// Methods</span><br>
+                                <span class="terminal-code" style="font-size: 0.8rem; line-height: 1.4;">
+onFileChange(event)&nbsp;&nbsp;<span class="terminal-comment">// Read file & show modal</span><br>
+saveCrop()&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="terminal-comment">// Apply, dispatch event, close</span><br>
+cancelCrop()&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="terminal-comment">// Discard, close, clear input</span><br>
+clearInput()&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="terminal-comment">// Reset file input value</span>
+                                </span>
+                            </div>
+
+                            <div class="terminal" style="margin-top: 0.5rem;">
+                                <div class="terminal-header">
+                                    <span class="dot red"></span><span class="dot yellow"></span><span class="dot green"></span>
+                                </div>
+                                <span class="terminal-comment">// Events</span><br>
+                                <span class="terminal-code" style="font-size: 0.8rem; line-height: 1.4;">
+@image-cropped="handler"<br>
+<span class="terminal-comment">// $event.detail = { file: File, dataUrl: string }</span>
+                                </span>
+                            </div>
+                        </div>
+
+                        <div>
+                            <h3 style="font-size: 1.1rem; margin-bottom: 0.75rem; color: var(--color-cyan);">Livewire Component</h3>
+                            <p style="font-size: 0.9rem; margin-bottom: 1rem;">Listen for the cropped file and save to Spatie Media Library:</p>
+
+                            <div class="terminal" style="margin-top: 0.5rem;">
+                                <div class="terminal-header">
+                                    <span class="dot red"></span><span class="dot yellow"></span><span class="dot green"></span>
+                                </div>
+                                <span class="terminal-comment">// app/Livewire/Test.php</span><br>
+                                <span class="terminal-code" style="font-size: 0.8rem; line-height: 1.4;">
+class Test extends Component<br>
+{<br>
+&nbsp;&nbsp;&nbsp;&nbsp;use WithFileUploads;<br>
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;public ?TemporaryUploadedFile $photo = null;<br>
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;public function save(): void<br>
+&nbsp;&nbsp;&nbsp;&nbsp;{<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;$this->validate([<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'photo' => ['required', 'image', 'max:5120'],<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;]);<br>
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;$this->user->addMedia($this->photo->getRealPath())<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;->toMediaCollection('avatars');<br>
+&nbsp;&nbsp;&nbsp;&nbsp;}<br>
+}
+                                </span>
+                            </div>
+                        </div>
+
+
+                    </div>
+
+                    <p style="margin-top: 1.5rem; font-size: 0.9rem;">
+                        Visit <a href="/photo" style="color: var(--color-cyan);">/photo</a> on your local server to see the full cropping + upload workflow in action. The crop modal is a reusable Blade component — use <code>&lt;x-cropping-modal /&gt;</code> anywhere with customizable <code>title</code>, <code>cancelText</code>, and <code>applyText</code> props.
+                    </p>
+                </div>
+            </div>
+
             <!-- Opcodes Log Viewer Integration -->
             <div class="card col-12">
                 <div class="card-content">
@@ -1091,6 +1255,78 @@ public static function configure(Table $table): Table {<br>
 
     </div>
 
+    <!-- Full crop modal code hidden for copy button -->
+    <div id="full-crop-code" style="display: none;">&lt;div
+    x-data="imageCropper({ cropping: true, aspectRatio: 1 })"
+    @image-cropped.window="@this.upload('photo', $event.detail.file)"
+    wire:ignore
+&gt;
+    &lt;input type="file" x-ref="fileInput" @change="onFileChange" /&gt;
+    &lt;x-cropping-modal /&gt;
+&lt;/div&gt;
+
+&lt;!-- resources/views/components/cropping-modal.blade.php --&gt;
+@props([
+    'title' =&gt; 'Crop Your Profile Photo',
+    'cancelText' =&gt; 'Cancel',
+    'applyText' =&gt; 'Apply Crop'
+])
+
+&lt;template x-teleport="body"&gt;
+    &lt;div 
+        x-show="cropping &amp;&amp; imageUrl" 
+        x-transition:enter="transition ease-out duration-300"
+        x-transition:enter-start="opacity-0"
+        x-transition:enter-end="opacity-100"
+        x-transition:leave="transition ease-in duration-200"
+        x-transition:leave-start="opacity-100"
+        x-transition:leave-end="opacity-0"
+        class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/85 backdrop-blur-md"
+        style="display: none;"
+    &gt;
+        &lt;div 
+            x-show="cropping &amp;&amp; imageUrl"
+            x-transition:enter="transition ease-out duration-300"
+            x-transition:enter-start="opacity-0 scale-95 translate-y-4"
+            x-transition:enter-end="opacity-100 scale-100 translate-y-0"
+            x-transition:leave="transition ease-in duration-200"
+            x-transition:leave-start="opacity-100 scale-100 translate-y-0"
+            x-transition:leave-end="opacity-0 scale-95 translate-y-4"
+            class="bg-slate-900 border border-slate-800 rounded-2xl max-w-2xl w-full p-6 shadow-2xl flex flex-col max-h-[90vh]"
+        &gt;
+            &lt;div class="flex items-center justify-between mb-4 pb-3 border-b border-slate-800"&gt;
+                &lt;h3 class="text-lg font-bold text-white"&gt;{{ $title }}&lt;/h3&gt;
+                &lt;button @click="cancelCrop" type="button" class="text-slate-400 hover:text-white transition-colors cursor-pointer"&gt;
+                    &lt;svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"&gt;
+                        &lt;path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" /&gt;
+                    &lt;/svg&gt;
+                &lt;/button&gt;
+            &lt;/div&gt;
+            
+            &lt;div class="flex-1 overflow-hidden bg-slate-950 rounded-xl border border-slate-800 flex items-center justify-center p-4 min-h-[300px]"&gt;
+                &lt;img x-ref="cropperImage" :src="imageUrl" class="max-w-full max-h-[50vh] block"&gt;
+            &lt;/div&gt;
+            
+            &lt;div class="flex items-center justify-end gap-3 mt-6 pt-4 border-t border-slate-800"&gt;
+                &lt;button 
+                    @click="cancelCrop" 
+                    type="button" 
+                    class="px-4 py-2 text-sm font-medium text-slate-400 hover:text-white bg-slate-800 hover:bg-slate-700 rounded-xl border border-slate-700 transition-colors cursor-pointer"
+                &gt;
+                    {{ $cancelText }}
+                &lt;/button&gt;
+                &lt;button 
+                    @click="saveCrop" 
+                    type="button" 
+                    class="px-5 py-2 text-sm font-semibold text-white bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 rounded-xl transition-all shadow-lg shadow-indigo-600/20 cursor-pointer"
+                &gt;
+                    {{ $applyText }}
+                &lt;/button&gt;
+            &lt;/div&gt;
+        &lt;/div&gt;
+    &lt;/div&gt;
+&lt;/template&gt;</div>
+
     <!-- Notification Toast -->
     <div id="toast" class="toast">Copied to clipboard! 📋</div>
 
@@ -1104,6 +1340,15 @@ public static function configure(Table $table): Table {<br>
                     toast.classList.remove('show');
                 }, 2000);
             });
+        }
+
+        function copyCropCode() {
+            const el = document.getElementById('full-crop-code');
+            const html = el.innerHTML;
+            // Decode HTML entities back to raw HTML
+            const txt = document.createElement('textarea');
+            txt.innerHTML = html;
+            copyText(txt.value);
         }
     </script>
 </body>
