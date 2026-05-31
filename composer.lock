@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "45f421ec59ec478cdd7390ebabfa90f5",
+    "content-hash": "fb0a40d390c9b30ac7f2d0294b323ce2",
     "packages": [
         {
             "name": "bezhansalleh/filament-plugin-essentials",
@@ -956,6 +956,89 @@
                 }
             ],
             "time": "2026-03-16T11:29:23+00:00"
+        },
+        {
+            "name": "devrabiul/laravel-geo-genius",
+            "version": "v1.6",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/devrabiul/laravel-geo-genius.git",
+                "reference": "257e9a844e77cbe8a633dad6667cf15ce7ad9115"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/devrabiul/laravel-geo-genius/zipball/257e9a844e77cbe8a633dad6667cf15ce7ad9115",
+                "reference": "257e9a844e77cbe8a633dad6667cf15ce7ad9115",
+                "shasum": ""
+            },
+            "require": {
+                "php": "^8.0"
+            },
+            "type": "library",
+            "extra": {
+                "laravel": {
+                    "aliases": {
+                        "LaravelGeoGenius": "Devrabiul\\LaravelGeoGenius\\Facades\\LaravelGeoGenius"
+                    },
+                    "providers": [
+                        "Devrabiul\\LaravelGeoGenius\\LaravelGeoGeniusServiceProvider"
+                    ]
+                }
+            },
+            "autoload": {
+                "files": [
+                    "src/utils/GeniusTranslate.php",
+                    "src/utils/GeniusHelpers.php"
+                ],
+                "psr-4": {
+                    "Devrabiul\\LaravelGeoGenius\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Muhammad Rabiul",
+                    "email": "devrabiul@gmail.com"
+                }
+            ],
+            "description": "Laravel GeoGenius — A powerful, intelligent toolkit for geo-location, timezone, and locale-based features in Laravel applications.",
+            "homepage": "https://github.com/devrabiul/laravel-geo-genius",
+            "keywords": [
+                "IP Location",
+                "context-aware",
+                "country detection",
+                "datetime",
+                "geo",
+                "geo genius",
+                "geolocation",
+                "internationalization",
+                "laravel",
+                "laravel timezone",
+                "locale",
+                "region detection",
+                "timezone",
+                "timezone conversion",
+                "timezone detection",
+                "user timezone"
+            ],
+            "support": {
+                "issues": "https://github.com/devrabiul/laravel-geo-genius/issues",
+                "source": "https://github.com/devrabiul/laravel-geo-genius/tree/v1.6"
+            },
+            "funding": [
+                {
+                    "url": "https://github.com/devrabiul",
+                    "type": "github"
+                },
+                {
+                    "url": "https://ko-fi.com/devrabiul",
+                    "type": "ko_fi"
+                }
+            ],
+            "time": "2026-03-28T19:53:53+00:00"
         },
         {
             "name": "dflydev/dot-access-data",
