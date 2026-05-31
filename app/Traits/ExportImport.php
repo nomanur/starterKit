@@ -5,14 +5,23 @@ declare(strict_types=1);
 namespace App\Traits;
 
 use Filament\Actions\Action;
+use Filament\Forms\Components\CheckboxList;
+use Filament\Forms\Components\FileUpload;
+use Filament\Forms\Components\Select;
 use Filament\Notifications\Notification;
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Http\UploadedFile;
+use PhpOffice\PhpSpreadsheet\IOFactory;
+use PhpOffice\PhpSpreadsheet\Spreadsheet;
+use PhpOffice\PhpSpreadsheet\Style\Fill;
+use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 use Symfony\Component\HttpFoundation\StreamedResponse;
 
 /**
  * Trait ExportImport
- * 
+ *
  * Adds Excel/CSV import and export functionality to Filament resources.
- * 
+ *
  * Usage: Add `use ExportImport;` to your Filament Resource class.
  */
 trait ExportImport
@@ -27,7 +36,8 @@ trait ExportImport
     {
         // Default: export all model columns
         if (static::$model) {
-            $model = new static::$model();
+            $model = new static::$model;
+
             return array_combine(
                 $model->getFillable(),
                 $model->getFillable()
@@ -41,7 +51,7 @@ trait ExportImport
      * Get the query for exporting records.
      * Override this method to customize which records are exported.
      */
-    public static function getExportQuery(): \Illuminate\Database\Eloquent\Builder|\Illuminate\Database\Query\Builder
+    public static function getExportQuery(): Builder|\Illuminate\Database\Query\Builder
     {
         return static::getModel()::query();
     }
@@ -58,7 +68,7 @@ trait ExportImport
             ->modalHeading('Export Data')
             ->modalDescription('Choose your preferred format and columns to export.')
             ->form([
-                \Filament\Forms\Components\Select::make('format')
+                Select::make('format')
                     ->label('Format')
                     ->options([
                         'csv' => 'CSV',
@@ -66,7 +76,7 @@ trait ExportImport
                     ])
                     ->default('csv')
                     ->required(),
-                \Filament\Forms\Components\CheckboxList::make('columns')
+                CheckboxList::make('columns')
                     ->label('Columns')
                     ->options(static::getExportColumns())
                     ->default(array_keys(static::getExportColumns()))
@@ -76,7 +86,7 @@ trait ExportImport
             ->action(function (array $data): StreamedResponse {
                 $format = $data['format'];
                 $columns = $data['columns'];
-                
+
                 $query = static::getExportQuery();
                 $records = $query->get();
 
@@ -92,20 +102,20 @@ trait ExportImport
                     $row = [];
                     foreach ($columns as $column) {
                         $value = $record->{$column};
-                        
+
                         // Handle relationships and accessors
                         if (str_contains($column, '.')) {
                             $parts = explode('.', $column);
                             $relation = $parts[0];
                             $field = $parts[1];
-                            
+
                             if ($record->{$relation}) {
                                 $value = $record->{$relation}->{$field} ?? '';
                             } else {
                                 $value = '';
                             }
                         }
-                        
+
                         $row[] = $value ?? '';
                     }
                     $exportData[] = $row;
@@ -124,9 +134,9 @@ trait ExportImport
      */
     protected static function downloadAsCsv(array $headers, array $data): StreamedResponse
     {
-        $filename = strtolower(class_basename(static::class)) . '_export_' . date('Y-m-d_H-i-s') . '.csv';
+        $filename = strtolower(class_basename(static::class)).'_export_'.date('Y-m-d_H-i-s').'.csv';
 
-        return response()->streamDownload(function () use ($headers, $data) {
+        return response()->streamDownload(function () use ($headers, $data): void {
             $output = fopen('php://output', 'w');
 
             // Add BOM for UTF-8 encoding
@@ -152,10 +162,10 @@ trait ExportImport
      */
     protected static function downloadAsExcel(array $headers, array $data): StreamedResponse
     {
-        $filename = strtolower(class_basename(static::class)) . '_export_' . date('Y-m-d_H-i-s') . '.xlsx';
+        $filename = strtolower(class_basename(static::class)).'_export_'.date('Y-m-d_H-i-s').'.xlsx';
 
         // Check if PhpSpreadsheet is available
-        if (!class_exists(\PhpOffice\PhpSpreadsheet\Spreadsheet::class)) {
+        if (! class_exists(Spreadsheet::class)) {
             Notification::make()
                 ->title('Excel library not installed')
                 ->body('Please install phpoffice/phpspreadsheet to export as Excel.')
@@ -166,7 +176,7 @@ trait ExportImport
             return static::downloadAsCsv($headers, $data);
         }
 
-        $spreadsheet = new \PhpOffice\PhpSpreadsheet\Spreadsheet();
+        $spreadsheet = new Spreadsheet;
         $worksheet = $spreadsheet->getActiveSheet();
 
         // Set headers
@@ -184,15 +194,15 @@ trait ExportImport
         $headerStyle = [
             'font' => ['bold' => true],
             'fill' => [
-                'fillType' => \PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID,
+                'fillType' => Fill::FILL_SOLID,
                 'startColor' => ['rgb' => 'CCCCCC'],
             ],
         ];
-        $worksheet->getStyle('A1:' . $worksheet->getHighestDataColumn() . '1')->applyFromArray($headerStyle);
+        $worksheet->getStyle('A1:'.$worksheet->getHighestDataColumn().'1')->applyFromArray($headerStyle);
 
-        $writer = new \PhpOffice\PhpSpreadsheet\Writer\Xlsx($spreadsheet);
+        $writer = new Xlsx($spreadsheet);
 
-        return response()->streamDownload(function () use ($writer) {
+        return response()->streamDownload(function () use ($writer): void {
             $writer->save('php://output');
         }, $filename, [
             'Content-Type' => 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
@@ -211,11 +221,11 @@ trait ExportImport
             ->modalHeading('Import Data')
             ->modalDescription('Upload a CSV or Excel file to import records.')
             ->form([
-                \Filament\Forms\Components\FileUpload::make('file')
+                FileUpload::make('file')
                     ->label('File')
                     ->acceptedFileTypes(['text/csv', 'text/plain', 'application/vnd.ms-excel', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'])
                     ->required(),
-                \Filament\Forms\Components\Select::make('format')
+                Select::make('format')
                     ->label('Format')
                     ->options([
                         'csv' => 'CSV',
@@ -229,8 +239,8 @@ trait ExportImport
                 $format = $data['format'];
 
                 // Get the file path
-                $filePath = $file instanceof \Illuminate\Http\UploadedFile 
-                    ? $file->getRealPath() 
+                $filePath = $file instanceof UploadedFile
+                    ? $file->getRealPath()
                     : $file;
 
                 $records = [];
@@ -278,6 +288,7 @@ trait ExportImport
 
         if ($headers === false) {
             fclose($handle);
+
             return [];
         }
 
@@ -308,11 +319,11 @@ trait ExportImport
      */
     protected static function parseExcel(string $filePath): array
     {
-        if (!class_exists(\PhpOffice\PhpSpreadsheet\IOFactory::class)) {
+        if (! class_exists(IOFactory::class)) {
             throw new \RuntimeException('Please install phpoffice/phpspreadsheet to import Excel files.');
         }
 
-        $spreadsheet = \PhpOffice\PhpSpreadsheet\IOFactory::load($filePath);
+        $spreadsheet = IOFactory::load($filePath);
         $worksheet = $spreadsheet->getActiveSheet();
         $rows = $worksheet->toArray();
 

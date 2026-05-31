@@ -196,13 +196,18 @@ Key database updates and unified routing patterns power the passwordless authent
 
 ---
 
-## 🌍 Multilingual Spatie Translatable System 📚
+## 🌍 Multilingual Spatie Translatable & Localization System 📚
 
-The starter kit features a pre-wired, high-performance multilingual translation architecture leveraging Spatie's `laravel-translatable` under the hood. It allows managing content in any set of languages dynamically via tabbed forms in Filament resources, backed by advanced locale-scoped database querying.
+The starter kit features a pre-wired, high-performance multilingual translation and localization architecture. Combining Spatie's `laravel-translatable` with automated Geo-IP services and browser-header detection, administrators can manage content dynamically in the Filament Panel, while visitors are automatically served pages in their native tongue based on their location or browser preference.
+
+---
 
 ### 🚀 Key Features
 
-*   **Tabbed Form Interface**: The custom `Translatable` component automatically partitions inputs (like Title, Content) into beautiful language tabs based on the active available locales.
+*   **Geo-IP Language Detection**: The application queries the visitor's IP address dynamically using `devrabiul/laravel-geo-genius` to detect their country and auto-serve pages in their native language (e.g., visitors from Bangladesh automatically see Bengali content).
+*   **Preferred Browser Fallback**: If the geolocation lookup is inconclusive, the system seamlessly inspects browser headers to detect preferred languages, falling back gracefully to the application default (`en`).
+*   **Session-Persistent Overrides**: Manual language switching is fully supported. Toggling a language updates the user's session locale (`locale`), which takes full precedence over automatic detection.
+*   **Tabbed Form Interface**: The custom `Translatable` component automatically partitions inputs (like Title, Content) into beautiful language tabs based on active locales.
 *   **Settings-Driven Locales**: Manage the list of active translation languages dynamically inside `.env` or from **System > Settings > Translatable Locales** in the Filament Sidebar.
 *   **Locale-Scoped Search**: Column search is fully localized. Searching in Filament tables scopes filters to the current user's active locale's JSON database path (`title->en`), preventing invalid language matches and SQL performance issues.
 
@@ -262,6 +267,42 @@ TextColumn::make('title')
         return $query->where('title->' . app()->getLocale(), 'like', "%{$search}%");
     })
 ```
+
+#### 4. Automatic Localization Middleware (`SetLocaleMiddleware`)
+The global `SetLocaleMiddleware` is automatically appended to the `web` middleware group inside `bootstrap/app.php`. It handles country-to-locale mapping, browser header inspections, and session persistence:
+```php
+// app/Http/Middleware/SetLocaleMiddleware.php
+protected array $countryToLocaleMap = [
+    'BD' => 'bn', // Bangladesh -> Bengali
+    'IN' => 'hi', // India -> Hindi
+    'US' => 'en', // United States -> English
+    // ... easily expandable country-to-locale array
+];
+```
+
+#### 5. Implementing a Manual Language Selector
+To allow users to manually switch languages on the frontend, define a session-setting route and display selector links:
+
+**Step A: Define the route in `routes/web.php`:**
+```php
+use Illuminate\Support\Facades\Route;
+
+Route::get('/language/{locale}', function (string $locale) {
+    if (in_array($locale, config('app.translatable_locales', ['en']))) {
+        session(['locale' => $locale]);
+    }
+    return back();
+})->name('language.switch');
+```
+
+**Step B: Add a language selector component in your blade template:**
+```html
+<div class="flex gap-4 items-center">
+    <a href="{{ route('language.switch', 'en') }}" class="{{ app()->getLocale() === 'en' ? 'font-bold' : '' }}">English</a>
+    <a href="{{ route('language.switch', 'bn') }}" class="{{ app()->getLocale() === 'bn' ? 'font-bold' : '' }}">বাংলা</a>
+</div>
+```
+The `SetLocaleMiddleware` automatically intercepts all incoming requests, detects the session key, and sets the active application locale globally.
 
 ---
 
