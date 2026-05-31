@@ -28,6 +28,9 @@ export default function imageCropperPlugin(Alpine) {
             const file = event.target.files[0];
             if (!file) return;
             
+            // Always reset cropping to true when a new file is selected
+            this.cropping = true;
+            
             const reader = new FileReader();
             reader.readAsDataURL(file);
             reader.onload = (e) => {
@@ -83,12 +86,21 @@ export default function imageCropperPlugin(Alpine) {
             
             this.destroyCropper();
             this.cropping = false; // Turn off cropping mode
+            this.clearInput();
         },
         
         // Call this when the user cancels the crop action
         cancelCrop() {
             this.destroyCropper();
             this.cropping = false;
+            this.clearInput();
+        },
+
+        // Helper to reset the file input so the same file can be selected again
+        clearInput() {
+            if (this.$refs.fileInput) {
+                this.$refs.fileInput.value = '';
+            }
         }
     }));
 }

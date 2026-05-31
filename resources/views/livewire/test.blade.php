@@ -52,6 +52,7 @@
                 <div 
                     x-data="imageCropper({ cropping: true, aspectRatio: 1 })" 
                     @image-cropped.window="@this.upload('photo', $event.detail.file)"
+                    @photo-saved.window="imageUrl = null"
                     wire:ignore
                 >
                     <label class="block text-xs font-semibold text-slate-400 uppercase tracking-wider mb-2">
@@ -66,6 +67,7 @@
                         <!-- Alpine handles the file selection rather than Livewire directly -->
                         <input
                             type="file"
+                            x-ref="fileInput"
                             @change="onFileChange"
                             class="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10"
                             id="photo-upload"
