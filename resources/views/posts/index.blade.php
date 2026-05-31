@@ -1,5 +1,5 @@
-@foreach ($posts as $post) 
-    <li>
-        {{ $post->title }}
-    </li>
+@foreach ($posts as $post)
+<li>
+    {{ $post->title }}
+</li>
 @endforeach

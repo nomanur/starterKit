@@ -47,20 +47,26 @@
             </div>
 
             <!-- Upload Area -->
+            <!-- Upload Area with Alpine JS Image Cropper -->
             <form wire:submit.prevent="save" class="space-y-4">
-                <div>
+                <div 
+                    x-data="imageCropper({ cropping: true, aspectRatio: 1 })" 
+                    @image-cropped.window="@this.upload('photo', $event.detail.file)"
+                    wire:ignore
+                >
                     <label class="block text-xs font-semibold text-slate-400 uppercase tracking-wider mb-2">
                         Upload Image
                     </label>
 
                     <!-- Drag & Drop container -->
                     <div
-                        class="relative group cursor-pointer flex flex-col items-center justify-center p-6 border-2 border-dashed rounded-xl transition-all duration-300
-                        {{ $photo ? 'border-indigo-500/50 bg-indigo-950/10' : 'border-slate-800 hover:border-slate-700 bg-slate-950/20' }}"
+                        class="relative group cursor-pointer flex flex-col items-center justify-center p-6 border-2 border-dashed rounded-xl transition-all duration-300 border-slate-800 hover:border-slate-700 bg-slate-950/20"
+                        :class="imageUrl ? 'border-indigo-500/50 bg-indigo-950/10' : 'border-slate-800 hover:border-slate-700 bg-slate-950/20'"
                     >
+                        <!-- Alpine handles the file selection rather than Livewire directly -->
                         <input
                             type="file"
-                            wire:model="photo"
+                            @change="onFileChange"
                             class="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10"
                             id="photo-upload"
                         />
@@ -72,27 +78,92 @@
                                 </svg>
                             </div>
 
-                            @if ($photo)
+                            <template x-if="imageUrl">
                                 <div class="text-sm font-semibold text-indigo-400">
-                                    Selected: {{ $photo->getClientOriginalName() }}
+                                    Image Selected & Cropped
                                 </div>
-                                <div class="text-xs text-slate-500">
-                                    Size: {{ number_format($photo->getSize() / 1024, 1) }} KB
+                            </template>
+                            <template x-if="!imageUrl">
+                                <div>
+                                    <div class="text-sm font-medium text-slate-300">
+                                        Click or drag image here
+                                    </div>
+                                    <div class="text-xs text-slate-500 mt-1">
+                                        PNG, JPG, WEBP up to 5MB
+                                    </div>
                                 </div>
-                            @else
-                                <div class="text-sm font-medium text-slate-300">
-                                    Click or drag image here
-                                </div>
-                                <div class="text-xs text-slate-500">
-                                    PNG, JPG, WEBP up to 5MB
-                                </div>
-                            @endif
+                            </template>
+                        </div>
+                        
+                        <!-- Uploading Indicator -->
+                        <div wire:loading wire:target="photo" class="absolute inset-0 bg-slate-950/80 rounded-xl flex flex-col items-center justify-center space-y-2 z-20">
+                            <svg class="animate-spin h-8 w-8 text-indigo-500" fill="none" viewBox="0 0 24 24">
+                                <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                                <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                            </svg>
+                            <span class="text-xs text-indigo-400 font-semibold">Uploading cropped image...</span>
                         </div>
                     </div>
 
                     @error('photo')
                         <span class="text-xs text-rose-500 mt-2 block">{{ $message }}</span>
                     @enderror
+
+                    <!-- Beautiful Crop Modal Overlay -->
+                    <template x-teleport="body">
+                        <div 
+                            x-show="cropping && imageUrl" 
+                            x-transition:enter="transition ease-out duration-300"
+                            x-transition:enter-start="opacity-0"
+                            x-transition:enter-end="opacity-100"
+                            x-transition:leave="transition ease-in duration-200"
+                            x-transition:leave-start="opacity-100"
+                            x-transition:leave-end="opacity-0"
+                            class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/85 backdrop-blur-md"
+                            style="display: none;"
+                        >
+                            <div 
+                                x-show="cropping && imageUrl"
+                                x-transition:enter="transition ease-out duration-300"
+                                x-transition:enter-start="opacity-0 scale-95 translate-y-4"
+                                x-transition:enter-end="opacity-100 scale-100 translate-y-0"
+                                x-transition:leave="transition ease-in duration-200"
+                                x-transition:leave-start="opacity-100 scale-100 translate-y-0"
+                                x-transition:leave-end="opacity-0 scale-95 translate-y-4"
+                                class="bg-slate-900 border border-slate-800 rounded-2xl max-w-2xl w-full p-6 shadow-2xl flex flex-col max-h-[90vh]"
+                            >
+                                <div class="flex items-center justify-between mb-4 pb-3 border-b border-slate-800">
+                                    <h3 class="text-lg font-bold text-white">Crop Your Profile Photo</h3>
+                                    <button @click="cancelCrop" type="button" class="text-slate-400 hover:text-white transition-colors cursor-pointer">
+                                        <svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                                        </svg>
+                                    </button>
+                                </div>
+                                
+                                <div class="flex-1 overflow-hidden bg-slate-950 rounded-xl border border-slate-800 flex items-center justify-center p-4 min-h-[300px]">
+                                    <img x-ref="cropperImage" :src="imageUrl" class="max-w-full max-h-[50vh] block">
+                                </div>
+                                
+                                <div class="flex items-center justify-end gap-3 mt-6 pt-4 border-t border-slate-800">
+                                    <button 
+                                        @click="cancelCrop" 
+                                        type="button" 
+                                        class="px-4 py-2 text-sm font-medium text-slate-400 hover:text-white bg-slate-800 hover:bg-slate-700 rounded-xl border border-slate-700 transition-colors cursor-pointer"
+                                    >
+                                        Cancel
+                                    </button>
+                                    <button 
+                                        @click="saveCrop" 
+                                        type="button" 
+                                        class="px-5 py-2 text-sm font-semibold text-white bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 rounded-xl transition-all shadow-lg shadow-indigo-600/20 cursor-pointer"
+                                    >
+                                        Apply Crop
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </template>
                 </div>
 
                 <!-- Preview if exists in Livewire temporary storage -->
