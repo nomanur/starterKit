@@ -40,6 +40,8 @@ class Test extends Component
 
             $this->photo = null;
             $this->successMessage = 'Photo uploaded and saved to Spatie Media Library successfully!';
+
+            $this->dispatch('photo-saved');
         }
     }
 
