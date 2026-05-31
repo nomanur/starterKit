@@ -10,6 +10,7 @@ use App\Filament\Resources\Posts\Pages\ListPosts;
 use App\Filament\Resources\Posts\Schemas\PostForm;
 use App\Filament\Resources\Posts\Tables\PostsTable;
 use App\Models\Post;
+use App\Traits\ExportImport;
 use BackedEnum;
 use Filament\Resources\Resource;
 use Filament\Schemas\Schema;
@@ -18,6 +19,8 @@ use Filament\Tables\Table;
 
 class PostResource extends Resource
 {
+    use ExportImport;
+
     protected static ?string $model = Post::class;
 
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedRectangleStack;
@@ -45,6 +48,20 @@ class PostResource extends Resource
             'index' => ListPosts::route('/'),
             'create' => CreatePost::route('/create'),
             'edit' => EditPost::route('/{record}/edit'),
+        ];
+    }
+
+    /**
+     * Customize export columns for Post resource.
+     */
+    public static function getExportColumns(): array
+    {
+        return [
+            'id' => 'ID',
+            'title' => 'Title',
+            'content' => 'Content',
+            'created_at' => 'Created At',
+            'updated_at' => 'Updated At',
         ];
     }
 }

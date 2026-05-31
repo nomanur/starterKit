@@ -1,0 +1,16 @@
+{
+    "Welcome": "স্বাগতম",
+    "Login": "লগইন",
+    "Register": "নিবন্ধন",
+    "Logout": "লগআউট",
+    "Dashboard": "ড্যাশবোর্ড",
+    "Log in": "লগ ইন",
+    "Let's get started": "চলুন শুরু করা যাক",
+    "With so many options available to you,<br /> we suggest you start with the following:": "আপনার জন্য অনেক অপশন উপলব্ধ থাকায়,<br /> আমরা আপনাকে নিচেরগুলো দিয়ে শুরু করার পরামর্শ দিচ্ছি:",
+    "Read the": "পড়ুন",
+    "Documentation": "ডকুমেন্টেশন",
+    "Watch video tutorials at": "ভিডিও টিউটোরিয়াল দেখুন",
+    "Laracasts": "ল্যারাকাস্টস",
+    "Deploy now": "এখনই ডেপ্লয় করুন",
+    "View changelog": "চেঞ্জলগ দেখুন"
+}
