@@ -4,6 +4,7 @@
     "type": "project",
     "description": "The skeleton application for the Laravel framework.",
     "keywords": ["laravel", "framework"],
+    "homepage": "https://nomanur.github.io/starterKit/",
     "license": "MIT",
     "require": {
         "php": "^8.3",
