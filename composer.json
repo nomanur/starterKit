@@ -7,6 +7,7 @@
     "license": "MIT",
     "require": {
         "php": "^8.3",
+        "bacon/bacon-qr-code": "^3.0",
         "bezhansalleh/filament-shield": "^4.2",
         "croustibat/filament-jobs-monitor": "^4.4",
         "devrabiul/laravel-geo-genius": "^1.6",
@@ -16,6 +17,7 @@
         "laravel/tinker": "^3.0",
         "opcodesio/log-viewer": "^3.24",
         "phpoffice/phpspreadsheet": "^5.7",
+        "pragmarx/google2fa-qrcode": "^8.0",
         "spatie/laravel-medialibrary": "^11.23",
         "spatie/laravel-translatable": "^6.14",
         "spatie/laravel-translation-loader": "^2.8"

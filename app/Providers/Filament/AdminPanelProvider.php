@@ -2,6 +2,8 @@
 
 namespace App\Providers\Filament;
 
+use App\Filament\Pages\TwoFactorChallenge;
+use App\Models\User;
 use BezhanSalleh\FilamentShield\FilamentShieldPlugin;
 use Croustibat\FilamentJobsMonitor\FilamentJobsMonitorPlugin;
 use Filament\Http\Middleware\Authenticate;
@@ -21,6 +23,7 @@ use Illuminate\Foundation\Http\Middleware\PreventRequestForgery;
 use Illuminate\Routing\Middleware\SubstituteBindings;
 use Illuminate\Session\Middleware\StartSession;
 use Illuminate\View\Middleware\ShareErrorsFromSession;
+use Symfony\Component\HttpFoundation\Response;
 
 class AdminPanelProvider extends PanelProvider
 {
@@ -38,6 +41,7 @@ class AdminPanelProvider extends PanelProvider
             ->discoverPages(in: app_path('Filament/Pages'), for: 'App\Filament\Pages')
             ->pages([
                 Dashboard::class,
+                TwoFactorChallenge::class,
             ])
             ->discoverWidgets(in: app_path('Filament/Widgets'), for: 'App\Filament\Widgets')
             ->widgets([
@@ -68,6 +72,13 @@ class AdminPanelProvider extends PanelProvider
             ])
             ->authMiddleware([
                 Authenticate::class,
-            ]);
+            ])
+            ->globalSearchKeyBindings(['command+k', 'ctrl+k'])
+            ->renderHook(
+                'panels::body.end',
+                fn () => view('filament.hooks.two-factor-middleware', [
+                    'twoFactorRoute' => route('filament.admin.pages.two-factor-challenge'),
+                ])
+            );
     }
 }
