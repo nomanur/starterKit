@@ -13,7 +13,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use ParagonIE\ConstantTime\Base32;
-use Pragmarx\Google2FA\Google2FA;
+use PragmaRX\Google2FA\Google2FA;
 use Spatie\MediaLibrary\HasMedia;
 use Spatie\MediaLibrary\InteractsWithMedia;
 use Spatie\Permission\Traits\HasRoles;
@@ -24,6 +24,17 @@ class User extends Authenticatable implements FilamentUser, HasMedia
 {
     /** @use HasFactory<UserFactory> */
     use HasFactory, HasRoles, InteractsWithMedia, Notifiable;
+
+    /**
+     * The model's default values for attributes.
+     *
+     * @var array<string, mixed>
+     */
+    protected $attributes = [
+        'two_factor_secret' => null,
+        'two_factor_recovery_codes' => null,
+        'two_factor_confirmed_at' => null,
+    ];
 
     public function canAccessPanel(Panel $panel): bool
     {
@@ -58,7 +69,7 @@ class User extends Authenticatable implements FilamentUser, HasMedia
      */
     public function hasTwoFactorEnabled(): bool
     {
-        return $this->two_factor_secret !== null 
+        return $this->two_factor_secret !== null
             && $this->two_factor_confirmed_at !== null;
     }
 
@@ -69,9 +80,9 @@ class User extends Authenticatable implements FilamentUser, HasMedia
      */
     public function generateTwoFactorSecret(): array
     {
-        $google2fa = new Google2FA();
+        $google2fa = new Google2FA;
         $secret = $google2fa->generateSecretKey();
-        
+
         return [
             'secret' => $secret,
             'qr_code_url' => $google2fa->getQRCodeUrl(
@@ -87,12 +98,12 @@ class User extends Authenticatable implements FilamentUser, HasMedia
      */
     public function verifyTwoFactorCode(string $code): bool
     {
-        if (!$this->hasTwoFactorEnabled()) {
+        if (! $this->hasTwoFactorEnabled()) {
             return false;
         }
 
-        $google2fa = new Google2FA();
-        
+        $google2fa = new Google2FA;
+
         try {
             return $google2fa->verifyKey($this->two_factor_secret, $code);
         } catch (\Exception $e) {
@@ -108,11 +119,11 @@ class User extends Authenticatable implements FilamentUser, HasMedia
     public function generateRecoveryCodes(): array
     {
         $codes = [];
-        
+
         for ($i = 0; $i < 8; $i++) {
             $codes[] = implode('-', str_split(strtoupper(Base32::encode(random_bytes(10))), 4));
         }
-        
+
         return $codes;
     }
 
@@ -156,9 +167,9 @@ class User extends Authenticatable implements FilamentUser, HasMedia
     public function replaceUsedRecoveryCode(string $usedCode): void
     {
         $codes = $this->getRecoveryCodes() ?? [];
-        
-        $codes = array_filter($codes, fn ($code) => $code !== $usedCode);
-        
+
+        $codes = array_filter($codes, fn (string $code): bool => $code !== $usedCode);
+
         $this->forceFill([
             'two_factor_recovery_codes' => json_encode(array_values($codes)),
         ])->save();

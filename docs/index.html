@@ -1182,6 +1182,118 @@ public static function configure(Table $table): Table {<br>
                 </div>
             </div>
 
+            <!-- Two-Factor Authentication (2FA) Integration -->
+            <div class="card col-12">
+                <div class="card-content">
+                    <h2 class="card-title">
+                        <span class="card-icon">🔐</span> Two-Factor Authentication (2FA)
+                    </h2>
+                    <p>The starter kit features a secure, industry-standard <strong>Time-based One-time Password (TOTP) Two-Factor Authentication</strong> system for admin panel protection. Unverified users with 2FA enabled are locked to the challenge page while keeping their Laravel sessions intact.</p>
+                    
+                    <div style="display: flex; gap: 1rem; align-items: center; margin-bottom: 1.5rem; flex-wrap: wrap;">
+                        <span class="badge primary">Secure SVG QR Code</span>
+                        <span class="badge primary">Encrypted Recovery Codes</span>
+                        <span class="badge">TwoFactorMiddleware</span>
+                        <span class="badge">Pest Test Covered</span>
+                    </div>
+
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 2rem; margin-top: 1.5rem;">
+                        <div>
+                            <h3 style="font-size: 1.1rem; margin-bottom: 0.75rem; color: var(--color-cyan);">1. Toggle 2FA in Users Resource</h3>
+                            <p style="font-size: 0.9rem; margin-bottom: 1rem;">Admin users can enable/disable 2FA from the edit user interface. Opening the modal generates a persistent secret and renders a scanable SVG QR code inline:</p>
+                            
+                            <div class="terminal" style="margin-top: 0.5rem;">
+                                <div class="terminal-header">
+                                    <span class="dot red"></span><span class="dot yellow"></span><span class="dot green"></span>
+                                </div>
+                                <span class="terminal-comment">// app/Filament/Resources/Users/Pages/EditUser.php</span><br>
+                                <span class="terminal-code" style="font-size: 0.8rem; line-height: 1.4;">
+Hidden::make('two_factor_secret')<br>
+&nbsp;&nbsp;&nbsp;&nbsp;->default(fn () => (new Google2FA)->generateSecretKey());<br><br>
+Placeholder::make('qr_code')<br>
+&nbsp;&nbsp;&nbsp;&nbsp;->content(fn ($get) => new HtmlString(...));
+                                </span>
+                            </div>
+                        </div>
+
+                        <div>
+                            <h3 style="font-size: 1.1rem; margin-bottom: 0.75rem; color: var(--color-cyan);">2. Protection Middleware</h3>
+                            <p style="font-size: 0.9rem; margin-bottom: 1rem;">The custom <code>TwoFactorMiddleware</code> intercepts all panel requests for users who have 2FA enabled, redirecting them to verification if not verified in their session:</p>
+                            
+                            <div class="terminal" style="margin-top: 0.5rem;">
+                                <div class="terminal-header">
+                                    <span class="dot red"></span><span class="dot yellow"></span><span class="dot green"></span>
+                                </div>
+                                <span class="terminal-comment">// app/Http/Middleware/TwoFactorMiddleware.php</span><br>
+                                <span class="terminal-code" style="font-size: 0.8rem; line-height: 1.4;">
+if ($user->hasTwoFactorEnabled() && <br>
+&nbsp;&nbsp;&nbsp;&nbsp;! session()->has('two_factor_verified_at')) {<br>
+&nbsp;&nbsp;&nbsp;&nbsp;return redirect()->route('filament.admin.pages.two-factor-challenge');<br>
+}
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Profile Validation Rules Trait -->
+            <div class="card col-12">
+                <div class="card-content">
+                    <h2 class="card-title">
+                        <span class="card-icon">📝</span> Profile Validation Rules Trait
+                    </h2>
+                    <p>The <code>ProfileValidationRules</code> trait centralizes common email and password validation rules across registration, edit profile, and password reset interfaces to ensure consistent architecture and security policies.</p>
+                    
+                    <div style="display: flex; gap: 1rem; align-items: center; margin-bottom: 1.5rem; flex-wrap: wrap;">
+                        <span class="badge primary">Centralized Validation</span>
+                        <span class="badge">Dynamic ID Ignoring</span>
+                        <span class="badge">Saves Boilerplate</span>
+                    </div>
+
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 2rem; margin-top: 1.5rem;">
+                        <div>
+                            <h3 style="font-size: 1.1rem; margin-bottom: 0.75rem; color: var(--color-cyan);">1. Define Trait</h3>
+                            <p style="font-size: 0.9rem; margin-bottom: 1rem;">Centralizes email and password rules (e.g. required, length, unique check, confirmation matching):</p>
+                            
+                            <div class="terminal" style="margin-top: 0.5rem;">
+                                <div class="terminal-header">
+                                    <span class="dot red"></span><span class="dot yellow"></span><span class="dot green"></span>
+                                </div>
+                                <span class="terminal-comment">// app/Traits/ProfileValidationRules.php</span><br>
+                                <span class="terminal-code" style="font-size: 0.8rem; line-height: 1.4;">
+trait ProfileValidationRules {<br>
+&nbsp;&nbsp;&nbsp;&nbsp;protected function emailRules(?int $userId = null): array;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;protected function passwordRules(): array;<br>
+}
+                                </span>
+                            </div>
+                        </div>
+
+                        <div>
+                            <h3 style="font-size: 1.1rem; margin-bottom: 0.75rem; color: var(--color-cyan);">2. Usage Example</h3>
+                            <p style="font-size: 0.9rem; margin-bottom: 1rem;">Import and use validation helper methods in form requests, controllers, or livewire components:</p>
+                            
+                            <div class="terminal" style="margin-top: 0.5rem;">
+                                <div class="terminal-header">
+                                    <span class="dot red"></span><span class="dot yellow"></span><span class="dot green"></span>
+                                </div>
+                                <span class="terminal-comment">// Any Controller or Component</span><br>
+                                <span class="terminal-code" style="font-size: 0.8rem; line-height: 1.4;">
+use App\Traits\ProfileValidationRules;<br>
+class RegisterController extends Controller {<br>
+&nbsp;&nbsp;&nbsp;&nbsp;use ProfileValidationRules;<br><br>
+&nbsp;&nbsp;&nbsp;&nbsp;public function save() {<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;$this->validate(['email' => $this->emailRules()]);<br>
+&nbsp;&nbsp;&nbsp;&nbsp;}<br>
+}
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
             <!-- Core Application Configurations -->
 
             <div class="card col-12">

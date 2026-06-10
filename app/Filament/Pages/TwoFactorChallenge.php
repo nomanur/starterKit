@@ -2,21 +2,28 @@
 
 namespace App\Filament\Pages;
 
-use App\Models\User;
-use Filament\Facades\Filament;
-use Filament\Forms\Components\Actions\Action;
+use Filament\Actions\Action;
+use Filament\Auth\Http\Responses\Contracts\LoginResponse;
 use Filament\Forms\Components\Placeholder;
 use Filament\Forms\Components\TextInput;
-use Filament\Forms\Form;
 use Filament\Notifications\Notification;
-use Filament\Pages\Auth\Login as BaseLogin;
+use Filament\Pages\Page;
+use Filament\Schemas\Schema;
 use Filament\Support\Exceptions\Halt;
-use Illuminate\Contracts\View\View;
-use Pragmarx\Google2FA\Google2FA;
+use PragmaRX\Google2FA\Google2FA;
 
-class TwoFactorChallenge extends BaseLogin
+class TwoFactorChallenge extends Page
 {
-    protected static string $view = 'filament.pages.two-factor-challenge';
+    public function hasLogo(): bool
+    {
+        return true;
+    }
+
+    protected string $view = 'filament.pages.two-factor-challenge';
+
+    protected static string $layout = 'filament-panels::components.layout.simple';
+
+    protected static bool $shouldRegisterNavigation = false;
 
     public ?string $code = '';
 
@@ -24,58 +31,52 @@ class TwoFactorChallenge extends BaseLogin
 
     public bool $useRecoveryCode = false;
 
-    protected function getForms(): array
+    public function form(Schema $schema): Schema
     {
-        return [
-            'form' => Form::make()
-                ->schema([
-                    TextInput::make('code')
-                        ->label('Authentication Code')
-                        ->placeholder('Enter 6-digit code from your authenticator app')
-                        ->length(6)
-                        ->numeric()
-                        ->required()
-                        ->autofocus()
-                        ->hidden(fn () => $this->useRecoveryCode),
+        return $schema
+            ->components([
+                TextInput::make('code')
+                    ->label('Authentication Code')
+                    ->placeholder('Enter 6-digit code from your authenticator app')
+                    ->length(6)
+                    ->numeric()
+                    ->required()
+                    ->autofocus()
+                    ->hidden(fn () => $this->useRecoveryCode),
 
-                    TextInput::make('recovery_code')
-                        ->label('Recovery Code')
-                        ->placeholder('Enter one of your recovery codes')
-                        ->required()
-                        ->hidden(fn () => !$this->useRecoveryCode),
+                TextInput::make('recovery_code')
+                    ->label('Recovery Code')
+                    ->placeholder('Enter one of your recovery codes')
+                    ->required()
+                    ->hidden(fn () => ! $this->useRecoveryCode),
 
-                    Placeholder::make('instructions')
-                        ->content('Open your authenticator app and enter the 6-digit code shown.')
-                        ->hidden(fn () => $this->useRecoveryCode),
+                Placeholder::make('instructions')
+                    ->content('Open your authenticator app and enter the 6-digit code shown.')
+                    ->hidden(fn () => $this->useRecoveryCode),
 
-                    Placeholder::make('recovery_instructions')
-                        ->content('Lost access to your device? Enter one of your recovery codes instead.')
-                        ->hidden(fn () => !$this->useRecoveryCode),
-                ])
-                ->actions([
-                    Action::make('submit')
-                        ->label('Verify')
-                        ->submit('authenticate'),
-                ]),
-        ];
+                Placeholder::make('recovery_instructions')
+                    ->content('Lost access to your device? Enter one of your recovery codes instead.')
+                    ->hidden(fn () => ! $this->useRecoveryCode),
+            ]);
     }
 
-    public function authenticate(): void
+    public function authenticate(): ?LoginResponse
     {
-        $user = session()->get('two_factor_pending_user');
+        $user = auth()->user();
 
-        if (!$user) {
+        if (! $user) {
             redirect()->route('filament.admin.auth.login');
-            return;
+
+            return null;
         }
 
         try {
             $verified = false;
 
-            if ($this->useRecoveryCode && !empty($this->recovery_code)) {
+            if ($this->useRecoveryCode && ! empty($this->recovery_code)) {
                 $codes = $user->getRecoveryCodes() ?? [];
                 $normalizedInput = strtoupper(str_replace('-', '', $this->recovery_code));
-                
+
                 foreach ($codes as $code) {
                     $normalizedCode = str_replace('-', '', $code);
                     if ($normalizedCode === $normalizedInput) {
@@ -84,17 +85,17 @@ class TwoFactorChallenge extends BaseLogin
                         break;
                     }
                 }
-            } elseif (!$this->useRecoveryCode && !empty($this->code)) {
-                $google2fa = new Google2FA();
+            } elseif (! $this->useRecoveryCode && ! empty($this->code)) {
+                $google2fa = new Google2FA;
                 $verified = $google2fa->verifyKey($user->two_factor_secret, $this->code);
             }
 
             if ($verified) {
-                session()->forget('two_factor_pending_user');
-                Filament::auth()->login($user, remember: false);
                 session()->put('two_factor_verified_at', now());
 
-                redirect()->intended(config('filament.path'));
+                redirect()->intended(route('filament.admin.pages.dashboard'));
+
+                return null;
             } else {
                 throw new \Exception('Invalid code. Please try again.');
             }
@@ -105,16 +106,26 @@ class TwoFactorChallenge extends BaseLogin
                 ->danger()
                 ->send();
 
-            throw new Halt();
+            throw new Halt;
         }
+    }
+
+    protected function getFormActions(): array
+    {
+        return [
+            Action::make('authenticate')
+                ->label('Verify')
+                ->submit('authenticate')
+                ->color('primary'),
+        ];
     }
 
     public function toggleRecoveryCode(): void
     {
-        $this->useRecoveryCode = !$this->useRecoveryCode;
+        $this->useRecoveryCode = ! $this->useRecoveryCode;
         $this->code = '';
         $this->recovery_code = '';
-        
+
         $this->resetValidation();
     }
 
