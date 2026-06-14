@@ -21,6 +21,7 @@ use Illuminate\Foundation\Http\Middleware\PreventRequestForgery;
 use Illuminate\Routing\Middleware\SubstituteBindings;
 use Illuminate\Session\Middleware\StartSession;
 use Illuminate\View\Middleware\ShareErrorsFromSession;
+use Nomanur\FilamentSeoPro\SeoPlugin;
 
 class AdminPanelProvider extends PanelProvider
 {
@@ -57,14 +58,16 @@ class AdminPanelProvider extends PanelProvider
             ])
             ->navigationItems([
                 NavigationItem::make('Log Viewer')
-                    ->url(fn (): string => url('log-viewer'))
+                    ->url(fn(): string => url('log-viewer'))
                     ->icon('heroicon-o-document-text')
                     ->group('System')
-                    ->visible(fn (): bool => auth()->user()?->can('view_log_viewer') ?? false),
+                    ->visible(fn(): bool => auth()->user()?->can('view_log_viewer') ?? false),
             ])
             ->plugins([
                 FilamentShieldPlugin::make(),
                 FilamentJobsMonitorPlugin::make(),
+                SeoPlugin::make()
+                    ->enableDashboardWidget(false),
             ])
             ->authMiddleware([
                 Authenticate::class,
