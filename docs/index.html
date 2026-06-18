@@ -492,6 +492,10 @@
                             <p style="font-size: 0.9rem;">Added <strong>Filament Jobs Monitor</strong> to track background job execution and failures in real-time.</p>
                         </div>
                         <div>
+                            <h3 style="font-size: 1.1rem; margin-bottom: 0.5rem; color: var(--color-cyan);">SEO Management</h3>
+                            <p style="font-size: 0.9rem;">Integrated <strong>Filament SEO Pro</strong> for real-time SEO analysis, readability scoring, and meta tags rendering.</p>
+                        </div>
+                        <div>
                             <h3 style="font-size: 1.1rem; margin-bottom: 0.5rem; color: var(--color-cyan);">Modern Livewire</h3>
                             <p style="font-size: 0.9rem;">Standardized on the <strong>Livewire V3 class format</strong> for all dynamic components.</p>
                         </div>
@@ -1111,6 +1115,89 @@ Route::get('/language/{locale}', function ($locale) {<br>
                         </div>
 
                     </div>
+                </div>
+            </div>
+
+
+            <!-- Search Engine Optimization (SEO) -->
+            <div class="card col-12">
+                <div class="card-content">
+                    <h2 class="card-title">
+                        <span class="card-icon">🔍</span> Search Engine Optimization (SEO)
+                    </h2>
+                    <p>The starter kit integrates the premium <code>filament-seo-pro</code> package to provide real-time search engine optimization, keywords optimization, readability analysis, and live previews of search results directly in Filament resource panels. The application's main layout file (<code>resources/views/layouts/app.blade.php</code>) is already pre-configured to render these SEO meta codes dynamically.</p>
+
+                    <div style="display: flex; gap: 1rem; align-items: center; margin-bottom: 1.5rem; flex-wrap: wrap;">
+                        <span class="badge primary">Polymorphic HasSeo Trait</span>
+                        <span class="badge primary">Real-Time Readability & Score</span>
+                        <span class="badge">Google & Social Previews</span>
+                        <span class="badge">Automatic Head Metadata</span>
+                    </div>
+
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 2rem; margin-top: 1.5rem;">
+                        <div>
+                            <h3 style="font-size: 1.1rem; margin-bottom: 0.75rem; color: var(--color-cyan);">1. Add HasSeo Trait to Models</h3>
+                            <p style="font-size: 0.9rem; margin-bottom: 1rem;">Attach the trait to any Eloquent model to connect it with polymorphic SEO metadata:</p>
+
+                            <div class="terminal" style="margin-top: 0.5rem;">
+                                <div class="terminal-header">
+                                    <span class="dot red"></span><span class="dot yellow"></span><span class="dot green"></span>
+                                </div>
+                                <span class="terminal-comment">// app/Models/Post.php</span><br>
+                                <span class="terminal-code" style="font-size: 0.8rem; line-height: 1.4;">
+use Nomanur\FilamentSeoPro\Traits\HasSeo;<br><br>
+class Post extends Model {<br>
+&nbsp;&nbsp;&nbsp;&nbsp;use HasSeo;<br>
+}
+                                </span>
+                            </div>
+                        </div>
+
+                        <div>
+                            <h3 style="font-size: 1.1rem; margin-bottom: 0.75rem; color: var(--color-cyan);">2. Register Filament Component</h3>
+                            <p style="font-size: 0.9rem; margin-bottom: 1rem;">Add the prebuilt SEO tab component to resource form schemas to unlock the analysis editor:</p>
+
+                            <div class="terminal" style="margin-top: 0.5rem;">
+                                <div class="terminal-header">
+                                    <span class="dot red"></span><span class="dot yellow"></span><span class="dot green"></span>
+                                </div>
+                                <span class="terminal-comment">// app/Filament/Resources/Posts/Schemas/PostForm.php</span><br>
+                                <span class="terminal-code" style="font-size: 0.8rem; line-height: 1.4;">
+use Nomanur\FilamentSeoPro\Forms\SeoTab;<br><br>
+public static function configure(Form $form): Form {<br>
+&nbsp;&nbsp;&nbsp;&nbsp;return $form-&gt;schema([<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Tabs::make(&#39;Heading&#39;)-&gt;tabs([<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;SeoTab::make(),<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;]),<br>
+&nbsp;&nbsp;&nbsp;&nbsp;]);<br>
+}
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div style="margin-top: 1.5rem;">
+                        <h3 style="font-size: 1.1rem; margin-bottom: 0.5rem; color: var(--color-cyan);">3. Automatic Layout Rendering</h3>
+                        <p style="font-size: 0.9rem; margin-bottom: 1rem;">The global HTML <code>&lt;head&gt;</code> renders SEO tags, Open Graph properties, Twitter cards, and Schema.org JSON-LD dynamically with clean fallbacks for static pages:</p>
+
+                        <div class="terminal" style="margin-top: 0.5rem; width: 100%;">
+                            <div class="terminal-header">
+                                <span class="dot red"></span><span class="dot yellow"></span><span class="dot green"></span>
+                            </div>
+                            <span class="terminal-comment">// resources/views/layouts/app.blade.php</span><br>
+                            <span class="terminal-code" style="font-size: 0.8rem; line-height: 1.4;">
+&lt;!-- Basic Meta Tags --&gt;<br>
+&lt;title&gt;{{ $seoModel?->seo?->title ?? $seoModel?->title ?? $title ?? config(&#39;app.name&#39;, &#39;Laravel Starter&#39;) }}&lt;/title&gt;<br>
+&lt;meta name="description" content="{{ $seoModel?->seo?->description ?? ($seoModel?->content ? Str::limit(strip_tags($seoModel-&gt;content), 150) : &#39;&#39;) }}"&gt;<br>
+&lt;meta name="robots" content="{{ $seoModel?->seo?->robots ?? &#39;index, follow&#39; }}"&gt;<br>
+&lt;link rel="canonical" href="{{ $seoModel?->seo?->canonical_url ?? request()-&gt;url() }}"&gt;
+                            </span>
+                        </div>
+                    </div>
+
+                    <p style="margin-top: 1.5rem; font-size: 0.9rem;">
+                        See the official package repository and documentation at <a href="https://nomanur.github.io/filament-seo-pro/" target="_blank" style="color: var(--color-cyan);">filament-seo-pro Documentation</a> for advanced usage, custom checks, and configurations.
+                    </p>
                 </div>
             </div>
 

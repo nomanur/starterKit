@@ -61,10 +61,10 @@ class AdminPanelProvider extends PanelProvider
             ])
             ->navigationItems([
                 NavigationItem::make('Log Viewer')
-                    ->url(fn(): string => url('log-viewer'))
+                    ->url(fn (): string => url('log-viewer'))
                     ->icon('heroicon-o-document-text')
                     ->group('System')
-                    ->visible(fn(): bool => auth()->user()?->can('view_log_viewer') ?? false),
+                    ->visible(fn (): bool => auth()->user()?->can('view_log_viewer') ?? false),
             ])
             ->plugins([
                 FilamentShieldPlugin::make(),

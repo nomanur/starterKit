@@ -5,7 +5,52 @@
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <meta name="csrf-token" content="{{ csrf_token() }}">
 
-        <title>{{ $title ?? config('app.name', 'Laravel Starter') }}</title>
+        @php
+            $seoModel = $model ?? null;
+        @endphp
+
+        <!-- Basic Meta Tags -->
+        <title>{{ $seoModel?->seo?->title ?? $seoModel?->title ?? $title ?? config('app.name', 'Laravel Starter') }}</title>
+        <meta name="description" content="{{ $seoModel?->seo?->description ?? ($seoModel?->content ? Str::limit(strip_tags($seoModel->content), 150) : '') }}">
+        @if($seoModel?->seo?->keywords)
+            <meta name="keywords" content="{{ $seoModel->seo->keywords }}">
+        @endif
+        <meta name="robots" content="{{ $seoModel?->seo?->robots ?? 'index, follow' }}">
+        <link rel="canonical" href="{{ $seoModel?->seo?->canonical_url ?? request()->url() }}">
+
+        <!-- Open Graph (Facebook / LinkedIn) -->
+        <meta property="og:type" content="website">
+        <meta property="og:url" content="{{ request()->url() }}">
+        <meta property="og:title" content="{{ $seoModel?->seo?->og_title ?? $seoModel?->seo?->title ?? $seoModel?->title ?? $title ?? config('app.name', 'Laravel Starter') }}">
+        <meta property="og:description" content="{{ $seoModel?->seo?->og_description ?? $seoModel?->seo?->description ?? '' }}">
+        @if($seoModel?->seo?->og_image)
+            <meta property="og:image" content="{{ Storage::disk(config('filament.default_filesystem_disk', 'public'))->url($seoModel->seo->og_image) }}">
+        @endif
+
+        <!-- Twitter Cards -->
+        <meta name="twitter:card" content="summary_large_image">
+        <meta name="twitter:url" content="{{ request()->url() }}">
+        <meta name="twitter:title" content="{{ $seoModel?->seo?->twitter_title ?? $seoModel?->seo?->title ?? $seoModel?->title ?? $title ?? config('app.name', 'Laravel Starter') }}">
+        <meta name="twitter:description" content="{{ $seoModel?->seo?->twitter_description ?? $seoModel?->seo?->description ?? '' }}">
+        @if($seoModel?->seo?->twitter_image)
+            <meta name="twitter:image" content="{{ Storage::disk(config('filament.default_filesystem_disk', 'public'))->url($seoModel->seo->twitter_image) }}">
+        @endif
+
+        <!-- Schema.org JSON-LD Markup -->
+        @if($seoModel?->seo?->schema_type)
+            <script type="application/ld+json">
+            {
+                "@@context": "https://schema.org",
+                "@@type": "{{ $seoModel->seo->schema_type }}",
+                "mainEntityOfPage": {
+                    "@@type": "WebPage",
+                    "@@id": "{{ request()->url() }}"
+                },
+                "headline": "{{ $seoModel?->seo?->title ?? $seoModel?->title }}",
+                "description": "{{ $seoModel?->seo?->description ?? '' }}"
+            }
+            </script>
+        @endif
 
         <!-- Fonts -->
         @fonts

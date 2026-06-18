@@ -13,7 +13,7 @@ use Spatie\Translatable\HasTranslations;
 class Post extends Model
 {
     /** @use HasFactory<PostFactory> */
-    use HasFactory, HasTranslations, HasSeo;
+    use HasFactory, HasSeo, HasTranslations;
 
     protected $fillable = ['title', 'content'];
 
