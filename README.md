@@ -8,6 +8,7 @@
   <a href="https://packagist.org/packages/nomanur/nomanur-starter-kit"><img src="https://img.shields.io/packagist/v/nomanur/nomanur-starter-kit" alt="Latest Stable Version"></a>
   <a href="https://packagist.org/packages/nomanur/nomanur-starter-kit"><img src="https://img.shields.io/packagist/l/nomanur/nomanur-starter-kit" alt="License"></a>
   <a href="https://github.com/nomanur/starterKit"><img src="https://img.shields.io/github/actions/workflow/status/nomanur/starterKit/tests.yml?branch=main" alt="Build Status"></a>
+  <a href="https://nomanur.github.io/starterKit/"><img src="https://img.shields.io/badge/docs-homepage-blue" alt="Homepage"></a>
 </p>
 
 ---

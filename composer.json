@@ -4,6 +4,7 @@
     "type": "project",
     "description": "The skeleton application for the Laravel framework.",
     "keywords": ["laravel", "framework"],
+    "homepage": "https://nomanur.github.io/starterKit/",
     "license": "MIT",
     "require": {
         "php": "^8.3",
@@ -15,6 +16,7 @@
         "laravel/framework": "^13.8",
         "laravel/socialite": "^5.27",
         "laravel/tinker": "^3.0",
+        "nomanur/filament-seo-pro": "^0.1.0",
         "opcodesio/log-viewer": "^3.24",
         "phpoffice/phpspreadsheet": "^5.7",
         "pragmarx/google2fa": "^8.0",

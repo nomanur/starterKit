@@ -4736,6 +4736,81 @@
             "time": "2025-12-06T11:56:16+00:00"
         },
         {
+            "name": "nomanur/filament-seo-pro",
+            "version": "v0.1.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/nomanur/filament-seo-pro.git",
+                "reference": "b0a822a7fa23d7555cf016e4ca2570ed2c01db3b"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/nomanur/filament-seo-pro/zipball/b0a822a7fa23d7555cf016e4ca2570ed2c01db3b",
+                "reference": "b0a822a7fa23d7555cf016e4ca2570ed2c01db3b",
+                "shasum": ""
+            },
+            "require": {
+                "filament/filament": "^3.2 || ^4.0 || ^5.0",
+                "filament/forms": "^3.2 || ^4.0 || ^5.0",
+                "filament/support": "^3.2 || ^4.0 || ^5.0",
+                "filament/tables": "^3.2 || ^4.0 || ^5.0",
+                "illuminate/support": "^10.0 || ^11.0 || ^12.0 || ^13.0",
+                "livewire/livewire": "^3.0 || ^4.0",
+                "php": "^8.2 || ^8.3 || ^8.4",
+                "spatie/laravel-package-tools": "^1.16"
+            },
+            "require-dev": {
+                "larastan/larastan": "^3.0",
+                "laravel/pint": "^1.0",
+                "orchestra/testbench": "^9.0 || ^10.0",
+                "pestphp/pest": "^3.0",
+                "pestphp/pest-plugin-laravel": "^3.0"
+            },
+            "type": "library",
+            "extra": {
+                "laravel": {
+                    "providers": [
+                        "Nomanur\\FilamentSeoPro\\SeoServiceProvider"
+                    ]
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Nomanur\\FilamentSeoPro\\": "src"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Nomanur Rahman",
+                    "email": "nomanurrahman@gmail.com",
+                    "role": "Developer"
+                }
+            ],
+            "description": "The definitive SEO toolkit for Filament — live analysis, Google preview, social cards, schema markup, and bulk management.",
+            "homepage": "https://github.com/nomanur/filament-seo-pro",
+            "keywords": [
+                "filament",
+                "filament-plugin",
+                "laravel",
+                "meta-tags",
+                "open-graph",
+                "schema-markup",
+                "seo",
+                "seo-analyzer",
+                "twitter-cards",
+                "yoast"
+            ],
+            "support": {
+                "issues": "https://github.com/nomanur/filament-seo-pro/issues",
+                "source": "https://github.com/nomanur/filament-seo-pro/tree/v0.1.0"
+            },
+            "time": "2026-06-11T10:28:16+00:00"
+        },
+        {
             "name": "nunomaduro/termwind",
             "version": "v2.4.0",
             "source": {
@@ -4824,16 +4899,16 @@
         },
         {
             "name": "opcodesio/log-viewer",
-            "version": "v3.24.0",
+            "version": "v3.24.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/opcodesio/log-viewer.git",
-                "reference": "8afefde09f6005f7d8ee3f628aa311f27c91d125"
+                "reference": "45d3c87571556dc9735001af3df2eef02e98cde6"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/opcodesio/log-viewer/zipball/8afefde09f6005f7d8ee3f628aa311f27c91d125",
-                "reference": "8afefde09f6005f7d8ee3f628aa311f27c91d125",
+                "url": "https://api.github.com/repos/opcodesio/log-viewer/zipball/45d3c87571556dc9735001af3df2eef02e98cde6",
+                "reference": "45d3c87571556dc9735001af3df2eef02e98cde6",
                 "shasum": ""
             },
             "require": {
@@ -4896,7 +4971,7 @@
             ],
             "support": {
                 "issues": "https://github.com/opcodesio/log-viewer/issues",
-                "source": "https://github.com/opcodesio/log-viewer/tree/v3.24.0"
+                "source": "https://github.com/opcodesio/log-viewer/tree/v3.24.1"
             },
             "funding": [
                 {
@@ -4908,20 +4983,20 @@
                     "type": "github"
                 }
             ],
-            "time": "2026-03-15T19:31:14+00:00"
+            "time": "2026-06-11T08:29:10+00:00"
         },
         {
             "name": "opcodesio/mail-parser",
-            "version": "v0.2.3",
+            "version": "v0.2.4",
             "source": {
                 "type": "git",
                 "url": "https://github.com/opcodesio/mail-parser.git",
-                "reference": "6f9544a1e526d5849cf8d96600556b2951893aec"
+                "reference": "7151e4183288e46d911a76803c5545a1c8822226"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/opcodesio/mail-parser/zipball/6f9544a1e526d5849cf8d96600556b2951893aec",
-                "reference": "6f9544a1e526d5849cf8d96600556b2951893aec",
+                "url": "https://api.github.com/repos/opcodesio/mail-parser/zipball/7151e4183288e46d911a76803c5545a1c8822226",
+                "reference": "7151e4183288e46d911a76803c5545a1c8822226",
                 "shasum": ""
             },
             "require": {
@@ -4959,9 +5034,9 @@
             ],
             "support": {
                 "issues": "https://github.com/opcodesio/mail-parser/issues",
-                "source": "https://github.com/opcodesio/mail-parser/tree/v0.2.3"
+                "source": "https://github.com/opcodesio/mail-parser/tree/v0.2.4"
             },
-            "time": "2026-02-28T09:04:57+00:00"
+            "time": "2026-06-11T08:50:37+00:00"
         },
         {
             "name": "openspout/openspout",
@@ -5361,16 +5436,16 @@
         },
         {
             "name": "phpseclib/phpseclib",
-            "version": "3.0.52",
+            "version": "3.0.53",
             "source": {
                 "type": "git",
                 "url": "https://github.com/phpseclib/phpseclib.git",
-                "reference": "2adaefc83df2ec548558307690f376dd7d4f4fce"
+                "reference": "511ddc8e352d5d1f1e33bea468b6f4ef48438cf9"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/phpseclib/phpseclib/zipball/2adaefc83df2ec548558307690f376dd7d4f4fce",
-                "reference": "2adaefc83df2ec548558307690f376dd7d4f4fce",
+                "url": "https://api.github.com/repos/phpseclib/phpseclib/zipball/511ddc8e352d5d1f1e33bea468b6f4ef48438cf9",
+                "reference": "511ddc8e352d5d1f1e33bea468b6f4ef48438cf9",
                 "shasum": ""
             },
             "require": {
@@ -5451,7 +5526,7 @@
             ],
             "support": {
                 "issues": "https://github.com/phpseclib/phpseclib/issues",
-                "source": "https://github.com/phpseclib/phpseclib/tree/3.0.52"
+                "source": "https://github.com/phpseclib/phpseclib/tree/3.0.53"
             },
             "funding": [
                 {
@@ -5467,7 +5542,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2026-04-27T07:02:15+00:00"
+            "time": "2026-06-09T18:08:26+00:00"
         },
         {
             "name": "pragmarx/google2fa",
@@ -8559,16 +8634,16 @@
         },
         {
             "name": "symfony/polyfill-mbstring",
-            "version": "v1.38.1",
+            "version": "v1.38.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/polyfill-mbstring.git",
-                "reference": "14c5439eec4ccff081ac14eca2dc57feb2a66d92"
+                "reference": "d3d318bad5e7a1bfbd026009c8bfb8d8f99ae6b6"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/polyfill-mbstring/zipball/14c5439eec4ccff081ac14eca2dc57feb2a66d92",
-                "reference": "14c5439eec4ccff081ac14eca2dc57feb2a66d92",
+                "url": "https://api.github.com/repos/symfony/polyfill-mbstring/zipball/d3d318bad5e7a1bfbd026009c8bfb8d8f99ae6b6",
+                "reference": "d3d318bad5e7a1bfbd026009c8bfb8d8f99ae6b6",
                 "shasum": ""
             },
             "require": {
@@ -8620,7 +8695,7 @@
                 "shim"
             ],
             "support": {
-                "source": "https://github.com/symfony/polyfill-mbstring/tree/v1.38.1"
+                "source": "https://github.com/symfony/polyfill-mbstring/tree/v1.38.2"
             },
             "funding": [
                 {
@@ -8640,7 +8715,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2026-05-26T12:51:13+00:00"
+            "time": "2026-05-27T06:59:30+00:00"
         },
         {
             "name": "symfony/polyfill-php80",
@@ -10777,7 +10852,7 @@
             "extra": {
                 "laravel": {
                     "aliases": {
-                        "Mcp": "Laravel\\Mcp\\Server\\Facades\\Mcp"
+                        "Mcp": "Laravel\\Mcp\\Facades\\Mcp"
                     },
                     "providers": [
                         "Laravel\\Mcp\\Server\\McpServiceProvider"

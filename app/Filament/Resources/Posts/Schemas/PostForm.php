@@ -8,6 +8,7 @@ use App\Filament\Forms\Components\Translatable;
 use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\TextInput;
 use Filament\Schemas\Schema;
+use Nomanur\FilamentSeoPro\Forms\SeoSection;
 
 class PostForm
 {
@@ -16,18 +17,19 @@ class PostForm
         return $schema
             ->components([
                 Translatable::make(function (string $locale): array {
-                    $suffix = ' ('.strtoupper($locale).')';
+                    $suffix = ' (' . strtoupper($locale) . ')';
 
                     return [
                         TextInput::make("title.{$locale}")
-                            ->label('Title'.$suffix)
+                            ->label('Title' . $suffix)
                             ->required()
                             ->maxLength(255),
                         Textarea::make("content.{$locale}")
-                            ->label('Content'.$suffix)
+                            ->label('Content' . $suffix)
                             ->rows(5),
                     ];
                 }),
+                SeoSection::make(),
             ]);
     }
 }
