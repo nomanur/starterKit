@@ -84,3 +84,12 @@ test('can delete the avatar from the media library', function (): void {
 
     expect($user->fresh()->getMedia('avatars'))->toHaveCount(0);
 });
+
+test('the photo page renders successfully with layouts app containing SEO tags', function (): void {
+    $user = User::factory()->create();
+
+    $response = $this->get(route('test'));
+
+    $response->assertSuccessful();
+    $response->assertSee('Starter Kit');
+});

@@ -8,6 +8,7 @@ use App\Filament\Forms\Components\Translatable;
 use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\TextInput;
 use Filament\Schemas\Schema;
+use Nomanur\FilamentSeoPro\Forms\SeoSection;
 
 class PostForm
 {
@@ -28,6 +29,7 @@ class PostForm
                             ->rows(5),
                     ];
                 }),
+                SeoSection::make(),
             ]);
     }
 }

@@ -34,6 +34,8 @@ This starter kit comes pre-integrated with premium, industry-standard packages, 
 *   **Spatie Laravel Media Library v11**: Battle-tested file attachments, uploads, and media collection associations on Eloquent models (e.g. User Profile Avatars).
 *   **Opcodes Log Viewer v3**: A beautiful, highly secure log-monitoring interface integrated into the Filament sidebar. Restricts access natively to Super Admins.
 *   **CSV/Excel Export & Import**: A reusable trait that adds export/import buttons to any Filament resource table, supporting CSV and XLSX formats with column selection and styled output.
+*   **Two-Factor Authentication (2FA)**: Secure TOTP-based 2FA protecting the admin panel with recovery codes and inline SVG QR code modal.
+*   **Profile Validation Rules Trait**: Centralized validation rules for consistent email and password rules across registration, edit profile, and password reset flows.
 
 ---
 
@@ -47,6 +49,8 @@ This starter kit comes pre-integrated with premium, industry-standard packages, 
 *   **Media Library Demo Page**: Fully functional Livewire and Spatie Media Library upload/gallery demo integrated at `/photo` with a premium glassmorphic UI.
 *   **Secure Log Viewer**: Integrated the **Opcodes Log Viewer** package, exposing it only to `super_admin` users via dynamic navigation sidebar elements in the Filament admin panel.
 *   **CSV/Excel Export & Import**: Added a reusable `ExportImport` trait for Filament resources. Export supports CSV/XLSX with column selection; import parses uploaded files into new records with success/failure notifications.
+*   **Two-Factor Authentication (2FA)**: Added robust TOTP-based 2FA for admin panels with SVG QR code rendering and session-persistent protection.
+*   **Profile Validation Rules**: CENTRALIZED email and password validations in the reusable `ProfileValidationRules` trait.
 
 ---
 
@@ -495,6 +499,60 @@ Headers in your CSV/XLSX file should match the database column names. Example:
 title,content
 My First Post,This is the content of the post.
 My Second Post,More content here.
+```
+
+---
+
+## 🛡️ Two-Factor Authentication (2FA) 🔐
+
+The starter kit features a secure, industry-standard **Time-based One-time Password (TOTP) Two-Factor Authentication** system for admin panel protection.
+
+### Key Features
+*   **Secure QR Code Generation**: Generates inline SVG QR codes inside the Filament modal, preventing OS-level scheme interception.
+*   **Recovery Codes**: Automatically generates 8 secure, encrypted recovery codes for backup access.
+*   **Session-Persistent Authentication**: Once verified, the user's 2FA status is stored securely in the session.
+*   **Panel Protection Middleware**: The `TwoFactorMiddleware` protects all admin routes, redirecting unverified users to the challenge page while keeping their Laravel session intact.
+
+### How to Enable & Use
+1.  Log into the admin panel and go to **Users > Edit User**.
+2.  Click the green **Enable 2FA** button at the top-right.
+3.  Scan the rendered QR code with your authenticator app (e.g. Google Authenticator, Authy, or 1Password) and enter the 6-digit code to confirm.
+4.  Copy and save your backup recovery codes.
+5.  On your next login, you will be intercepted and redirected to `/admin/two-factor-challenge` to verify your 2FA code before accessing the dashboard.
+
+---
+
+## 📝 Profile Validation Rules Trait
+
+The `ProfileValidationRules` trait (`app/Traits/ProfileValidationRules.php`) centralizes password and email validation rules to ensure consistency and clean architecture across registration, edit profile, and password reset forms.
+
+### Centralized Validation Rules
+*   **Centralized Email Rules**: Standardizes validation patterns, including required, email format, maximum length, and dynamic unique constraints (allowing ignoring specific user IDs during profile updates).
+*   **Centralized Password Rules**: Standardizes password rules, including minimum length (8 characters), required, and confirmation matching.
+
+### How to Use
+Use the trait in any controller, livewire component, or form request class:
+```php
+use App\Traits\ProfileValidationRules;
+
+class RegisterController extends Controller
+{
+    use ProfileValidationRules;
+
+    public function register(Request $request)
+    {
+        $request->validate([
+            'email' => $this->emailRules(),
+            'password' => $this->passwordRules(),
+        ]);
+    }
+}
+```
+For updating an existing user's profile:
+```php
+$request->validate([
+    'email' => $this->emailRules($user->id), // dynamically ignores the current user's ID
+]);
 ```
 
 ---
