@@ -1195,6 +1195,43 @@ public static function configure(Form $form): Form {<br>
                         </div>
                     </div>
 
+                    <div style="margin-top: 2rem; display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 2rem;">
+                        <div>
+                            <h3 style="font-size: 1.1rem; margin-bottom: 0.5rem; color: var(--color-cyan);">4. Automated Sitemap Generation</h3>
+                            <p style="font-size: 0.9rem; margin-bottom: 1rem;">Generate a structured XML sitemap using the integrated <code>spatie/laravel-sitemap</code> console command, scheduled daily:</p>
+
+                            <div class="terminal" style="margin-top: 0.5rem;">
+                                <div class="terminal-header">
+                                    <span class="dot red"></span><span class="dot yellow"></span><span class="dot green"></span>
+                                </div>
+                                <span class="terminal-comment"># Generate the sitemap manually</span><br>
+                                <span class="terminal-code">php artisan sitemap:generate</span><br><br>
+                                <span class="terminal-comment">// routes/console.php (Scheduled daily updates)</span><br>
+                                <span class="terminal-code" style="font-size: 0.75rem; line-height: 1.3;">
+Schedule::command(&#39;sitemap:generate&#39;)-&gt;daily();
+                                </span>
+                            </div>
+                        </div>
+
+                        <div>
+                            <h3 style="font-size: 1.1rem; margin-bottom: 0.5rem; color: var(--color-cyan);">5. Crawling Controls (robots.txt)</h3>
+                            <p style="font-size: 0.9rem; margin-bottom: 1rem;">Managed via <code>public/robots.txt</code>, directing search engines away from admin paths while indexing layouts:</p>
+
+                            <div class="terminal" style="margin-top: 0.5rem;">
+                                <div class="terminal-header">
+                                    <span class="dot red"></span><span class="dot yellow"></span><span class="dot green"></span>
+                                </div>
+                                <span class="terminal-comment"># public/robots.txt content</span><br>
+                                <span class="terminal-code" style="font-size: 0.8rem; line-height: 1.4;">
+User-agent: *<br>
+Disallow: /admin/<br>
+Disallow: /log-viewer/<br><br>
+Sitemap: http://starterkit.test/sitemap.xml
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+
                     <p style="margin-top: 1.5rem; font-size: 0.9rem;">
                         See the official package repository and documentation at <a href="https://nomanur.github.io/filament-seo-pro/" target="_blank" style="color: var(--color-cyan);">filament-seo-pro Documentation</a> for advanced usage, custom checks, and configurations.
                     </p>
