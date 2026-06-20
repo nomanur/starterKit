@@ -80,7 +80,11 @@
 
         <!-- Main Content -->
         <main class="flex-1 py-8 px-4 sm:px-6 lg:px-8">
-            {{ $slot }}
+            @isset($slot)
+                {{ $slot }}
+            @else
+                @yield('content')
+            @endisset
         </main>
 
         <!-- Footer -->
