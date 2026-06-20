@@ -2,20 +2,32 @@
 
 namespace App\Helpers;
 
-use Artesaos\SEOTools\Facades\SEOMeta;
-use Artesaos\SEOTools\Facades\OpenGraph;
-use Artesaos\SEOTools\Facades\TwitterCard;
+use Nomanur\FilamentSeoPro\Models\SeoMeta;
 
 class SeoHelper
 {
+    protected static ?SeoMeta $seo = null;
+
+    /**
+     * Get or initialize the dynamic SEO meta instance.
+     */
+    public static function getSeo(): SeoMeta
+    {
+        if (self::$seo === null) {
+            self::$seo = new SeoMeta([
+                'robots' => 'index, follow',
+                'seo_score' => 0,
+            ]);
+
+            // Share the seo wrapper with the views globally so app.blade.php renders it
+            view()->share('model', (object) ['seo' => self::$seo]);
+        }
+
+        return self::$seo;
+    }
+
     /**
      * Set default SEO meta tags for a page.
-     *
-     * @param string $title
-     * @param string|null $description
-     * @param array $keywords
-     * @param string|null $image
-     * @return void
      */
     public static function setDefault(
         string $title,
@@ -23,35 +35,24 @@ class SeoHelper
         array $keywords = [],
         ?string $image = null
     ): void {
-        SEOMeta::setTitle($title);
-        SEOMeta::setDescription($description ?? config('app.description', ''));
-        SEOMeta::setKeywords($keywords);
-        SEOMeta::addMeta('author', config('app.name'));
-        
+        $seo = self::getSeo();
+        $seo->title = $title;
+        $seo->description = $description ?? config('app.description', '');
+        $seo->keywords = implode(', ', $keywords);
+
         if ($image) {
-            OpenGraph::addProperty('image', $image);
-            TwitterCard::addValue('image', $image);
+            $seo->og_image = $image;
+            $seo->twitter_image = $image;
         }
-        
-        OpenGraph::setTitle($title);
-        OpenGraph::setDescription($description ?? config('app.description', ''));
-        OpenGraph::setUrl(url()->current());
-        OpenGraph::setSiteName(config('app.name'));
-        
-        TwitterCard::setTitle($title);
-        TwitterCard::setSite('@' . config('social.twitter_handle', 'laravel'));
+
+        $seo->og_title = $title;
+        $seo->og_description = $description ?? config('app.description', '');
+        $seo->twitter_title = $title;
+        $seo->twitter_description = $description ?? config('app.description', '');
     }
 
     /**
      * Set SEO data for an article or blog post.
-     *
-     * @param string $title
-     * @param string $description
-     * @param string $url
-     * @param string|null $image
-     * @param string|null $publishedTime
-     * @param string|null $author
-     * @return void
      */
     public static function setArticle(
         string $title,
@@ -62,37 +63,14 @@ class SeoHelper
         ?string $author = null
     ): void {
         self::setDefault($title, $description, [], $image);
-        
-        SEOMeta::setCanonical($url);
-        
-        OpenGraph::setType('article');
-        OpenGraph::setUrl($url);
-        
-        if ($publishedTime) {
-            OpenGraph::addProperty('published_time', $publishedTime);
-        }
-        
-        if ($author) {
-            OpenGraph::addProperty('author', $author);
-        }
-        
-        if ($image) {
-            OpenGraph::addProperty('image', $image);
-            TwitterCard::addValue('image', $image);
-        }
+
+        $seo = self::getSeo();
+        $seo->canonical_url = $url;
+        $seo->schema_type = 'Article';
     }
 
     /**
      * Set SEO data for a product page.
-     *
-     * @param string $title
-     * @param string $description
-     * @param string $url
-     * @param float $price
-     * @param string $currency
-     * @param string|null $image
-     * @param string $availability
-     * @return void
      */
     public static function setProduct(
         string $title,
@@ -104,39 +82,22 @@ class SeoHelper
         string $availability = 'in stock'
     ): void {
         self::setDefault($title, $description, [], $image);
-        
-        SEOMeta::setCanonical($url);
-        
-        OpenGraph::setType('product');
-        OpenGraph::setUrl($url);
-        OpenGraph::addProperty('price:amount', $price);
-        OpenGraph::addProperty('price:currency', $currency);
-        OpenGraph::addProperty('availability', "http://schema.org/{$availability}");
-        
-        if ($image) {
-            OpenGraph::addProperty('image', $image);
-        }
+
+        $seo = self::getSeo();
+        $seo->canonical_url = $url;
+        $seo->schema_type = 'Product';
     }
 
     /**
      * Add structured data (JSON-LD) for rich snippets.
-     *
-     * @param array $data
-     * @return string
      */
     public static function addStructuredData(array $data): string
     {
-        return '<script type="application/ld+json">' . json_encode($data) . '</script>';
+        return '<script type="application/ld+json">'.json_encode($data, JSON_UNESCAPED_SLASHES | JSON_PRETTY_PRINT).'</script>';
     }
 
     /**
      * Generate Organization schema.
-     *
-     * @param string $name
-     * @param string $url
-     * @param string|null $logo
-     * @param string|null $description
-     * @return string
      */
     public static function organizationSchema(
         string $name,
@@ -165,13 +126,12 @@ class SeoHelper
     /**
      * Generate BreadcrumbList schema.
      *
-     * @param array $items [['name' => 'Home', 'url' => '/'], ...]
-     * @return string
+     * @param  array  $items  [['name' => 'Home', 'url' => '/'], ...]
      */
     public static function breadcrumbSchema(array $items): string
     {
         $itemListElements = [];
-        
+
         foreach ($items as $index => $item) {
             $itemListElements[] = [
                 '@type' => 'ListItem',
@@ -192,27 +152,14 @@ class SeoHelper
 
     /**
      * Check if a page should be indexed.
-     *
-     * @param bool $noIndex
-     * @param bool $noFollow
-     * @return void
      */
     public static function setRobots(bool $noIndex = false, bool $noFollow = false): void
     {
         $robots = [];
-        
-        if ($noIndex) {
-            $robots[] = 'noindex';
-        } else {
-            $robots[] = 'index';
-        }
-        
-        if ($noFollow) {
-            $robots[] = 'nofollow';
-        } else {
-            $robots[] = 'follow';
-        }
-        
-        SEOMeta::addMeta('robots', implode(', ', $robots));
+        $robots[] = $noIndex ? 'noindex' : 'index';
+        $robots[] = $noFollow ? 'nofollow' : 'follow';
+
+        $seo = self::getSeo();
+        $seo->robots = implode(', ', $robots);
     }
 }

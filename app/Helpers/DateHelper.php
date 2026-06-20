@@ -8,14 +8,10 @@ class DateHelper
 {
     /**
      * Format a date consistently based on application settings.
-     *
-     * @param mixed $date
-     * @param string $format
-     * @return string
      */
-    public static function format($date, string $format = 'M d, Y'): string
+    public static function format(mixed $date, string $format = 'M d, Y'): string
     {
-        if (!$date) {
+        if (! $date) {
             return '';
         }
 
@@ -24,13 +20,10 @@ class DateHelper
 
     /**
      * Get human-readable time difference (e.g., "2 hours ago").
-     *
-     * @param mixed $timestamp
-     * @return string
      */
-    public static function timeAgo($timestamp): string
+    public static function timeAgo(mixed $timestamp): string
     {
-        if (!$timestamp) {
+        if (! $timestamp) {
             return '';
         }
 
@@ -39,46 +32,34 @@ class DateHelper
 
     /**
      * Convert a date to the user's timezone.
-     *
-     * @param mixed $date
-     * @param string|null $timezone
-     * @return Carbon
      */
-    public static function toUserTimezone($date, ?string $timezone = null): Carbon
+    public static function toUserTimezone(mixed $date, ?string $timezone = null): Carbon
     {
         $timezone = $timezone ?? config('app.timezone');
+
         return Carbon::parse($date)->timezone($timezone);
     }
 
     /**
      * Check if a date is in the past.
-     *
-     * @param mixed $date
-     * @return bool
      */
-    public static function isPast($date): bool
+    public static function isPast(mixed $date): bool
     {
         return Carbon::parse($date)->isPast();
     }
 
     /**
      * Check if a date is in the future.
-     *
-     * @param mixed $date
-     * @return bool
      */
-    public static function isFuture($date): bool
+    public static function isFuture(mixed $date): bool
     {
         return Carbon::parse($date)->isFuture();
     }
 
     /**
      * Get the age from a birth date.
-     *
-     * @param mixed $birthDate
-     * @return int
      */
-    public static function age($birthDate): int
+    public static function age(mixed $birthDate): int
     {
         return Carbon::parse($birthDate)->age;
     }

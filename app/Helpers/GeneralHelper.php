@@ -6,43 +6,29 @@ class GeneralHelper
 {
     /**
      * Format a number with locale-aware separators.
-     *
-     * @param float|int $number
-     * @param int $decimals
-     * @return string
      */
-    public static function formatNumber($number, int $decimals = 0): string
+    public static function formatNumber(float|int $number, int $decimals = 0): string
     {
         return number_format((float) $number, $decimals, '.', ',');
     }
 
     /**
      * Format an amount as currency.
-     *
-     * @param float|int $amount
-     * @param string|null $currency
-     * @param string|null $locale
-     * @return string
      */
-    public static function formatMoney($amount, ?string $currency = null, ?string $locale = null): string
+    public static function formatMoney(float|int $amount, ?string $currency = null, ?string $locale = null): string
     {
         $currency = $currency ?? config('app.currency', 'USD');
         $locale = $locale ?? config('app.locale', 'en_US');
-        
-        $formatter = new \NumberFormatter($locale . '@currency=' . $currency, \NumberFormatter::CURRENCY);
-        
+
+        $formatter = new \NumberFormatter($locale.'@currency='.$currency, \NumberFormatter::CURRENCY);
+
         return $formatter->formatCurrency((float) $amount, $currency);
     }
 
     /**
      * Calculate percentage safely.
-     *
-     * @param float|int $part
-     * @param float|int $total
-     * @param int $precision
-     * @return float
      */
-    public static function percentage($part, $total, int $precision = 2): float
+    public static function percentage(float|int $part, float|int $total, int $precision = 2): float
     {
         if ($total == 0) {
             return 0.0;
@@ -53,8 +39,6 @@ class GeneralHelper
 
     /**
      * Get the client's IP address.
-     *
-     * @return string|null
      */
     public static function getClientIp(): ?string
     {
@@ -66,7 +50,7 @@ class GeneralHelper
         ];
 
         foreach ($ipKeys as $key) {
-            if (!empty($_SERVER[$key])) {
+            if (! empty($_SERVER[$key])) {
                 $ip = explode(',', $_SERVER[$key])[0];
                 if (filter_var(trim($ip), FILTER_VALIDATE_IP)) {
                     return trim($ip);
@@ -79,8 +63,6 @@ class GeneralHelper
 
     /**
      * Get the user agent string.
-     *
-     * @return string|null
      */
     public static function getUserAgent(): ?string
     {
@@ -89,25 +71,20 @@ class GeneralHelper
 
     /**
      * Check if the request is from a mobile device.
-     *
-     * @return bool
      */
     public static function isMobile(): bool
     {
         $userAgent = self::getUserAgent();
-        
-        if (!$userAgent) {
+
+        if (! $userAgent) {
             return false;
         }
 
-        return preg_match('/(android|bb\d+|meego).+mobile|avantgo|bada\/|blackberry|blazer|compal|elaine|fennec|hiptop|iemobile|ip(hone|od)|iris|kindle|lge |maemo|midp|mmp|mobile.+firefox|netfront|opera m(ob|in)i|palm( os)?|phone|p(ixi|re)\/|plucker|pocket|psp|series(4|6)0|symbian|treo|up\.(browser|link)|vodafone|wap|windows ce|xda|xiino/i', $userAgent);
+        return (bool) preg_match('/(android|bb\d+|meego).+mobile|avantgo|bada\/|blackberry|blazer|compal|elaine|fennec|hiptop|iemobile|ip(hone|od)|iris|kindle|lge |maemo|midp|mmp|mobile.+firefox|netfront|opera m(ob|in)i|palm( os)?|phone|p(ixi|re)\/|plucker|pocket|psp|series(4|6)0|symbian|treo|up\.(browser|link)|vodafone|wap|windows ce|xda|xiino/i', $userAgent);
     }
 
     /**
      * Generate a random unique string.
-     *
-     * @param int $length
-     * @return string
      */
     public static function generateRandomString(int $length = 32): string
     {
@@ -116,9 +93,6 @@ class GeneralHelper
 
     /**
      * Parse and return video ID from YouTube or Vimeo URL.
-     *
-     * @param string $url
-     * @return string|null
      */
     public static function parseVideoId(string $url): ?string
     {
@@ -137,21 +111,18 @@ class GeneralHelper
 
     /**
      * Convert a hex color to RGB array.
-     *
-     * @param string $hex
-     * @return array|null
      */
     public static function hexToRgb(string $hex): ?array
     {
         $hex = ltrim($hex, '#');
-        
+
         if (strlen($hex) === 3) {
-            $hex = str_repeat(substr($hex, 0, 1), 2) . 
-                   str_repeat(substr($hex, 1, 1), 2) . 
+            $hex = str_repeat(substr($hex, 0, 1), 2).
+                   str_repeat(substr($hex, 1, 1), 2).
                    str_repeat(substr($hex, 2, 1), 2);
         }
-        
-        if (strlen($hex) !== 6 || !ctype_xdigit($hex)) {
+
+        if (strlen($hex) !== 6 || ! ctype_xdigit($hex)) {
             return null;
         }
 
@@ -164,15 +135,11 @@ class GeneralHelper
 
     /**
      * Get active class for navigation based on current route.
-     *
-     * @param string|array $routes
-     * @param string $activeClass
-     * @return string
      */
-    public static function isActiveRoute($routes, string $activeClass = 'active'): string
+    public static function isActiveRoute(array|string $routes, string $activeClass = 'active'): string
     {
         $routes = is_array($routes) ? $routes : [$routes];
-        
+
         foreach ($routes as $route) {
             if (request()->routeIs($route) || request()->fullUrlIs($route)) {
                 return $activeClass;
@@ -184,11 +151,8 @@ class GeneralHelper
 
     /**
      * Sanitize input data.
-     *
-     * @param mixed $data
-     * @return mixed
      */
-    public static function sanitize($data)
+    public static function sanitize(mixed $data): mixed
     {
         if (is_array($data)) {
             return array_map([self::class, 'sanitize'], $data);
