@@ -1,0 +1,769 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Global Helper Functions & Helpers - Documentation 🚀</title>
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap"
+        rel="stylesheet">
+
+    <style>
+        /* Modern Design System with Harmonious HSL Palette */
+        :root {
+            --bg-base: #06070b;
+            --bg-surface: rgba(15, 17, 26, 0.7);
+            --bg-card: rgba(22, 25, 38, 0.85);
+            --border-glow: rgba(147, 51, 234, 0.15);
+            --border-hover: rgba(147, 51, 234, 0.4);
+
+            --color-primary: hsl(263, 75%, 62%);
+            --color-primary-glow: rgba(147, 51, 234, 0.4);
+            --color-cyan: hsl(190, 95%, 55%);
+            --color-cyan-glow: rgba(6, 182, 212, 0.35);
+            --color-emerald: hsl(142, 70%, 50%);
+
+            --text-main: #f3f4f6;
+            --text-muted: #9ca3af;
+            --text-glow: #e9d5ff;
+
+            --font-outfit: 'Outfit', sans-serif;
+            --font-inter: 'Inter', sans-serif;
+            --font-mono: 'JetBrains Mono', monospace;
+
+            --shadow-glow: 0 0 35px -5px var(--color-primary-glow);
+            --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        /* Base Styles */
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            background-color: var(--bg-base);
+            color: var(--text-main);
+            font-family: var(--font-inter);
+            line-height: 1.6;
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        /* Gorgeous Glowing Background Accents */
+        body::before {
+            content: '';
+            position: absolute;
+            top: -200px;
+            left: -150px;
+            width: 600px;
+            height: 600px;
+            background: radial-gradient(circle, var(--color-primary-glow) 0%, rgba(0, 0, 0, 0) 70%);
+            z-index: -1;
+            filter: blur(80px);
+        }
+
+        body::after {
+            content: '';
+            position: absolute;
+            top: 600px;
+            right: -200px;
+            width: 700px;
+            height: 700px;
+            background: radial-gradient(circle, var(--color-cyan-glow) 0%, rgba(0, 0, 0, 0) 70%);
+            z-index: -1;
+            filter: blur(100px);
+        }
+
+        /* Container Layout */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 4rem 2rem;
+        }
+
+        /* Navigation Header */
+        .nav-back {
+            margin-bottom: 2rem;
+        }
+
+        .btn-back {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: var(--color-cyan);
+            text-decoration: none;
+            font-weight: 600;
+            font-family: var(--font-outfit);
+            font-size: 1rem;
+            transition: var(--transition);
+        }
+
+        .btn-back:hover {
+            transform: translateX(-4px);
+            color: #ffffff;
+        }
+
+        /* Premium Header Styling */
+        header {
+            text-align: center;
+            margin-bottom: 4rem;
+            position: relative;
+        }
+
+        .logo-wrapper {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 80px;
+            height: 80px;
+            border-radius: 20px;
+            background: linear-gradient(135deg, var(--color-primary), var(--color-cyan));
+            box-shadow: 0 10px 40px -10px var(--color-primary-glow);
+            margin-bottom: 1.5rem;
+        }
+
+        .logo-icon {
+            font-size: 2.5rem;
+        }
+
+        h1 {
+            font-family: var(--font-outfit);
+            font-size: 3rem;
+            font-weight: 800;
+            background: linear-gradient(to right, #ffffff 30%, var(--text-glow) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 0.75rem;
+            letter-spacing: -0.03em;
+        }
+
+        .subtitle {
+            font-size: 1.15rem;
+            color: var(--text-muted);
+            max-width: 700px;
+            margin: 0 auto 1.5rem auto;
+            font-weight: 400;
+        }
+
+        /* Table of Contents Menu */
+        .toc-menu {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            flex-wrap: wrap;
+            margin-bottom: 3rem;
+        }
+
+        .toc-link {
+            background-color: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            color: var(--text-muted);
+            padding: 0.5rem 1.25rem;
+            border-radius: 50px;
+            font-size: 0.9rem;
+            font-weight: 500;
+            text-decoration: none;
+            transition: var(--transition);
+            backdrop-filter: blur(10px);
+        }
+
+        .toc-link:hover {
+            border-color: var(--border-hover);
+            color: #ffffff;
+            background: linear-gradient(to right, rgba(147, 51, 234, 0.1), rgba(6, 182, 212, 0.1));
+            transform: translateY(-2px);
+        }
+
+        /* Cards Layout */
+        .grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 2.5rem;
+            margin-bottom: 4rem;
+        }
+
+        .card {
+            background: var(--bg-card);
+            border: 1px solid var(--border-glow);
+            border-radius: 20px;
+            padding: 2.5rem;
+            backdrop-filter: blur(12px);
+            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.4);
+            transition: var(--transition);
+        }
+
+        .card:hover {
+            border-color: var(--border-hover);
+            box-shadow: var(--shadow-glow);
+        }
+
+        .card-title {
+            font-family: var(--font-outfit);
+            font-size: 1.75rem;
+            font-weight: 700;
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            color: #ffffff;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+            padding-bottom: 0.75rem;
+        }
+
+        .card-icon {
+            color: var(--color-cyan);
+            font-size: 1.75rem;
+        }
+
+        /* Helpers Lists */
+        .helper-item {
+            margin-bottom: 2.5rem;
+        }
+
+        .helper-item:last-child {
+            margin-bottom: 0;
+        }
+
+        .helper-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            margin-bottom: 0.5rem;
+            gap: 0.5rem;
+        }
+
+        .helper-name {
+            font-family: var(--font-mono);
+            font-size: 1.2rem;
+            color: var(--color-cyan);
+            font-weight: 600;
+        }
+
+        .helper-badge {
+            font-size: 0.75rem;
+            font-weight: 600;
+            padding: 0.2rem 0.6rem;
+            border-radius: 6px;
+            background-color: rgba(147, 51, 234, 0.15);
+            border: 1px solid rgba(147, 51, 234, 0.3);
+            color: var(--text-glow);
+        }
+
+        .helper-desc {
+            color: var(--text-muted);
+            font-size: 0.95rem;
+            margin-bottom: 0.75rem;
+        }
+
+        /* Glow Terminal Block */
+        .terminal {
+            background-color: #0b0c14;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            border-radius: 12px;
+            padding: 1.25rem;
+            font-family: var(--font-mono);
+            font-size: 0.85rem;
+            color: #d1d5db;
+            position: relative;
+            margin-top: 0.5rem;
+            box-shadow: inset 0 0 15px rgba(0, 0, 0, 0.8);
+        }
+
+        .terminal-header {
+            display: flex;
+            gap: 6px;
+            margin-bottom: 0.75rem;
+        }
+
+        .dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+        }
+
+        .dot.red { background-color: #ef4444; }
+        .dot.yellow { background-color: #f59e0b; }
+        .dot.green { background-color: #10b981; }
+
+        .terminal-code {
+            color: #10b981;
+            user-select: text;
+            white-space: pre-wrap;
+            word-break: break-all;
+            display: block;
+        }
+
+        .terminal-comment {
+            color: #6b7280;
+        }
+
+        /* Footer styling */
+        footer {
+            text-align: center;
+            padding-top: 3rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.05);
+            color: var(--text-muted);
+            font-size: 0.9rem;
+        }
+
+        /* Back to top button */
+        .btn-top {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            background-color: var(--bg-card);
+            border: 1px solid var(--border-glow);
+            color: var(--color-cyan);
+            font-size: 1.25rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: var(--transition);
+            z-index: 99;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.5);
+            text-decoration: none;
+        }
+
+        .btn-top:hover {
+            border-color: var(--border-hover);
+            color: #ffffff;
+            transform: translateY(-4px);
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="container">
+        <!-- Back Link -->
+        <div class="nav-back">
+            <a href="index.html" class="btn-back">← Back to Docs Home</a>
+        </div>
+
+        <!-- Header -->
+        <header>
+            <div class="logo-wrapper">
+                <span class="logo-icon">🛠️</span>
+            </div>
+            <h1>Global Helpers & Classes</h1>
+            <p class="subtitle">A comprehensive, premium suite of helper functions and classes carefully designed to accelerate date management, secure HTML sanitization, formatted currency printing, image resizing, and SEO optimization.</p>
+        </header>
+
+        <!-- Table of Contents -->
+        <div class="toc-menu">
+            <a href="#date-helpers" class="toc-link">📅 Date Helpers</a>
+            <a href="#formatting-helpers" class="toc-link">📝 Formatting Helpers</a>
+            <a href="#general-helpers" class="toc-link">⚙️ General Helpers</a>
+            <a href="#image-helpers" class="toc-link">🖼️ Image & Storage</a>
+            <a href="#seo-helpers" class="toc-link">🔍 SEO & Schemas</a>
+        </div>
+
+        <!-- Main Cards Grid -->
+        <div class="grid">
+
+            <!-- Date Helpers -->
+            <div class="card" id="date-helpers">
+                <h2 class="card-title">
+                    <span class="card-icon">📅</span> Date & Time Helpers
+                </h2>
+                <div class="helper-item">
+                    <div class="helper-header">
+                        <span class="helper-name">format_date($date, string $format = 'M d, Y')</span>
+                        <span class="helper-badge">Global Wrapper</span>
+                    </div>
+                    <p class="helper-desc">Formats a date string, Carbon instance, or timestamp into a consistent display structure. Backed by <code>DateHelper::format()</code>.</p>
+                    <div class="terminal">
+                        <div class="terminal-header"><span class="dot red"></span><span class="dot yellow"></span><span class="dot green"></span></div>
+                        <span class="terminal-code"><span class="terminal-comment">// Output: "Jun 20, 2026"</span>
+echo format_date('2026-06-20 14:30:00');
+
+<span class="terminal-comment">// Output: "2026-06-20"</span>
+echo format_date(now(), 'Y-m-d');</span>
+                    </div>
+                </div>
+
+                <div class="helper-item" style="margin-top: 2rem;">
+                    <div class="helper-header">
+                        <span class="helper-name">time_ago($timestamp)</span>
+                        <span class="helper-badge">Global Wrapper</span>
+                    </div>
+                    <p class="helper-desc">Calculates a human-friendly diffForHumans() string (e.g., "2 hours ago"). Backed by <code>DateHelper::timeAgo()</code>.</p>
+                    <div class="terminal">
+                        <div class="terminal-header"><span class="dot red"></span><span class="dot yellow"></span><span class="dot green"></span></div>
+                        <span class="terminal-code"><span class="terminal-comment">// Output: "3 hours ago"</span>
+echo time_ago(now()->subHours(3));</span>
+                    </div>
+                </div>
+
+                <div class="helper-item" style="margin-top: 2rem;">
+                    <div class="helper-header">
+                        <span class="helper-name">DateHelper::toUserTimezone($date, ?string $timezone = null)</span>
+                        <span class="helper-badge">Static Class Method</span>
+                    </div>
+                    <p class="helper-desc">Converts raw date objects to the target timezone (falls back to <code>config('app.timezone')</code>).</p>
+                    <div class="terminal">
+                        <div class="terminal-header"><span class="dot red"></span><span class="dot yellow"></span><span class="dot green"></span></div>
+                        <span class="terminal-code">use App\Helpers\DateHelper;
+$userTime = DateHelper::toUserTimezone('2026-06-20 12:00:00', 'Asia/Dhaka');</span>
+                    </div>
+                </div>
+
+                <div class="helper-item" style="margin-top: 2rem;">
+                    <div class="helper-header">
+                        <span class="helper-name">DateHelper::isPast($date)</span>
+                        <span class="helper-badge">Static Class Method</span>
+                    </div>
+                    <p class="helper-desc">Checks whether a date is in the past.</p>
+                    <div class="terminal">
+                        <div class="terminal-header"><span class="dot red"></span><span class="dot yellow"></span><span class="dot green"></span></div>
+                        <span class="terminal-code">if (DateHelper::isPast($task->deadline)) {
+    <span class="terminal-comment">// handle overdue</span>
+}</span>
+                    </div>
+                </div>
+
+                <div class="helper-item" style="margin-top: 2rem;">
+                    <div class="helper-header">
+                        <span class="helper-name">DateHelper::age($birthDate)</span>
+                        <span class="helper-badge">Static Class Method</span>
+                    </div>
+                    <p class="helper-desc">Computes the age based on a birth date.</p>
+                    <div class="terminal">
+                        <div class="terminal-header"><span class="dot red"></span><span class="dot yellow"></span><span class="dot green"></span></div>
+                        <span class="terminal-code"><span class="terminal-comment">// Output: 31</span>
+echo DateHelper::age('1995-10-15');</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Formatting Helpers -->
+            <div class="card" id="formatting-helpers">
+                <h2 class="card-title">
+                    <span class="card-icon">📝</span> Formatting & String Helpers
+                </h2>
+                <div class="helper-item">
+                    <div class="helper-header">
+                        <span class="helper-name">clean_html(string $html, array $allowedTags = ['p', 'br', 'strong', 'em', 'a'])</span>
+                        <span class="helper-badge">Global Wrapper</span>
+                    </div>
+                    <p class="helper-desc">Strips out harmful HTML tags to shield against cross-site scripting (XSS), keeping only defined allowed formatting tags.</p>
+                    <div class="terminal">
+                        <div class="terminal-header"><span class="dot red"></span><span class="dot yellow"></span><span class="dot green"></span></div>
+                        <span class="terminal-code"><span class="terminal-comment">// Output: "Hello <strong>World</strong>"</span>
+echo clean_html('Hello &lt;script&gt;evil()&lt;/script&gt; &lt;strong&gt;World&lt;/strong&gt;');</span>
+                    </div>
+                </div>
+
+                <div class="helper-item" style="margin-top: 2rem;">
+                    <div class="helper-header">
+                        <span class="helper-name">generate_slug(string $title, string $separator = '-')</span>
+                        <span class="helper-badge">Global Wrapper</span>
+                    </div>
+                    <p class="helper-desc">Transforms text titles into slug components for SEO-friendly URLs. Backed by <code>FormatHelper::generateSlug()</code>.</p>
+                    <div class="terminal">
+                        <div class="terminal-header"><span class="dot red"></span><span class="dot yellow"></span><span class="dot green"></span></div>
+                        <span class="terminal-code"><span class="terminal-comment">// Output: "super-secure-laravel-starter-kit"</span>
+echo generate_slug('Super Secure Laravel Starter Kit!');</span>
+                    </div>
+                </div>
+
+                <div class="helper-item" style="margin-top: 2rem;">
+                    <div class="helper-header">
+                        <span class="helper-name">truncate_text(string $text, int $limit = 100, string $ending = '...')</span>
+                        <span class="helper-badge">Global Wrapper</span>
+                    </div>
+                    <p class="helper-desc">Shortens strings to a length limit while preventing character clipping. Backed by <code>FormatHelper::truncate()</code>.</p>
+                    <div class="terminal">
+                        <div class="terminal-header"><span class="dot red"></span><span class="dot yellow"></span><span class="dot green"></span></div>
+                        <span class="terminal-code"><span class="terminal-comment">// Output: "Laravel is a..."</span>
+echo truncate_text('Laravel is a PHP framework designed for web artisans.', 15);</span>
+                    </div>
+                </div>
+
+                <div class="helper-item" style="margin-top: 2rem;">
+                    <div class="helper-header">
+                        <span class="helper-name">mask_string(string $string, int $visibleChars = 3, string $maskChar = '*')</span>
+                        <span class="helper-badge">Global Wrapper</span>
+                    </div>
+                    <p class="helper-desc">Masks sensitive inputs (such as tokens, emails, or digits) keeping a prefix visible.</p>
+                    <div class="terminal">
+                        <div class="terminal-header"><span class="dot red"></span><span class="dot yellow"></span><span class="dot green"></span></div>
+                        <span class="terminal-code"><span class="terminal-comment">// Output: "adm********"</span>
+echo mask_string('adminsecretpwd', 3);</span>
+                    </div>
+                </div>
+
+                <div class="helper-item" style="margin-top: 2rem;">
+                    <div class="helper-header">
+                        <span class="helper-name">FormatHelper::htmlToText(string $html)</span>
+                        <span class="helper-badge">Static Class Method</span>
+                    </div>
+                    <p class="helper-desc">Strips all HTML tags and trims spacing to retrieve raw, plain text contents.</p>
+                    <div class="terminal">
+                        <div class="terminal-header"><span class="dot red"></span><span class="dot yellow"></span><span class="dot green"></span></div>
+                        <span class="terminal-code">use App\Helpers\FormatHelper;
+<span class="terminal-comment">// Output: "Click Here"</span>
+echo FormatHelper::htmlToText('&lt;a href="#"&gt;Click Here&lt;/a&gt;');</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- General Helpers -->
+            <div class="card" id="general-helpers">
+                <h2 class="card-title">
+                    <span class="card-icon">⚙️</span> General & Math Utilities
+                </h2>
+                <div class="helper-item">
+                    <div class="helper-header">
+                        <span class="helper-name">format_money($amount, ?string $currency = null, ?string $locale = null)</span>
+                        <span class="helper-badge">Global Wrapper</span>
+                    </div>
+                    <p class="helper-desc">Formats decimals into currency representations, using PHP's <code>NumberFormatter</code>. Backed by <code>GeneralHelper::formatMoney()</code>.</p>
+                    <div class="terminal">
+                        <div class="terminal-header"><span class="dot red"></span><span class="dot yellow"></span><span class="dot green"></span></div>
+                        <span class="terminal-code"><span class="terminal-comment">// Output: "$1,250.50" (assuming default USD/en_US settings)</span>
+echo format_money(1250.50);
+
+<span class="terminal-comment">// Output: "1.250,50 €"</span>
+echo format_money(1250.50, 'EUR', 'de_DE');</span>
+                    </div>
+                </div>
+
+                <div class="helper-item" style="margin-top: 2rem;">
+                    <div class="helper-header">
+                        <span class="helper-name">calculate_percentage($part, $total, int $precision = 2)</span>
+                        <span class="helper-badge">Global Wrapper</span>
+                    </div>
+                    <p class="helper-desc">Safely calculates percentage fractions, preventing Division-by-Zero runtime exceptions.</p>
+                    <div class="terminal">
+                        <div class="terminal-header"><span class="dot red"></span><span class="dot yellow"></span><span class="dot green"></span></div>
+                        <span class="terminal-code"><span class="terminal-comment">// Output: 25.00</span>
+echo calculate_percentage(15, 60);
+
+<span class="terminal-comment">// Output: 0.00 (Safe from crashing)</span>
+echo calculate_percentage(10, 0);</span>
+                    </div>
+                </div>
+
+                <div class="helper-item" style="margin-top: 2rem;">
+                    <div class="helper-header">
+                        <span class="helper-name">get_client_ip()</span>
+                        <span class="helper-badge">Global Wrapper</span>
+                    </div>
+                    <p class="helper-desc">Resolves client IPs from requests, identifying headers from Cloudflare proxy setups or front-end reverse proxies.</p>
+                    <div class="terminal">
+                        <div class="terminal-header"><span class="dot red"></span><span class="dot yellow"></span><span class="dot green"></span></div>
+                        <span class="terminal-code">$clientIp = get_client_ip();</span>
+                    </div>
+                </div>
+
+                <div class="helper-item" style="margin-top: 2rem;">
+                    <div class="helper-header">
+                        <span class="helper-name">is_mobile()</span>
+                        <span class="helper-badge">Global Wrapper</span>
+                    </div>
+                    <p class="helper-desc">Checks user agent request strings to identify mobile browsing sessions.</p>
+                    <div class="terminal">
+                        <div class="terminal-header"><span class="dot red"></span><span class="dot yellow"></span><span class="dot green"></span></div>
+                        <span class="terminal-code">if (is_mobile()) {
+    <span class="terminal-comment">// load optimized sidebar layout</span>
+}</span>
+                    </div>
+                </div>
+
+                <div class="helper-item" style="margin-top: 2rem;">
+                    <div class="helper-header">
+                        <span class="helper-name">active_route($routes, string $activeClass = 'active')</span>
+                        <span class="helper-badge">Global Wrapper</span>
+                    </div>
+                    <p class="helper-desc">Checks if the current route matches input values, returning class lists for navigation menus.</p>
+                    <div class="terminal">
+                        <div class="terminal-header"><span class="dot red"></span><span class="dot yellow"></span><span class="dot green"></span></div>
+                        <span class="terminal-code">&lt;a href="{{ route('admin.dashboard') }}" class="{{ active_route('admin.dashboard') }}"&gt;Dashboard&lt;/a&gt;</span>
+                    </div>
+                </div>
+
+                <div class="helper-item" style="margin-top: 2rem;">
+                    <div class="helper-header">
+                        <span class="helper-name">GeneralHelper::parseVideoId(string $url)</span>
+                        <span class="helper-badge">Static Class Method</span>
+                    </div>
+                    <p class="helper-desc">Extracts embed video IDs from YouTube or Vimeo URLs.</p>
+                    <div class="terminal">
+                        <div class="terminal-header"><span class="dot red"></span><span class="dot yellow"></span><span class="dot green"></span></div>
+                        <span class="terminal-code">use App\Helpers\GeneralHelper;
+<span class="terminal-comment">// Output: "dQw4w9WgXcQ"</span>
+echo GeneralHelper::parseVideoId('https://www.youtube.com/watch?v=dQw4w9WgXcQ');</span>
+                    </div>
+                </div>
+
+                <div class="helper-item" style="margin-top: 2rem;">
+                    <div class="helper-header">
+                        <span class="helper-name">GeneralHelper::sanitize($data)</span>
+                        <span class="helper-badge">Static Class Method</span>
+                    </div>
+                    <p class="helper-desc">Recursively HTML-encodes strings inside values or arrays for safe render output.</p>
+                    <div class="terminal">
+                        <div class="terminal-header"><span class="dot red"></span><span class="dot yellow"></span><span class="dot green"></span></div>
+                        <span class="terminal-code">$safeInput = GeneralHelper::sanitize($request->all());</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Image & Storage Helpers -->
+            <div class="card" id="image-helpers">
+                <h2 class="card-title">
+                    <span class="card-icon">🖼️</span> Image & Storage Utilities
+                </h2>
+                <div class="helper-item">
+                    <div class="helper-header">
+                        <span class="helper-name">get_avatar($user, int $size = 100)</span>
+                        <span class="helper-badge">Global Wrapper</span>
+                    </div>
+                    <p class="helper-desc">Resolves user avatar paths. Checks database fields, falls back to Gravatar images or local fallbacks.</p>
+                    <div class="terminal">
+                        <div class="terminal-header"><span class="dot red"></span><span class="dot yellow"></span><span class="dot green"></span></div>
+                        <span class="terminal-code">&lt;img src="{{ get_avatar(auth()->user(), 80) }}" alt="Avatar"&gt;</span>
+                    </div>
+                </div>
+
+                <div class="helper-item" style="margin-top: 2rem;">
+                    <div class="helper-header">
+                        <span class="helper-name">storage_url(?string $path)</span>
+                        <span class="helper-badge">Global Wrapper</span>
+                    </div>
+                    <p class="helper-desc">Converts storage path strings to full URLs. External URLs are ignored and returned as is.</p>
+                    <div class="terminal">
+                        <div class="terminal-header"><span class="dot red"></span><span class="dot yellow"></span><span class="dot green"></span></div>
+                        <span class="terminal-code"><span class="terminal-comment">// Output: "http://domain.test/storage/avatars/avatar.png"</span>
+echo storage_url('avatars/avatar.png');</span>
+                    </div>
+                </div>
+
+                <div class="helper-item" style="margin-top: 2rem;">
+                    <div class="helper-header">
+                        <span class="helper-name">file_size_human(int $bytes, int $precision = 2)</span>
+                        <span class="helper-badge">Global Wrapper</span>
+                    </div>
+                    <p class="helper-desc">Translates bytes integer counts to human readable filesizes (e.g. KB, MB, GB).</p>
+                    <div class="terminal">
+                        <div class="terminal-header"><span class="dot red"></span><span class="dot yellow"></span><span class="dot green"></span></div>
+                        <span class="terminal-code"><span class="terminal-comment">// Output: "1.48 MB"</span>
+echo file_size_human(1548576);</span>
+                    </div>
+                </div>
+
+                <div class="helper-item" style="margin-top: 2rem;">
+                    <div class="helper-header">
+                        <span class="helper-name">ImageHelper::uploadImage(UploadedFile $file, string $directory, array $options = [])</span>
+                        <span class="helper-badge">Static Class Method</span>
+                    </div>
+                    <p class="helper-desc">Scales and saves files in storage with Intervention Image, preserving aspect ratios.</p>
+                    <div class="terminal">
+                        <div class="terminal-header"><span class="dot red"></span><span class="dot yellow"></span><span class="dot green"></span></div>
+                        <span class="terminal-code">use App\Helpers\ImageHelper;
+$path = ImageHelper::uploadImage($request->file('cover'), 'covers', [
+    'max_width' => 1200,
+    'max_height' => 800,
+    'quality' => 80
+]);</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- SEO & Schema Helpers -->
+            <div class="card" id="seo-helpers">
+                <h2 class="card-title">
+                    <span class="card-icon">🔍</span> SEO & Schema Generators
+                </h2>
+                <div class="helper-item">
+                    <div class="helper-header">
+                        <span class="helper-name">set_seo(string $title, ?string $description = null, array $keywords = [], ?string $image = null)</span>
+                        <span class="helper-badge">Global Wrapper</span>
+                    </div>
+                    <p class="helper-desc">Bootstraps page-level SEO header variables (Meta titles, descriptions, keywords, OpenGraph items).</p>
+                    <div class="terminal">
+                        <div class="terminal-header"><span class="dot red"></span><span class="dot yellow"></span><span class="dot green"></span></div>
+                        <span class="terminal-code">set_seo('Pricing Plan', 'Select our subscription plan.', ['pricing', 'plans']);</span>
+                    </div>
+                </div>
+
+                <div class="helper-item" style="margin-top: 2rem;">
+                    <div class="helper-header">
+                        <span class="helper-name">set_article_seo(string $title, string $description, string $url, ?string $image = null, ?string $publishedTime = null, ?string $author = null)</span>
+                        <span class="helper-badge">Global Wrapper</span>
+                    </div>
+                    <p class="helper-desc">Configures specific schema properties and canonical links on article pages.</p>
+                    <div class="terminal">
+                        <div class="terminal-header"><span class="dot red"></span><span class="dot yellow"></span><span class="dot green"></span></div>
+                        <span class="terminal-code">set_article_seo(
+    $post->title,
+    $post->description,
+    route('blog.show', $post),
+    storage_url($post->image),
+    $post->published_at->toIso8601String()
+);</span>
+                    </div>
+                </div>
+
+                <div class="helper-item" style="margin-top: 2rem;">
+                    <div class="helper-header">
+                        <span class="helper-name">structured_data(array $data)</span>
+                        <span class="helper-badge">Global Wrapper</span>
+                    </div>
+                    <p class="helper-desc">Wraps structured data arrays in inline script tags matching search engine JSON-LD requirements.</p>
+                    <div class="terminal">
+                        <div class="terminal-header"><span class="dot red"></span><span class="dot yellow"></span><span class="dot green"></span></div>
+                        <span class="terminal-code">{!! structured_data([
+    '@context' => 'https://schema.org',
+    '@type' => 'Organization',
+    'name' => 'Starter Kit Inc.',
+    'url' => 'https://starterkit.test'
+]) !!}</span>
+                    </div>
+                </div>
+
+                <div class="helper-item" style="margin-top: 2rem;">
+                    <div class="helper-header">
+                        <span class="helper-name">SeoHelper::breadcrumbSchema(array $items)</span>
+                        <span class="helper-badge">Static Class Method</span>
+                    </div>
+                    <p class="helper-desc">Generates JSON-LD Breadcrumb schemas matching navigation lists.</p>
+                    <div class="terminal">
+                        <div class="terminal-header"><span class="dot red"></span><span class="dot yellow"></span><span class="dot green"></span></div>
+                        <span class="terminal-code">use App\Helpers\SeoHelper;
+echo SeoHelper::breadcrumbSchema([
+    ['name' => 'Home', 'url' => '/'],
+    ['name' => 'Categories', 'url' => '/categories']
+]);</span>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- Footer -->
+        <footer>
+            <p>&copy; 2026 Nomanur Starter Kit. Open-sourced under the MIT license.</p>
+        </footer>
+
+    </div>
+
+    <!-- Back to top button -->
+    <a href="#" class="btn-top">▲</a>
+
+</body>
+
+</html>
