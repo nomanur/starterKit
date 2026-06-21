@@ -26,12 +26,14 @@ class DatabaseSeeder extends Seeder
         ]);
 
         // 2. Create the Admin user
-        $admin = User::create([
-            'name' => 'Admin User',
-            'email' => 'admin@admin.com',
-            'password' => bcrypt('12345678'),
-            'email_verified_at' => now(),
-        ]);
+        $admin = User::firstOrCreate(
+            ['email' => 'admin@admin.com'],
+            [
+                'name' => 'Admin User',
+                'password' => bcrypt('12345678'),
+                'email_verified_at' => now(),
+            ]
+        );
 
         // 3. Assign the super_admin role to the Admin user
         Artisan::call('shield:super-admin', [
