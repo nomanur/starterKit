@@ -18,10 +18,11 @@ afterEach(function (): void {
     }
 });
 
-test('it exits when no features are selected', function (): void {
+function buildChoices(array $skipIds = ['admin-panel']): array
+{
     $features = collect(config('installer.features'));
     $options = $features
-        ->reject(fn (array $f) => in_array($f['id'], ['admin-panel']))
+        ->reject(fn (array $f) => in_array($f['id'], $skipIds))
         ->mapWithKeys(fn (array $f) => [$f['id'] => $f['name'].' — '.Str::of($f['description'])->limit(60)])
         ->all();
 
@@ -31,9 +32,14 @@ test('it exits when no features are selected', function (): void {
     $keys = array_keys($options);
     sort($keys);
 
-    $choices = array_merge($labels, $keys);
+    return array_merge($labels, $keys);
+}
+
+test('it exits when no features are selected', function (): void {
+    $choices = buildChoices(['admin-panel', 'api']);
 
     $this->artisan('starter-kit:install')
+        ->expectsConfirmation('Do you want to install the API Starter Kit?', 'no')
         ->expectsChoice('Which features would you like to install?', [], $choices)
         ->expectsConfirmation('Proceed with installation?', 'no')
         ->expectsOutputToContain('Installation cancelled')
@@ -41,46 +47,23 @@ test('it exits when no features are selected', function (): void {
 });
 
 test('it exits when installation is cancelled', function (): void {
-    $features = collect(config('installer.features'));
-    $options = $features
-        ->reject(fn (array $f) => in_array($f['id'], ['admin-panel']))
-        ->mapWithKeys(fn (array $f) => [$f['id'] => $f['name'].' — '.Str::of($f['description'])->limit(60)])
-        ->all();
-
-    $labels = array_values($options);
-    sort($labels);
-
-    $keys = array_keys($options);
-    sort($keys);
-
-    $choices = array_merge($labels, $keys);
+    $choices = buildChoices(['admin-panel', 'api']);
 
     $this->artisan('starter-kit:install')
+        ->expectsConfirmation('Do you want to install the API Starter Kit?', 'no')
         ->expectsChoice('Which features would you like to install?', ['log-viewer'], $choices)
         ->expectsConfirmation('Proceed with installation?', 'no')
         ->expectsOutputToContain('Installation cancelled')
         ->assertExitCode(0);
 });
 
-test('it skips api starter kit installation when declined', function (): void {
-    $features = collect(config('installer.features'));
-    $options = $features
-        ->reject(fn (array $f) => in_array($f['id'], ['admin-panel']))
-        ->mapWithKeys(fn (array $f) => [$f['id'] => $f['name'].' — '.Str::of($f['description'])->limit(60)])
-        ->all();
-
-    $labels = array_values($options);
-    sort($labels);
-
-    $keys = array_keys($options);
-    sort($keys);
-
-    $choices = array_merge($labels, $keys);
+test('it skips api starter kit when declined', function (): void {
+    $choices = buildChoices(['admin-panel', 'api']);
 
     $this->artisan('starter-kit:install')
-        ->expectsChoice('Which features would you like to install?', ['api'], $choices)
-        ->expectsConfirmation('Proceed with installation?', 'yes')
         ->expectsConfirmation('Do you want to install the API Starter Kit?', 'no')
+        ->expectsChoice('Which features would you like to install?', [], $choices)
+        ->expectsConfirmation('Proceed with installation?', 'yes')
         ->expectsOutputToContain('Installation complete!')
         ->assertExitCode(0);
 });

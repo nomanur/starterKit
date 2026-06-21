@@ -37,8 +37,10 @@ class InstallStarterKit extends Command
 
     public function handle(): int
     {
+        $installApi = confirm(label: 'Do you want to install the API Starter Kit?', default: true);
+
         $features = $this->loadFeatures();
-        $selected = $this->selectFeatures($features);
+        $selected = $this->selectFeatures($features, $installApi);
 
         if (empty($selected)) {
             warning('No features selected. Nothing to install.');
@@ -72,9 +74,13 @@ class InstallStarterKit extends Command
         return collect($config);
     }
 
-    private function selectFeatures(Collection $features): array
+    private function selectFeatures(Collection $features, bool $installApi): array
     {
         $skippedFeatures = ['admin-panel'];
+
+        if (! $installApi) {
+            $skippedFeatures[] = 'api';
+        }
 
         $options = $features
             ->reject(fn (array $f) => in_array($f['id'], $skippedFeatures))
@@ -90,6 +96,10 @@ class InstallStarterKit extends Command
         );
 
         $selected[] = 'admin-panel';
+
+        if ($installApi) {
+            $selected[] = 'api';
+        }
 
         return $selected;
     }
@@ -571,11 +581,6 @@ PHP;
 
     protected function installApi(): void
     {
-        if (! confirm(label: 'Do you want to install the API Starter Kit?', default: true)) {
-            $this->selected = array_values(array_filter($this->selected, fn (string $id): bool => $id !== 'api'));
-
-            return;
-        }
 
         $this->runComposerRequire('nomanur/api-starter-kit');
 
