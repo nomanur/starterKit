@@ -27,6 +27,8 @@ class InstallStarterKit extends Command
 
     private Filesystem $filesystem;
 
+    private array $selected = [];
+
     public function __construct()
     {
         parent::__construct();
@@ -44,8 +46,8 @@ class InstallStarterKit extends Command
             return self::SUCCESS;
         }
 
-        $selected = $this->resolveDependencies($features, $selected);
-        $this->printSummary($features, $selected);
+        $this->selected = $this->resolveDependencies($features, $selected);
+        $this->printSummary($features, $this->selected);
 
         if (! confirm(label: 'Proceed with installation?', default: true)) {
             warning('Installation cancelled.');
@@ -53,11 +55,11 @@ class InstallStarterKit extends Command
             return self::SUCCESS;
         }
 
-        $this->installFeatures($features, $selected);
+        $this->installFeatures($features, $this->selected);
 
-        $this->runPostInstallSteps($selected);
+        $this->runPostInstallSteps($this->selected);
 
-        $this->printCompletion($selected);
+        $this->printCompletion($this->selected);
 
         return self::SUCCESS;
     }
@@ -136,7 +138,7 @@ class InstallStarterKit extends Command
             if (method_exists($this, $method)) {
                 task(
                     label: "Installing {$this->featureName($features, $id)}",
-                    callback: fn () => $this->{$method}($features, $selected),
+                    callback: fn () => $this->{$method}($features, $this->selected),
                 );
             } else {
                 info("  No installer for feature: {$id} (skipping)");
@@ -359,7 +361,7 @@ PHP;
         }
 
         $pluginsSection = empty($plugins)
-            ? '//'
+            ? ''
             : "\n".implode("\n", $plugins)."\n        ";
 
         $pluginImportsSection = empty($pluginImports)
@@ -569,16 +571,39 @@ PHP;
 
     protected function installApi(): void
     {
+        if (! confirm(label: 'Do you want to install the API Starter Kit?', default: true)) {
+            $this->selected = array_values(array_filter($this->selected, fn (string $id): bool => $id !== 'api'));
+
+            return;
+        }
+
         $this->runComposerRequire('nomanur/api-starter-kit');
 
-        $exitCode = $this->call('api-starter-kit:install', [
-            '--sanctum' => true,
-            '--migrations' => true,
-            '--force' => $this->option('force'),
-        ]);
+        $this->line('  Running: php artisan api-starter-kit:install...');
 
-        if ($exitCode !== 0) {
-            warning('API Starter Kit installation may have encountered issues.');
+        $process = new Process(
+            command: [
+                PHP_BINARY,
+                'artisan',
+                'api-starter-kit:install',
+                '--sanctum',
+                '--migrations',
+                '--force',
+                '--no-interaction',
+                '--ansi',
+            ],
+            cwd: base_path(),
+            timeout: 180,
+        );
+
+        try {
+            $process->mustRun(function (string $type, string $output): void {
+                if ($type === Process::OUT) {
+                    echo $output;
+                }
+            });
+        } catch (\Throwable $e) {
+            warning('API Starter Kit installation may have encountered issues: '.$e->getMessage());
         }
     }
 
