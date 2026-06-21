@@ -42,4 +42,16 @@ class UserFactory extends Factory
             'email_verified_at' => null,
         ]);
     }
+
+    /**
+     * Indicate that the user authenticated via a social provider.
+     */
+    public function socialite(string $provider = 'github'): static
+    {
+        return $this->state(fn (array $attributes) => [
+            'socialite_id' => fake()->uuid(),
+            'socialite_type' => $provider,
+            'password' => null,
+        ]);
+    }
 }

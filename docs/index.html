@@ -1,0 +1,1615 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nomanur Starter Kit - Documentation 🚀</title>
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap"
+        rel="stylesheet">
+
+    <style>
+        /* Modern Design System with Harmonious HSL Palette */
+        :root {
+            --bg-base: #06070b;
+            --bg-surface: rgba(15, 17, 26, 0.7);
+            --bg-card: rgba(22, 25, 38, 0.85);
+            --border-glow: rgba(147, 51, 234, 0.15);
+            --border-hover: rgba(147, 51, 234, 0.4);
+
+            --color-primary: hsl(263, 75%, 62%);
+            --color-primary-glow: rgba(147, 51, 234, 0.4);
+            --color-cyan: hsl(190, 95%, 55%);
+            --color-cyan-glow: rgba(6, 182, 212, 0.35);
+            --color-emerald: hsl(142, 70%, 50%);
+
+            --text-main: #f3f4f6;
+            --text-muted: #9ca3af;
+            --text-glow: #e9d5ff;
+
+            --font-outfit: 'Outfit', sans-serif;
+            --font-inter: 'Inter', sans-serif;
+            --font-mono: 'JetBrains Mono', monospace;
+
+            --shadow-glow: 0 0 35px -5px var(--color-primary-glow);
+            --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        /* Base Styles */
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            background-color: var(--bg-base);
+            color: var(--text-main);
+            font-family: var(--font-inter);
+            line-height: 1.6;
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        /* Gorgeous Glowing Background Accents */
+        body::before {
+            content: '';
+            position: absolute;
+            top: -200px;
+            left: -150px;
+            width: 600px;
+            height: 600px;
+            background: radial-gradient(circle, var(--color-primary-glow) 0%, rgba(0, 0, 0, 0) 70%);
+            z-index: -1;
+            filter: blur(80px);
+        }
+
+        body::after {
+            content: '';
+            position: absolute;
+            top: 400px;
+            right: -200px;
+            width: 700px;
+            height: 700px;
+            background: radial-gradient(circle, var(--color-cyan-glow) 0%, rgba(0, 0, 0, 0) 70%);
+            z-index: -1;
+            filter: blur(100px);
+        }
+
+        /* Container Layout */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 4rem 2rem;
+        }
+
+        /* Premium Header Styling */
+        header {
+            text-align: center;
+            margin-bottom: 5rem;
+            position: relative;
+        }
+
+        .logo-wrapper {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 100px;
+            height: 100px;
+            border-radius: 24px;
+            background: linear-gradient(135deg, var(--color-primary), var(--color-cyan));
+            box-shadow: 0 10px 40px -10px var(--color-primary-glow);
+            margin-bottom: 2rem;
+            animation: bounce 6s ease-in-out infinite;
+        }
+
+        .logo-icon {
+            font-size: 3rem;
+        }
+
+        h1 {
+            font-family: var(--font-outfit);
+            font-size: 3.5rem;
+            font-weight: 800;
+            background: linear-gradient(to right, #ffffff 30%, var(--text-glow) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 0.75rem;
+            letter-spacing: -0.03em;
+        }
+
+        .subtitle {
+            font-size: 1.25rem;
+            color: var(--text-muted);
+            max-width: 600px;
+            margin: 0 auto 1.5rem auto;
+            font-weight: 400;
+        }
+
+        .badge-list {
+            display: flex;
+            justify-content: center;
+            gap: 0.75rem;
+            flex-wrap: wrap;
+        }
+
+        .badge {
+            background-color: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            color: var(--text-main);
+            padding: 0.4rem 1rem;
+            border-radius: 50px;
+            font-size: 0.85rem;
+            font-weight: 500;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            backdrop-filter: blur(10px);
+        }
+
+        .badge.primary {
+            background: linear-gradient(to right, rgba(147, 51, 234, 0.2), rgba(6, 182, 212, 0.2));
+            border-color: var(--border-hover);
+            color: #e9d5ff;
+        }
+
+        /* Glassmorphism Cards Layout */
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(12, 1fr);
+            gap: 2rem;
+            margin-bottom: 4rem;
+        }
+
+        .card {
+            background: var(--bg-card);
+            border: 1px solid var(--border-glow);
+            border-radius: 20px;
+            padding: 2.25rem;
+            backdrop-filter: blur(12px);
+            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.4);
+            transition: var(--transition);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, rgba(147, 51, 234, 0.05) 0%, rgba(6, 182, 212, 0.05) 100%);
+            opacity: 0;
+            transition: var(--transition);
+            z-index: 0;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            border-color: var(--border-hover);
+            box-shadow: var(--shadow-glow);
+        }
+
+        .card:hover::before {
+            opacity: 1;
+        }
+
+        .card-content {
+            position: relative;
+            z-index: 1;
+        }
+
+        .col-12 {
+            grid-column: span 12;
+        }
+
+        .col-8 {
+            grid-column: span 8;
+        }
+
+        .col-6 {
+            grid-column: span 6;
+        }
+
+        .col-4 {
+            grid-column: span 4;
+        }
+
+        @media (max-width: 900px) {
+
+            .col-8,
+            .col-6,
+            .col-4 {
+                grid-column: span 12;
+            }
+        }
+
+        .card-title {
+            font-family: var(--font-outfit);
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 1.25rem;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            color: #ffffff;
+        }
+
+        .card-icon {
+            color: var(--color-primary);
+            font-size: 1.5rem;
+        }
+
+        /* Typography & Content Lists */
+        p {
+            color: var(--text-muted);
+            margin-bottom: 1rem;
+            font-size: 0.975rem;
+        }
+
+        ul {
+            list-style: none;
+            margin-bottom: 1.5rem;
+        }
+
+        li {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            margin-bottom: 0.75rem;
+            color: var(--text-main);
+            font-size: 0.95rem;
+        }
+
+        .bullet {
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            background-color: var(--color-cyan);
+            box-shadow: 0 0 10px var(--color-cyan);
+        }
+
+        /* Default Credentials Highlight Panel */
+        .credentials-box {
+            background-color: rgba(6, 182, 212, 0.04);
+            border: 1px dashed rgba(6, 182, 212, 0.3);
+            border-radius: 14px;
+            padding: 1.5rem;
+            margin-top: 1.5rem;
+        }
+
+        .credential-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0.5rem 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .credential-row:last-child {
+            border-bottom: none;
+        }
+
+        .cred-label {
+            color: var(--text-muted);
+            font-size: 0.9rem;
+        }
+
+        .cred-val {
+            font-family: var(--font-mono);
+            font-weight: 600;
+            color: var(--color-cyan);
+            background-color: rgba(6, 182, 212, 0.1);
+            padding: 0.25rem 0.6rem;
+            border-radius: 6px;
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .cred-val:hover {
+            background-color: rgba(6, 182, 212, 0.2);
+        }
+
+        /* Glow Terminal Block */
+        .terminal {
+            background-color: #0b0c14;
+            border: 1px solid rgba(255, 255, 255, 0.07);
+            border-radius: 12px;
+            padding: 1.25rem;
+            font-family: var(--font-mono);
+            font-size: 0.9rem;
+            color: #d1d5db;
+            position: relative;
+            margin-top: 1.25rem;
+            box-shadow: inset 0 0 15px rgba(0, 0, 0, 0.8);
+        }
+
+        .terminal-header {
+            display: flex;
+            gap: 6px;
+            margin-bottom: 1rem;
+        }
+
+        .dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+        }
+
+        .dot.red {
+            background-color: #ef4444;
+        }
+
+        .dot.yellow {
+            background-color: #f59e0b;
+        }
+
+        .dot.green {
+            background-color: #10b981;
+        }
+
+        .terminal-code {
+            color: #10b981;
+            user-select: text;
+        }
+
+        .terminal-comment {
+            color: #6b7280;
+        }
+
+        /* Quality Checks Dashboard Panel */
+        .checks-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 1.5rem;
+            margin-top: 1.5rem;
+        }
+
+        .check-item {
+            background-color: rgba(255, 255, 255, 0.02);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            border-radius: 16px;
+            padding: 1.25rem;
+            text-align: center;
+            transition: var(--transition);
+        }
+
+        .check-item:hover {
+            border-color: rgba(16, 185, 129, 0.3);
+            background-color: rgba(16, 185, 129, 0.02);
+        }
+
+        .check-status {
+            color: var(--color-emerald);
+            font-size: 1.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .check-name {
+            font-weight: 600;
+            font-size: 0.95rem;
+            margin-bottom: 0.25rem;
+        }
+
+        .check-detail {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+        }
+
+        /* Footer styling */
+        footer {
+            text-align: center;
+            padding-top: 4rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.05);
+            color: var(--text-muted);
+            font-size: 0.9rem;
+        }
+
+        /* Animations */
+        @keyframes bounce {
+
+            0%,
+            100% {
+                transform: translateY(0);
+            }
+
+            50% {
+                transform: translateY(-10px);
+            }
+        }
+
+        /* Click to copy notification toast */
+        .toast {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            background: linear-gradient(135deg, var(--color-primary), var(--color-cyan));
+            color: #ffffff;
+            padding: 0.75rem 1.5rem;
+            border-radius: 12px;
+            font-weight: 600;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+            transform: translateY(150%);
+            opacity: 0;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            z-index: 100;
+        }
+
+        .toast.show {
+            transform: translateY(0);
+            opacity: 1;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="container">
+
+        <!-- Header -->
+        <header>
+            <div class="logo-wrapper">
+                <span class="logo-icon">🛡️</span>
+            </div>
+            <h1>Nomanur Laravel Starter Kit</h1>
+            <p class="subtitle">A premium, highly secure, and pre-integrated Laravel blueprint for speed-of-light
+                administrative development.</p>
+
+            <div class="badge-list">
+                <span class="badge primary">Filament v5</span>
+                <span class="badge primary">Shield v4</span>
+                <span class="badge primary">Pest v4</span>
+                <span class="badge">Livewire V3 Format</span>
+                <span class="badge">PHP 8.4</span>
+                <span class="badge">Laravel 13</span>
+                <a href="helpers.html" class="badge primary" style="text-decoration: none; border-color: var(--color-cyan); color: var(--color-cyan); font-weight: 600;">🛠️ Helpers Docs</a>
+            </div>
+        </header>
+
+        <!-- Main Content Board -->
+        <div class="grid">
+
+            <!-- Recent Updates Card -->
+            <div class="card col-12">
+                <div class="card-content">
+                    <h2 class="card-title">
+                        <span class="card-icon">🚀</span> Recent Improvements
+                    </h2>
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1.5rem;">
+                        <div>
+                            <h3 style="font-size: 1.1rem; margin-bottom: 0.5rem; color: var(--color-cyan);">Role Management</h3>
+                            <p style="font-size: 0.9rem;">Integrated <strong>Filament Shield</strong> for dynamic, UI-driven permission and role management.</p>
+                        </div>
+                        <div>
+                            <h3 style="font-size: 1.1rem; margin-bottom: 0.5rem; color: var(--color-cyan);">Queue Monitoring</h3>
+                            <p style="font-size: 0.9rem;">Added <strong>Filament Jobs Monitor</strong> to track background job execution and failures in real-time.</p>
+                        </div>
+                        <div>
+                            <h3 style="font-size: 1.1rem; margin-bottom: 0.5rem; color: var(--color-cyan);">SEO Management</h3>
+                            <p style="font-size: 0.9rem;">Integrated <strong>Filament SEO Pro</strong> for real-time SEO analysis, readability scoring, and meta tags rendering.</p>
+                        </div>
+                        <div>
+                            <h3 style="font-size: 1.1rem; margin-bottom: 0.5rem; color: var(--color-cyan);">Modern Livewire</h3>
+                            <p style="font-size: 0.9rem;">Standardized on the <strong>Livewire V3 class format</strong> for all dynamic components.</p>
+                        </div>
+                        <div>
+                            <h3 style="font-size: 1.1rem; margin-bottom: 0.5rem; color: var(--color-cyan);">User Resource</h3>
+                            <p style="font-size: 0.9rem;">Refactored User administration with multi-role support and styled status badges.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Global Helper Functions -->
+            <div class="card col-12">
+                <div class="card-content">
+                    <h2 class="card-title">
+                        <span class="card-icon">🛠️</span> Global Helper Functions & Utility Classes
+                    </h2>
+                    <p>The starter kit includes a robust suite of custom helper classes and global wrapper functions to simplify date formatting, sanitize rich text input, format locale-aware currency, process image uploads/resizes, and optimize page-level SEO metadata. All utility helpers are centralized and fully documented.</p>
+                    
+                    <div style="display: flex; gap: 1rem; align-items: center; margin-bottom: 1.5rem; flex-wrap: wrap;">
+                        <span class="badge primary">Date Formatting</span>
+                        <span class="badge primary">HTML Sanitization</span>
+                        <span class="badge primary">SEO Meta Tools</span>
+                        <span class="badge">Image Resizing & Uploads</span>
+                        <span class="badge">Currency Formatting</span>
+                    </div>
+
+                    <p style="margin-top: 1.5rem; font-size: 0.95rem;">
+                        See the dedicated <a href="helpers.html" style="color: var(--color-cyan); font-weight: 600; text-decoration: none; border-bottom: 1px dashed var(--color-cyan);">helpers.html</a> (or <a href="HELPERS.md" style="color: var(--color-cyan); font-weight: 600; text-decoration: none; border-bottom: 1px dashed var(--color-cyan);">HELPERS.md</a>) page for full signatures, parameter definitions, and clean PHP code examples.
+                    </p>
+                </div>
+            </div>
+
+            <!-- Setup & Quick Start -->
+            <div class="card col-8">
+                <div class="card-content">
+                    <h2 class="card-title">
+                        <span class="card-icon">⚡</span> Quick Installation & Seeding
+                    </h2>
+                    <p>Setting up your new application is completely automated. Run a single command to touch databases,
+                        install packages, and seed administrative access control:</p>
+
+                    <div class="terminal">
+                        <div class="terminal-header">
+                            <span class="dot red"></span>
+                            <span class="dot yellow"></span>
+                            <span class="dot green"></span>
+                        </div>
+                        <span class="terminal-comment"># Create and boot a new project blueprint</span><br>
+                        <span class="terminal-code">composer create-project nomanur/nomanur-starter-kit
+                            my-app</span><br><br>
+                        <span class="terminal-comment"># Boot up the concurrent dev environment (HTTP server, queues,
+                            pail log tailing)</span><br>
+                        <span class="terminal-code">composer run dev</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Credentials Card -->
+            <div class="card col-4">
+                <div class="card-content">
+                    <h2 class="card-title">
+                        <span class="card-icon">🔑</span> Admin Login
+                    </h2>
+                    <p>The installation seeder creates a pre-configured Super Admin account for instant administrative
+                        dashboard access.</p>
+
+                    <div class="credentials-box">
+                        <div class="credential-row">
+                            <span class="cred-label">Login URL</span>
+                            <span class="cred-val" onclick="copyText('/admin')">/admin</span>
+                        </div>
+                        <div class="credential-row">
+                            <span class="cred-label">Username</span>
+                            <span class="cred-val" onclick="copyText('admin@admin.com')">admin@admin.com</span>
+                        </div>
+                        <div class="credential-row">
+                            <span class="cred-label">Password</span>
+                            <span class="cred-val" onclick="copyText('12345678')">12345678</span>
+                        </div>
+                    </div>
+
+                    <p style="margin-top: 1.25rem; font-size: 0.85rem;">*Click any value above to copy it instantly to
+                        your clipboard.</p>
+                </div>
+            </div>
+
+            <!-- Pre-integrated Stack Architecture -->
+            <div class="card col-6">
+                <div class="card-content">
+                    <h2 class="card-title">
+                        <span class="card-icon">📦</span> Built-in Stack Features
+                    </h2>
+                    <p>The starter kit combines modern packages configured with security best practices:</p>
+
+                    <ul>
+                        <li>
+                            <span class="bullet"></span>
+                            <div>
+                                <strong>Filament PHP Panel</strong>
+                                <p style="margin: 0; font-size: 0.875rem;">A responsive dashboard designed with Filament
+                                    v5.</p>
+                            </div>
+                        </li>
+                        <li>
+                            <span class="bullet"></span>
+                            <div>
+                                <strong>Filament Shield Integration</strong>
+                                <p style="margin: 0; font-size: 0.875rem;">Dynamic role & permission management. Secured
+                                    by Spatie under the hood.</p>
+                            </div>
+                        </li>
+                        <li>
+                            <span class="bullet"></span>
+                            <div>
+                                <strong>Jobs & Queue Monitor</strong>
+                                <p style="margin: 0; font-size: 0.875rem;">Real-time queue job monitoring using
+                                    Croustibat Jobs Monitor.</p>
+                            </div>
+                        </li>
+                        <li>
+                            <span class="bullet"></span>
+                            <div>
+                                <strong>Premium User Resource</strong>
+                                <p style="margin: 0; font-size: 0.875rem;">Form-level role management and table display
+                                    with primary badges.</p>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Quality & Standard Audits Dashboard -->
+            <div class="card col-6">
+                <div class="card-content">
+                    <h2 class="card-title">
+                        <span class="card-icon">🛡️</span> Standard Auditing & Verification
+                    </h2>
+                    <p>We ensure that the starter kit stays perfectly healthy, styled, and secure. Run
+                        <code>composer test</code> to trigger all audits:</p>
+
+                    <div class="checks-grid">
+                        <div class="check-item">
+                            <div class="check-status">✓</div>
+                            <div class="check-name">Pint Linting</div>
+                            <div class="check-detail">Clean style structures</div>
+                        </div>
+                        <div class="check-item">
+                            <div class="check-status">✓</div>
+                            <div class="check-name">Rector Upgrades</div>
+                            <div class="check-detail">PHP 8.4 compliance</div>
+                        </div>
+                        <div class="check-item">
+                            <div class="check-status">✓</div>
+                            <div class="check-name">PHPStan</div>
+                            <div class="check-detail">0 errors level analysis</div>
+                        </div>
+                        <div class="check-item">
+                            <div class="check-status">✓</div>
+                            <div class="check-name">Pest Tests</div>
+                            <div class="check-detail">100% type coverage</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Spatie Media Library Integration -->
+            <div class="card col-12">
+                <div class="card-content">
+                    <h2 class="card-title">
+                        <span class="card-icon">📸</span> Spatie Media Library Integration
+                    </h2>
+                    <p>Spatie Media Library is fully configured and integrated into the starter kit. The storage symlink is automatically generated on installation via automated composer scripts, making media immediately visualizable.</p>
+                    
+                    <div style="display: flex; gap: 1rem; align-items: center; margin-bottom: 1.5rem; flex-wrap: wrap;">
+                        <span class="badge primary">Public Previews Enabled</span>
+                        <span class="badge">Autolinked Symlink</span>
+                        <span class="badge">Demo Route: <a href="/photo" style="color: var(--color-cyan); font-weight: 600; text-decoration: none;">/photo</a></span>
+                    </div>
+
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 2rem; margin-top: 1.5rem;">
+                        <div>
+                            <h3 style="font-size: 1.1rem; margin-bottom: 0.75rem; color: var(--color-cyan);">1. Enable Your Model</h3>
+                            <p style="font-size: 0.9rem; margin-bottom: 1rem;">Implement <code>HasMedia</code> and use <code>InteractsWithMedia</code> on any Eloquent model:</p>
+                            
+                            <div class="terminal" style="margin-top: 0.5rem;">
+                                <div class="terminal-header">
+                                    <span class="dot red"></span><span class="dot yellow"></span><span class="dot green"></span>
+                                </div>
+                                <span class="terminal-comment">// app/Models/User.php</span><br>
+                                <span class="terminal-code" style="font-size: 0.8rem; line-height: 1.4;">
+class User extends Authenticatable implements HasMedia {<br>
+&nbsp;&nbsp;&nbsp;&nbsp;use InteractsWithMedia;<br><br>
+&nbsp;&nbsp;&nbsp;&nbsp;public function registerMediaCollections(): void {<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;$this->addMediaCollection('avatars')<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;->singleFile();<br>
+&nbsp;&nbsp;&nbsp;&nbsp;}<br>
+}
+                                </span>
+                            </div>
+                        </div>
+
+                        <div>
+                            <h3 style="font-size: 1.1rem; margin-bottom: 0.75rem; color: var(--color-cyan);">2. Upload Files via Livewire</h3>
+                            <p style="font-size: 0.9rem; margin-bottom: 1rem;">Handle temporary files easily and attach them directly to media collections:</p>
+                            
+                            <div class="terminal" style="margin-top: 0.5rem;">
+                                <div class="terminal-header">
+                                    <span class="dot red"></span><span class="dot yellow"></span><span class="dot green"></span>
+                                </div>
+                                <span class="terminal-comment">// app/Livewire/Test.php</span><br>
+                                <span class="terminal-code" style="font-size: 0.8rem; line-height: 1.4;">
+class Test extends Component {<br>
+&nbsp;&nbsp;&nbsp;&nbsp;use WithFileUploads;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;public $photo;<br><br>
+&nbsp;&nbsp;&nbsp;&nbsp;public function save(): void {<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;$this->validate(['photo' => 'image|max:5120']);<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;$this->user->addMedia($this->photo->getRealPath())<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;->toMediaCollection('avatars');<br>
+&nbsp;&nbsp;&nbsp;&nbsp;}<br>
+}
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Image Cropper Integration -->
+            <div class="card col-12">
+                <div class="card-content">
+                    <h2 class="card-title">
+                        <span class="card-icon">✂️</span> Image Cropping System
+                    </h2>
+                    <p>The starter kit ships with a fully integrated <strong>client-side image cropping system</strong> powered by <a href="https://github.com/fengyuanchen/cropperjs" style="color: var(--color-cyan);">Cropper.js</a> and Alpine.js. Users can select an image, crop it to a desired aspect ratio, and upload the cropped result — all before the file ever touches the server.</p>
+
+                    <div style="display: flex; gap: 1rem; align-items: center; margin-bottom: 1.5rem; flex-wrap: wrap;">
+                        <span class="badge primary">Client-Side Cropping</span>
+                        <span class="badge">Cropper.js v1.6</span>
+                        <span class="badge">Alpine.js Plugin</span>
+                        <span class="badge">Livewire Upload Ready</span>
+                    </div>
+
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 2rem; margin-top: 1.5rem;">
+                        <div style="grid-column: 1 / -1;">
+                            <h3 style="font-size: 1.1rem; margin-bottom: 0.75rem; color: var(--color-cyan);">How It Works</h3>
+                            <p style="font-size: 0.9rem; margin-bottom: 1rem;">The cropping pipeline runs entirely on the client side:</p>
+                            <ul style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem 2rem;">
+                                <li>
+                                    <span class="bullet"></span>
+                                    <div>
+                                        <strong>File Selection</strong>
+                                        <p style="margin: 0; font-size: 0.875rem;">User picks an image via a file input.</p>
+                                    </div>
+                                </li>
+                                <li>
+                                    <span class="bullet"></span>
+                                    <div>
+                                        <strong>Crop Interface</strong>
+                                        <p style="margin: 0; font-size: 0.875rem;">A glassmorphic modal opens with the image loaded into Cropper.js. User adjusts the crop area.</p>
+                                    </div>
+                                </li>
+                                <li>
+                                    <span class="bullet"></span>
+                                    <div>
+                                        <strong>Canvas Extraction</strong>
+                                        <p style="margin: 0; font-size: 0.875rem;">On "Apply Crop", <code>getCroppedCanvas()</code> extracts the selection as a canvas, then <code>toBlob()</code> produces a JPEG <code>File</code> blob.</p>
+                                    </div>
+                                </li>
+                                <li>
+                                    <span class="bullet"></span>
+                                    <div>
+                                        <strong>Livewire Upload</strong>
+                                        <p style="margin: 0; font-size: 0.875rem;">An <code>image-cropped</code> custom event dispatches the file. Livewire's <code>@this.upload()</code> receives it as a temporary upload.</p>
+                                    </div>
+                                </li>
+                                <li>
+                                    <span class="bullet"></span>
+                                    <div>
+                                        <strong>Media Library Save</strong>
+                                        <p style="margin: 0; font-size: 0.875rem;">The Livewire component validates and persists the cropped file to Spatie Media Library.</p>
+                                    </div>
+                                </li>
+                            </ul>
+                        </div>
+
+                        <div>
+                            <h3 style="font-size: 1.1rem; margin-bottom: 0.75rem; color: var(--color-cyan);">Quick Usage</h3>
+                            <p style="font-size: 0.9rem; margin-bottom: 1rem;">Drop the Alpine component into any Livewire Blade view. The minimal setup:</p>
+
+                            <div class="terminal" style="margin-top: 0.5rem; position: relative;">
+                                <button onclick="copyCropCode()" style="position: absolute; top: 0.5rem; right: 0.5rem; background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.1); color: #9ca3af; padding: 0.25rem 0.6rem; border-radius: 6px; font-size: 0.7rem; cursor: pointer; transition: all 0.2s; z-index: 1;">Copy full code</button>
+                                <div class="terminal-header">
+                                    <span class="dot red"></span><span class="dot yellow"></span><span class="dot green"></span>
+                                </div>
+                                <span class="terminal-comment">&lt;!-- resources/views/livewire/test.blade.php --&gt;</span><br>
+                                <span class="terminal-code" style="font-size: 0.75rem; line-height: 1.3;">
+&lt;div<br>
+&nbsp;&nbsp;&nbsp;&nbsp;x-data="imageCropper({ cropping: true, aspectRatio: 1 })"<br>
+&nbsp;&nbsp;&nbsp;&nbsp;@image-cropped.window="@this.upload('photo', $event.detail.file)"<br>
+&nbsp;&nbsp;&nbsp;&nbsp;wire:ignore<br>
+&gt;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&lt;input type="file" x-ref="fileInput" @change="onFileChange" /&gt;<br>
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&lt;x-cropping-modal /&gt;<br>
+&lt;/div&gt;
+                                </span>
+                            </div>
+                            <p style="font-size: 0.8rem; color: var(--text-muted); margin-top: 0.5rem;">Click <strong>Copy full code</strong> above to copy the complete code including the reusable <code>&lt;x-cropping-modal /&gt;</code> component.</p>
+                        </div>
+
+                        <div>
+                            <h3 style="font-size: 1.1rem; margin-bottom: 0.75rem; color: var(--color-cyan);">Alpine Component API</h3>
+                            <p style="font-size: 0.9rem; margin-bottom: 1rem;">The <code>imageCropper</code> component accepts a config object:</p>
+
+                            <div class="terminal" style="margin-top: 0.5rem;">
+                                <div class="terminal-header">
+                                    <span class="dot red"></span><span class="dot yellow"></span><span class="dot green"></span>
+                                </div>
+                                <span class="terminal-comment">// Config properties</span><br>
+                                <span class="terminal-code" style="font-size: 0.8rem; line-height: 1.4;">
+{<br>
+&nbsp;&nbsp;cropping: true,&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="terminal-comment">// bool, default false</span><br>
+&nbsp;&nbsp;aspectRatio: 1,&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="terminal-comment">// number, default NaN (freeform)</span><br>
+}
+                                </span>
+                            </div>
+
+                            <div class="terminal" style="margin-top: 0.5rem;">
+                                <div class="terminal-header">
+                                    <span class="dot red"></span><span class="dot yellow"></span><span class="dot green"></span>
+                                </div>
+                                <span class="terminal-comment">// Methods</span><br>
+                                <span class="terminal-code" style="font-size: 0.8rem; line-height: 1.4;">
+onFileChange(event)&nbsp;&nbsp;<span class="terminal-comment">// Read file & show modal</span><br>
+saveCrop()&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="terminal-comment">// Apply, dispatch event, close</span><br>
+cancelCrop()&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="terminal-comment">// Discard, close, clear input</span><br>
+clearInput()&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="terminal-comment">// Reset file input value</span>
+                                </span>
+                            </div>
+
+                            <div class="terminal" style="margin-top: 0.5rem;">
+                                <div class="terminal-header">
+                                    <span class="dot red"></span><span class="dot yellow"></span><span class="dot green"></span>
+                                </div>
+                                <span class="terminal-comment">// Events</span><br>
+                                <span class="terminal-code" style="font-size: 0.8rem; line-height: 1.4;">
+@image-cropped="handler"<br>
+<span class="terminal-comment">// $event.detail = { file: File, dataUrl: string }</span>
+                                </span>
+                            </div>
+                        </div>
+
+                        <div>
+                            <h3 style="font-size: 1.1rem; margin-bottom: 0.75rem; color: var(--color-cyan);">Livewire Component</h3>
+                            <p style="font-size: 0.9rem; margin-bottom: 1rem;">Listen for the cropped file and save to Spatie Media Library:</p>
+
+                            <div class="terminal" style="margin-top: 0.5rem;">
+                                <div class="terminal-header">
+                                    <span class="dot red"></span><span class="dot yellow"></span><span class="dot green"></span>
+                                </div>
+                                <span class="terminal-comment">// app/Livewire/Test.php</span><br>
+                                <span class="terminal-code" style="font-size: 0.8rem; line-height: 1.4;">
+class Test extends Component<br>
+{<br>
+&nbsp;&nbsp;&nbsp;&nbsp;use WithFileUploads;<br>
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;public ?TemporaryUploadedFile $photo = null;<br>
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;public function save(): void<br>
+&nbsp;&nbsp;&nbsp;&nbsp;{<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;$this->validate([<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'photo' => ['required', 'image', 'max:5120'],<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;]);<br>
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;$this->user->addMedia($this->photo->getRealPath())<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;->toMediaCollection('avatars');<br>
+&nbsp;&nbsp;&nbsp;&nbsp;}<br>
+}
+                                </span>
+                            </div>
+                        </div>
+
+
+                    </div>
+
+                    <p style="margin-top: 1.5rem; font-size: 0.9rem;">
+                        Visit <a href="/photo" style="color: var(--color-cyan);">/photo</a> on your local server to see the full cropping + upload workflow in action. The crop modal is a reusable Blade component — use <code>&lt;x-cropping-modal /&gt;</code> anywhere with customizable <code>title</code>, <code>cancelText</code>, and <code>applyText</code> props.
+                    </p>
+                </div>
+            </div>
+
+            <!-- Opcodes Log Viewer Integration -->
+            <div class="card col-12">
+                <div class="card-content">
+                    <h2 class="card-title">
+                        <span class="card-icon">🪵</span> Opcodes Log Viewer Integration
+                    </h2>
+                    <p>Opcodes Log Viewer provides a comprehensive, interactive administrative interface for inspecting application log files in real-time. Access is secured natively at the service level and dynamic in Filament sidebars.</p>
+                    
+                    <div style="display: flex; gap: 1rem; align-items: center; margin-bottom: 1.5rem; flex-wrap: wrap;">
+                        <span class="badge primary">Restricted to Super Admin</span>
+                        <span class="badge">Spatie Permissions Integration</span>
+                        <span class="badge">Sidebar Link: System > Log Viewer</span>
+                    </div>
+
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 2rem; margin-top: 1.5rem;">
+                        <div>
+                            <h3 style="font-size: 1.1rem; margin-bottom: 0.75rem; color: var(--color-cyan);">1. Route Authorization</h3>
+                            <p style="font-size: 0.9rem; margin-bottom: 1rem;">Authorized exclusively for the <code>super_admin</code> role inside the <code>AppServiceProvider</code> class:</p>
+                            
+                            <div class="terminal" style="margin-top: 0.5rem;">
+                                <div class="terminal-header">
+                                    <span class="dot red"></span><span class="dot yellow"></span><span class="dot green"></span>
+                                </div>
+                                <span class="terminal-comment">// app/Providers/AppServiceProvider.php</span><br>
+                                <span class="terminal-code" style="font-size: 0.8rem; line-height: 1.4;">
+private function configureLogViewer(): void {<br>
+&nbsp;&nbsp;&nbsp;&nbsp;LogViewer::auth(function (Request $request): bool {<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;return $request->user()?->hasRole('super_admin') ?? false;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;});<br>
+}
+                                </span>
+                            </div>
+                        </div>
+
+                        <div>
+                            <h3 style="font-size: 1.1rem; margin-bottom: 0.75rem; color: var(--color-cyan);">2. Filament Sidebar Permission</h3>
+                            <p style="font-size: 0.9rem; margin-bottom: 1rem;">Visible in Filament via the <code>view_log_viewer</code> custom permission inside the admin panel provider:</p>
+                            
+                            <div class="terminal" style="margin-top: 0.5rem;">
+                                <div class="terminal-header">
+                                    <span class="dot red"></span><span class="dot yellow"></span><span class="dot green"></span>
+                                </div>
+                                <span class="terminal-comment">// app/Providers/Filament/AdminPanelProvider.php</span><br>
+                                <span class="terminal-code" style="font-size: 0.8rem; line-height: 1.4;">
+NavigationItem::make('Log Viewer')<br>
+&nbsp;&nbsp;&nbsp;&nbsp;->url(fn (): string => url('log-viewer'))<br>
+&nbsp;&nbsp;&nbsp;&nbsp;->icon('heroicon-o-document-text')<br>
+&nbsp;&nbsp;&nbsp;&nbsp;->group('System')<br>
+&nbsp;&nbsp;&nbsp;&nbsp;->visible(fn (): bool => auth()->user()?->can('view_log_viewer') ?? false)
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Laravel Socialite OAuth Integration -->
+            <div class="card col-12">
+                <div class="card-content">
+                    <h2 class="card-title">
+                        <span class="card-icon">🌐</span> Laravel Socialite OAuth Integration
+                    </h2>
+                    <p>The starter kit is fully integrated with Laravel Socialite to enable passwordless OAuth logins. The system dynamically auto-detects active providers via the <code>SocialiteProvider</code> enum and renders a styled list of options using a premium Livewire component.</p>
+                    
+                    <div style="display: flex; gap: 1rem; align-items: center; margin-bottom: 1.5rem; flex-wrap: wrap;">
+                        <span class="badge primary">Dynamic Auto-Detection</span>
+                        <span class="badge">Passwordless Login Ready</span>
+                        <span class="badge">Component: <code>&lt;livewire:socialite /&gt;</code></span>
+                    </div>
+
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 2rem; margin-top: 1.5rem;">
+                        <div>
+                            <h3 style="font-size: 1.1rem; margin-bottom: 0.75rem; color: var(--color-cyan);">1. Add Credentials & Config</h3>
+                            <p style="font-size: 0.9rem; margin-bottom: 1rem;">Fill in credentials inside your <code>.env</code> file, then uncomment the matching array inside <code>config/services.php</code>:</p>
+                            
+                            <div class="terminal" style="margin-top: 0.5rem;">
+                                <div class="terminal-header">
+                                    <span class="dot red"></span><span class="dot yellow"></span><span class="dot green"></span>
+                                </div>
+                                <span class="terminal-comment">// config/services.php</span><br>
+                                <span class="terminal-code" style="font-size: 0.8rem; line-height: 1.4;">
+'github' => [<br>
+&nbsp;&nbsp;&nbsp;&nbsp;'client_id' => env('GITHUB_CLIENT_ID'),<br>
+&nbsp;&nbsp;&nbsp;&nbsp;'client_secret' => env('GITHUB_CLIENT_SECRET'),<br>
+&nbsp;&nbsp;&nbsp;&nbsp;'redirect' => '/auth/github/callback',<br>
+],
+                                </span>
+                            </div>
+                        </div>
+
+                        <div>
+                            <h3 style="font-size: 1.1rem; margin-bottom: 0.75rem; color: var(--color-cyan);">2. Drop Into Any Blade View</h3>
+                            <p style="font-size: 0.9rem; margin-bottom: 1rem;">Use the Livewire component anywhere on your login/register pages with options to customize columns, size, and labels:</p>
+                            
+                            <div class="terminal" style="margin-top: 0.5rem;">
+                                <div class="terminal-header">
+                                    <span class="dot red"></span><span class="dot yellow"></span><span class="dot green"></span>
+                                </div>
+                                <span class="terminal-comment">// resources/views/auth/login.blade.php</span><br>
+                                <span class="terminal-code" style="font-size: 0.8rem; line-height: 1.4;">
+&lt;livewire:socialite <br>
+&nbsp;&nbsp;&nbsp;&nbsp;heading="Or continue with"<br>
+&nbsp;&nbsp;&nbsp;&nbsp;:columns="2"<br>
+&nbsp;&nbsp;&nbsp;&nbsp;size="md"<br>
+&nbsp;&nbsp;&nbsp;&nbsp;:showLabels="true" <br>
+/&gt;
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Multilingual Translation System Integration -->
+            <div class="card col-12">
+                <div class="card-content">
+                    <h2 class="card-title">
+                        <span class="card-icon">🌍</span> Multilingual Translation & Localization System
+                    </h2>
+                    <p>The starter kit features a pre-configured, end-to-end multilingual and geo-location translation architecture. Combining Spatie's <code>laravel-translatable</code> with local Geo-IP services, administrators can manage content across multiple languages in the Filament Panel, while visitors are automatically served pages in their native tongue based on their geolocation or browser preference.</p>
+                    
+                    <div style="display: flex; gap: 1rem; align-items: center; margin-bottom: 1.5rem; flex-wrap: wrap;">
+                        <span class="badge primary">Multi-Language Tabs</span>
+                        <span class="badge primary">Geo-IP Detection</span>
+                        <span class="badge">Locale-Scoped Search</span>
+                        <span class="badge">Settings-Driven Locales</span>
+                        <span class="badge">Manual Switch Overrides</span>
+                    </div>
+
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 2rem; margin-top: 1.5rem;">
+                        <div>
+                            <h3 style="font-size: 1.1rem; margin-bottom: 0.75rem; color: var(--color-cyan);">1. Define Translatable Models</h3>
+                            <p style="font-size: 0.9rem; margin-bottom: 1rem;">Implement Spatie's <code>HasTranslations</code> trait on your Eloquent model and list the translatable columns in the <code>$translatable</code> property:</p>
+                            
+                            <div class="terminal" style="margin-top: 0.5rem;">
+                                <div class="terminal-header">
+                                    <span class="dot red"></span><span class="dot yellow"></span><span class="dot green"></span>
+                                </div>
+                                <span class="terminal-comment">// app/Models/Post.php</span><br>
+                                <span class="terminal-code" style="font-size: 0.8rem; line-height: 1.4;">
+use Illuminate\Database\Eloquent\Model;<br>
+use Spatie\Translatable\HasTranslations;<br><br>
+class Post extends Model {<br>
+&nbsp;&nbsp;&nbsp;&nbsp;use HasTranslations;<br><br>
+&nbsp;&nbsp;&nbsp;&nbsp;protected $fillable = ['title', 'content'];<br>
+&nbsp;&nbsp;&nbsp;&nbsp;public array $translatable = ['title', 'content'];<br>
+}
+                                </span>
+                            </div>
+                        </div>
+
+                        <div>
+                            <h3 style="font-size: 1.1rem; margin-bottom: 0.75rem; color: var(--color-cyan);">2. Build Tabbed Forms & Search</h3>
+                            <p style="font-size: 0.9rem; margin-bottom: 1rem;">Wrap your input schema using the custom <code>Translatable</code> helper. It generates beautiful, localized tabs based on active locales:</p>
+                            
+                            <div class="terminal" style="margin-top: 0.5rem;">
+                                <div class="terminal-header">
+                                    <span class="dot red"></span><span class="dot yellow"></span><span class="dot green"></span>
+                                </div>
+                                <span class="terminal-comment">// app/Filament/Resources/Posts/Schemas/PostForm.php</span><br>
+                                <span class="terminal-code" style="font-size: 0.8rem; line-height: 1.4;">
+use App\Filament\Forms\Components\Translatable;<br>
+use Filament\Forms\Components\TextInput;<br><br>
+Translatable::make(function (string $locale): array {<br>
+&nbsp;&nbsp;&nbsp;&nbsp;return [<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TextInput::make("title.{$locale}")<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;->required(),<br>
+&nbsp;&nbsp;&nbsp;&nbsp;];<br>
+})
+                                </span>
+                            </div>
+                        </div>
+
+                        <div>
+                            <h3 style="font-size: 1.1rem; margin-bottom: 0.75rem; color: var(--color-cyan);">3. Geo-IP & Browser Locale Detection</h3>
+                            <p style="font-size: 0.9rem; margin-bottom: 1rem;">The global <code>SetLocaleMiddleware</code> automatically intercepts web requests, queries the user's IP address, and maps country codes to active languages:</p>
+                            
+                            <div class="terminal" style="margin-top: 0.5rem;">
+                                <div class="terminal-header">
+                                    <span class="dot red"></span><span class="dot yellow"></span><span class="dot green"></span>
+                                </div>
+                                <span class="terminal-comment">// app/Http/Middleware/SetLocaleMiddleware.php</span><br>
+                                <span class="terminal-code" style="font-size: 0.8rem; line-height: 1.4;">
+// 1. Checks session for active locale override.<br>
+// 2. Uses laravelGeoGenius() to detect country:<br>
+$countryCode = laravelGeoGenius()->geo()<br>
+&nbsp;&nbsp;&nbsp;&nbsp;->getCountryCode(); <span class="terminal-comment">// e.g., &#39;BD&#39;</span><br><br>
+// 3. Fallback: Browser headers or config default.<br>
+$locale = $this->countryToLocaleMap[$countryCode]<br>
+&nbsp;&nbsp;&nbsp;&nbsp;?? $request->getPreferredLanguage();
+                                </span>
+                            </div>
+                        </div>
+
+                        <div>
+                            <h3 style="font-size: 1.1rem; margin-bottom: 0.75rem; color: var(--color-cyan);">4. Dynamic Admin Settings</h3>
+                            <p style="font-size: 0.9rem; margin-bottom: 1rem;">Locales are entirely dynamic. Manage supported languages via <strong>System > Settings > Translatable Locales</strong> in the Filament Sidebar:</p>
+                            
+                            <div class="terminal" style="margin-top: 0.5rem;">
+                                <div class="terminal-header">
+                                    <span class="dot red"></span><span class="dot yellow"></span><span class="dot green"></span>
+                                </div>
+                                <span class="terminal-comment">// Updates .env key in the dashboard</span><br>
+                                <span class="terminal-code" style="font-size: 0.8rem; line-height: 1.4;">
+TRANSLATABLE_LOCALES=en,bn,es,fr<br><br>
+<span class="terminal-comment">// Handled via AppServiceProvider & SettingsPage</span><br>
+config('app.translatable_locales');<br><br>
+<span class="terminal-comment">// Renders locale tabs instantly in forms!</span>
+                                </span>
+                            </div>
+                        </div>
+
+                        <div style="grid-column: span 2;">
+                            <h3 style="font-size: 1.1rem; margin-bottom: 0.75rem; color: var(--color-cyan);">5. Implementing a Manual Language Selector</h3>
+                            <p style="font-size: 0.9rem; margin-bottom: 1rem;">Provide manual language selection anywhere on the frontend. Define a session-setting route and display selector links:</p>
+                            
+                            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+                                <div class="terminal" style="margin-top: 0.5rem;">
+                                    <div class="terminal-header">
+                                        <span class="dot red"></span><span class="dot yellow"></span><span class="dot green"></span>
+                                    </div>
+                                    <span class="terminal-comment">// routes/web.php</span><br>
+                                    <span class="terminal-code" style="font-size: 0.75rem; line-height: 1.3;">
+Route::get('/language/{locale}', function ($locale) {<br>
+&nbsp;&nbsp;&nbsp;&nbsp;if (in_array($locale, config('app.translatable_locales', ['en']))) {<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;session(['locale' => $locale]);<br>
+&nbsp;&nbsp;&nbsp;&nbsp;}<br>
+&nbsp;&nbsp;&nbsp;&nbsp;return back();<br>
+})-&gt;name('language.switch');
+                                    </span>
+                                </div>
+
+                                <div class="terminal" style="margin-top: 0.5rem;">
+                                    <div class="terminal-header">
+                                        <span class="dot red"></span><span class="dot yellow"></span><span class="dot green"></span>
+                                    </div>
+                                    <span class="terminal-comment">// resources/views/welcome.blade.php</span><br>
+                                    <span class="terminal-code" style="font-size: 0.75rem; line-height: 1.3;">
+&lt;div class="flex gap-4"&gt;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&lt;a href="{{ route(&#39;language.switch&#39;, &#39;en&#39;) }}"&gt;English&lt;/a&gt;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&lt;a href="{{ route(&#39;language.switch&#39;, &#39;bn&#39;) }}"&gt;Bengali&lt;/a&gt;<br>
+&lt;/div&gt;<br><br>
+<span class="terminal-comment">// The SetLocaleMiddleware respects this session override<br>// across all requests automatically!</span>
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+
+
+            <!-- Search Engine Optimization (SEO) -->
+            <div class="card col-12">
+                <div class="card-content">
+                    <h2 class="card-title">
+                        <span class="card-icon">🔍</span> Search Engine Optimization (SEO)
+                    </h2>
+                    <p>The starter kit integrates the premium <code>filament-seo-pro</code> package to provide real-time search engine optimization, keywords optimization, readability analysis, and live previews of search results directly in Filament resource panels. The application's main layout file (<code>resources/views/layouts/app.blade.php</code>) is already pre-configured to render these SEO meta codes dynamically.</p>
+
+                    <div style="display: flex; gap: 1rem; align-items: center; margin-bottom: 1.5rem; flex-wrap: wrap;">
+                        <span class="badge primary">Polymorphic HasSeo Trait</span>
+                        <span class="badge primary">Real-Time Readability & Score</span>
+                        <span class="badge">Google & Social Previews</span>
+                        <span class="badge">Automatic Head Metadata</span>
+                    </div>
+
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 2rem; margin-top: 1.5rem;">
+                        <div>
+                            <h3 style="font-size: 1.1rem; margin-bottom: 0.75rem; color: var(--color-cyan);">1. Add HasSeo Trait to Models</h3>
+                            <p style="font-size: 0.9rem; margin-bottom: 1rem;">Attach the trait to any Eloquent model to connect it with polymorphic SEO metadata:</p>
+
+                            <div class="terminal" style="margin-top: 0.5rem;">
+                                <div class="terminal-header">
+                                    <span class="dot red"></span><span class="dot yellow"></span><span class="dot green"></span>
+                                </div>
+                                <span class="terminal-comment">// app/Models/Post.php</span><br>
+                                <span class="terminal-code" style="font-size: 0.8rem; line-height: 1.4;">
+use Nomanur\FilamentSeoPro\Traits\HasSeo;<br><br>
+class Post extends Model {<br>
+&nbsp;&nbsp;&nbsp;&nbsp;use HasSeo;<br>
+}
+                                </span>
+                            </div>
+                        </div>
+
+                        <div>
+                            <h3 style="font-size: 1.1rem; margin-bottom: 0.75rem; color: var(--color-cyan);">2. Register Filament Component</h3>
+                            <p style="font-size: 0.9rem; margin-bottom: 1rem;">Add the prebuilt SEO tab component to resource form schemas to unlock the analysis editor:</p>
+
+                            <div class="terminal" style="margin-top: 0.5rem;">
+                                <div class="terminal-header">
+                                    <span class="dot red"></span><span class="dot yellow"></span><span class="dot green"></span>
+                                </div>
+                                <span class="terminal-comment">// app/Filament/Resources/Posts/Schemas/PostForm.php</span><br>
+                                <span class="terminal-code" style="font-size: 0.8rem; line-height: 1.4;">
+use Nomanur\FilamentSeoPro\Forms\SeoTab;<br><br>
+public static function configure(Form $form): Form {<br>
+&nbsp;&nbsp;&nbsp;&nbsp;return $form-&gt;schema([<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Tabs::make(&#39;Heading&#39;)-&gt;tabs([<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;SeoTab::make(),<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;]),<br>
+&nbsp;&nbsp;&nbsp;&nbsp;]);<br>
+}
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div style="margin-top: 1.5rem;">
+                        <h3 style="font-size: 1.1rem; margin-bottom: 0.5rem; color: var(--color-cyan);">3. Automatic Layout Rendering</h3>
+                        <p style="font-size: 0.9rem; margin-bottom: 1rem;">The global HTML <code>&lt;head&gt;</code> renders SEO tags, Open Graph properties, Twitter cards, and Schema.org JSON-LD dynamically with clean fallbacks for static pages:</p>
+
+                        <div class="terminal" style="margin-top: 0.5rem; width: 100%;">
+                            <div class="terminal-header">
+                                <span class="dot red"></span><span class="dot yellow"></span><span class="dot green"></span>
+                            </div>
+                            <span class="terminal-comment">// resources/views/layouts/app.blade.php</span><br>
+                            <span class="terminal-code" style="font-size: 0.8rem; line-height: 1.4;">
+&lt;!-- Basic Meta Tags --&gt;<br>
+&lt;title&gt;{{ $seoModel?->seo?->title ?? $seoModel?->title ?? $title ?? config(&#39;app.name&#39;, &#39;Laravel Starter&#39;) }}&lt;/title&gt;<br>
+&lt;meta name="description" content="{{ $seoModel?->seo?->description ?? ($seoModel?->content ? Str::limit(strip_tags($seoModel-&gt;content), 150) : &#39;&#39;) }}"&gt;<br>
+&lt;meta name="robots" content="{{ $seoModel?->seo?->robots ?? &#39;index, follow&#39; }}"&gt;<br>
+&lt;link rel="canonical" href="{{ $seoModel?->seo?->canonical_url ?? request()-&gt;url() }}"&gt;
+                            </span>
+                        </div>
+                    </div>
+
+                    <div style="margin-top: 2rem; display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 2rem;">
+                        <div>
+                            <h3 style="font-size: 1.1rem; margin-bottom: 0.5rem; color: var(--color-cyan);">4. Automated Sitemap Generation</h3>
+                            <p style="font-size: 0.9rem; margin-bottom: 1rem;">Generate a structured XML sitemap using the integrated <code>spatie/laravel-sitemap</code> console command, scheduled daily:</p>
+
+                            <div class="terminal" style="margin-top: 0.5rem;">
+                                <div class="terminal-header">
+                                    <span class="dot red"></span><span class="dot yellow"></span><span class="dot green"></span>
+                                </div>
+                                <span class="terminal-comment"># Generate the sitemap manually</span><br>
+                                <span class="terminal-code">php artisan sitemap:generate</span><br><br>
+                                <span class="terminal-comment">// routes/console.php (Scheduled daily updates)</span><br>
+                                <span class="terminal-code" style="font-size: 0.75rem; line-height: 1.3;">
+Schedule::command(&#39;sitemap:generate&#39;)-&gt;daily();
+                                </span>
+                            </div>
+                        </div>
+
+                        <div>
+                            <h3 style="font-size: 1.1rem; margin-bottom: 0.5rem; color: var(--color-cyan);">5. Crawling Controls (robots.txt)</h3>
+                            <p style="font-size: 0.9rem; margin-bottom: 1rem;">Managed via <code>public/robots.txt</code>, directing search engines away from admin paths while indexing layouts:</p>
+
+                            <div class="terminal" style="margin-top: 0.5rem;">
+                                <div class="terminal-header">
+                                    <span class="dot red"></span><span class="dot yellow"></span><span class="dot green"></span>
+                                </div>
+                                <span class="terminal-comment"># public/robots.txt content</span><br>
+                                <span class="terminal-code" style="font-size: 0.8rem; line-height: 1.4;">
+User-agent: *<br>
+Disallow: /admin/<br>
+Disallow: /log-viewer/<br><br>
+Sitemap: http://starterkit.test/sitemap.xml
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <p style="margin-top: 1.5rem; font-size: 0.9rem;">
+                        See the official package repository and documentation at <a href="https://nomanur.github.io/filament-seo-pro/" target="_blank" style="color: var(--color-cyan);">filament-seo-pro Documentation</a> for advanced usage, custom checks, and configurations.
+                    </p>
+                </div>
+            </div>
+
+            <!-- Export Import Trait -->
+            <div class="card col-12">
+                <div class="card-content">
+                    <h2 class="card-title">
+                        <span class="card-icon">📥</span> CSV/Excel Export & Import
+                    </h2>
+                    <p>The starter kit ships with a reusable <code>ExportImport</code> trait that adds export and import buttons to any Filament resource table. It supports <strong>CSV</strong> and <strong>Excel (XLSX)</strong> formats with styled output and column selection—no additional setup required for CSV.</p>
+
+                    <div style="display: flex; gap: 1rem; align-items: center; margin-bottom: 1.5rem; flex-wrap: wrap;">
+                        <span class="badge primary">Zero-Dependency CSV</span>
+                        <span class="badge">Column Selection Modal</span>
+                        <span class="badge">Styled XLSX Headers</span>
+                        <span class="badge">Auto-Sized Columns</span>
+                    </div>
+
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 2rem; margin-top: 1.5rem;">
+                        <div>
+                            <h3 style="font-size: 1.1rem; margin-bottom: 0.75rem; color: var(--color-cyan);">1. Add Trait to Resource</h3>
+                            <p style="font-size: 0.9rem; margin-bottom: 1rem;">Use the trait in any Filament resource and override columns/query if needed:</p>
+
+                            <div class="terminal" style="margin-top: 0.5rem;">
+                                <div class="terminal-header">
+                                    <span class="dot red"></span><span class="dot yellow"></span><span class="dot green"></span>
+                                </div>
+                                <span class="terminal-comment">// app/Filament/Resources/Posts/PostResource.php</span><br>
+                                <span class="terminal-code" style="font-size: 0.8rem; line-height: 1.4;">
+class PostResource extends Resource {<br>
+&nbsp;&nbsp;&nbsp;&nbsp;use ExportImport;<br><br>
+&nbsp;&nbsp;&nbsp;&nbsp;public static function getExportColumns(): array {<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;return [<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'id' => 'ID',<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'title' => 'Title',<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'content' => 'Content',<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;];<br>
+&nbsp;&nbsp;&nbsp;&nbsp;}<br>
+}
+                                </span>
+                            </div>
+                        </div>
+
+                        <div>
+                            <h3 style="font-size: 1.1rem; margin-bottom: 0.75rem; color: var(--color-cyan);">2. Wire Actions to Table</h3>
+                            <p style="font-size: 0.9rem; margin-bottom: 1rem;">Add export and import action buttons to the table toolbar in your table schema:</p>
+
+                            <div class="terminal" style="margin-top: 0.5rem;">
+                                <div class="terminal-header">
+                                    <span class="dot red"></span><span class="dot yellow"></span><span class="dot green"></span>
+                                </div>
+                                <span class="terminal-comment">// app/Filament/Resources/Posts/Tables/PostsTable.php</span><br>
+                                <span class="terminal-code" style="font-size: 0.8rem; line-height: 1.4;">
+public static function configure(Table $table): Table {<br>
+&nbsp;&nbsp;&nbsp;&nbsp;return $table<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;->toolbarActions([<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;PostResource::getExportAction(),<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;PostResource::getImportAction(),<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;]);<br>
+}
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <p style="margin-top: 1.5rem; font-size: 0.9rem;">
+                        See <a href="EXPORT_IMPORT_TRAIT.md" style="color: var(--color-cyan);">EXPORT_IMPORT_TRAIT.md</a> for full documentation, including custom query filters, import file format specs, and handling translatable columns.
+                    </p>
+                </div>
+            </div>
+
+            <!-- Two-Factor Authentication (2FA) Integration -->
+            <div class="card col-12">
+                <div class="card-content">
+                    <h2 class="card-title">
+                        <span class="card-icon">🔐</span> Two-Factor Authentication (2FA)
+                    </h2>
+                    <p>The starter kit features a secure, industry-standard <strong>Time-based One-time Password (TOTP) Two-Factor Authentication</strong> system for admin panel protection. Unverified users with 2FA enabled are locked to the challenge page while keeping their Laravel sessions intact.</p>
+                    
+                    <div style="display: flex; gap: 1rem; align-items: center; margin-bottom: 1.5rem; flex-wrap: wrap;">
+                        <span class="badge primary">Secure SVG QR Code</span>
+                        <span class="badge primary">Encrypted Recovery Codes</span>
+                        <span class="badge">TwoFactorMiddleware</span>
+                        <span class="badge">Pest Test Covered</span>
+                    </div>
+
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 2rem; margin-top: 1.5rem;">
+                        <div>
+                            <h3 style="font-size: 1.1rem; margin-bottom: 0.75rem; color: var(--color-cyan);">1. Toggle 2FA in Users Resource</h3>
+                            <p style="font-size: 0.9rem; margin-bottom: 1rem;">Admin users can enable/disable 2FA from the edit user interface. Opening the modal generates a persistent secret and renders a scanable SVG QR code inline:</p>
+                            
+                            <div class="terminal" style="margin-top: 0.5rem;">
+                                <div class="terminal-header">
+                                    <span class="dot red"></span><span class="dot yellow"></span><span class="dot green"></span>
+                                </div>
+                                <span class="terminal-comment">// app/Filament/Resources/Users/Pages/EditUser.php</span><br>
+                                <span class="terminal-code" style="font-size: 0.8rem; line-height: 1.4;">
+Hidden::make('two_factor_secret')<br>
+&nbsp;&nbsp;&nbsp;&nbsp;->default(fn () => (new Google2FA)->generateSecretKey());<br><br>
+Placeholder::make('qr_code')<br>
+&nbsp;&nbsp;&nbsp;&nbsp;->content(fn ($get) => new HtmlString(...));
+                                </span>
+                            </div>
+                        </div>
+
+                        <div>
+                            <h3 style="font-size: 1.1rem; margin-bottom: 0.75rem; color: var(--color-cyan);">2. Protection Middleware</h3>
+                            <p style="font-size: 0.9rem; margin-bottom: 1rem;">The custom <code>TwoFactorMiddleware</code> intercepts all panel requests for users who have 2FA enabled, redirecting them to verification if not verified in their session:</p>
+                            
+                            <div class="terminal" style="margin-top: 0.5rem;">
+                                <div class="terminal-header">
+                                    <span class="dot red"></span><span class="dot yellow"></span><span class="dot green"></span>
+                                </div>
+                                <span class="terminal-comment">// app/Http/Middleware/TwoFactorMiddleware.php</span><br>
+                                <span class="terminal-code" style="font-size: 0.8rem; line-height: 1.4;">
+if ($user->hasTwoFactorEnabled() && <br>
+&nbsp;&nbsp;&nbsp;&nbsp;! session()->has('two_factor_verified_at')) {<br>
+&nbsp;&nbsp;&nbsp;&nbsp;return redirect()->route('filament.admin.pages.two-factor-challenge');<br>
+}
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Profile Validation Rules Trait -->
+            <div class="card col-12">
+                <div class="card-content">
+                    <h2 class="card-title">
+                        <span class="card-icon">📝</span> Profile Validation Rules Trait
+                    </h2>
+                    <p>The <code>ProfileValidationRules</code> trait centralizes common email and password validation rules across registration, edit profile, and password reset interfaces to ensure consistent architecture and security policies.</p>
+                    
+                    <div style="display: flex; gap: 1rem; align-items: center; margin-bottom: 1.5rem; flex-wrap: wrap;">
+                        <span class="badge primary">Centralized Validation</span>
+                        <span class="badge">Dynamic ID Ignoring</span>
+                        <span class="badge">Saves Boilerplate</span>
+                    </div>
+
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 2rem; margin-top: 1.5rem;">
+                        <div>
+                            <h3 style="font-size: 1.1rem; margin-bottom: 0.75rem; color: var(--color-cyan);">1. Define Trait</h3>
+                            <p style="font-size: 0.9rem; margin-bottom: 1rem;">Centralizes email and password rules (e.g. required, length, unique check, confirmation matching):</p>
+                            
+                            <div class="terminal" style="margin-top: 0.5rem;">
+                                <div class="terminal-header">
+                                    <span class="dot red"></span><span class="dot yellow"></span><span class="dot green"></span>
+                                </div>
+                                <span class="terminal-comment">// app/Traits/ProfileValidationRules.php</span><br>
+                                <span class="terminal-code" style="font-size: 0.8rem; line-height: 1.4;">
+trait ProfileValidationRules {<br>
+&nbsp;&nbsp;&nbsp;&nbsp;protected function emailRules(?int $userId = null): array;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;protected function passwordRules(): array;<br>
+}
+                                </span>
+                            </div>
+                        </div>
+
+                        <div>
+                            <h3 style="font-size: 1.1rem; margin-bottom: 0.75rem; color: var(--color-cyan);">2. Usage Example</h3>
+                            <p style="font-size: 0.9rem; margin-bottom: 1rem;">Import and use validation helper methods in form requests, controllers, or livewire components:</p>
+                            
+                            <div class="terminal" style="margin-top: 0.5rem;">
+                                <div class="terminal-header">
+                                    <span class="dot red"></span><span class="dot yellow"></span><span class="dot green"></span>
+                                </div>
+                                <span class="terminal-comment">// Any Controller or Component</span><br>
+                                <span class="terminal-code" style="font-size: 0.8rem; line-height: 1.4;">
+use App\Traits\ProfileValidationRules;<br>
+class RegisterController extends Controller {<br>
+&nbsp;&nbsp;&nbsp;&nbsp;use ProfileValidationRules;<br><br>
+&nbsp;&nbsp;&nbsp;&nbsp;public function save() {<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;$this->validate(['email' => $this->emailRules()]);<br>
+&nbsp;&nbsp;&nbsp;&nbsp;}<br>
+}
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Core Application Configurations -->
+
+            <div class="card col-12">
+                <div class="card-content">
+                    <h2 class="card-title">
+                        <span class="card-icon">⚙️</span> Core Application Configurations
+                    </h2>
+                    <p>The <code>AppServiceProvider</code> is meticulously tuned for developer productivity, data integrity, and production safety. We encapsulate these configurations into dedicated, descriptive methods (<code>configureModels</code>, <code>configureCommands</code>, <code>configureDates</code>) to ensure global application behavior is predictable, centralized, and easy to maintain.</p>
+
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 2rem; margin-top: 1.5rem;">
+                        <div>
+                            <ul>
+                                <li>
+                                    <span class="bullet"></span>
+                                    <div>
+                                        <strong>Strict Eloquent Models</strong>
+                                        <p style="margin: 0; font-size: 0.875rem;">Enforced via <code>Model::shouldBeStrict()</code>. This prevents lazy loading, accessing missing attributes, and silent failures, catching common bugs early in development.</p>
+                                    </div>
+                                </li>
+                                <li style="margin-top: 1rem;">
+                                    <span class="bullet"></span>
+                                    <div>
+                                        <strong>Unguarded Models</strong>
+                                        <p style="margin: 0; font-size: 0.875rem;">Models are unguarded to streamline data handling. We shift safety responsibility to the entry points like <strong>Form Requests</strong> and <strong>Filament Schemas</strong>.</p>
+                                    </div>
+                                </li>
+                                <li style="margin-top: 1rem;">
+                                    <span class="bullet"></span>
+                                    <div>
+                                        <strong>Super Admin Permissions</strong>
+                                        <p style="margin: 0; font-size: 0.875rem;">An implicit <code>Gate::before</code> check ensures that any user with the <code>super_admin</code> role bypasses all permission checks, simplifying admin access management.</p>
+                                    </div>
+                                </li>
+                            </ul>
+                        </div>
+                        <div>
+                            <ul>
+                                <li>
+                                    <span class="bullet"></span>
+                                    <div>
+                                        <strong>Production Protection</strong>
+                                        <p style="margin: 0; font-size: 0.875rem;">We use <code>DB::prohibitDestructiveCommands()</code> to lock down commands like <code>migrate:fresh</code> in production, adding a critical safety layer against data loss.</p>
+                                    </div>
+                                </li>
+                                <li style="margin-top: 1rem;">
+                                    <span class="bullet"></span>
+                                    <div>
+                                        <strong>Immutable Dates</strong>
+                                        <p style="margin: 0; font-size: 0.875rem;">By defaulting to <code>CarbonImmutable</code>, we eliminate entire classes of bugs where date objects are accidentally mutated during formatting or math.</p>
+                                    </div>
+                                </li>
+                                <li style="margin-top: 1rem;">
+                                    <span class="bullet"></span>
+                                    <div>
+                                        <strong>Architectural Clarity</strong>
+                                        <p style="margin: 0; font-size: 0.875rem;">Centralizing these defaults in <code>AppServiceProvider</code> ensures every developer on the team follows the same rigorous standards without manual overhead.</p>
+                                    </div>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- Footer -->
+        <footer>
+            <p>&copy; 2026 Nomanur Starter Kit. Open-sourced under the MIT license.</p>
+        </footer>
+
+    </div>
+
+    <!-- Full crop modal code hidden for copy button -->
+    <div id="full-crop-code" style="display: none;">&lt;div
+    x-data="imageCropper({ cropping: true, aspectRatio: 1 })"
+    @image-cropped.window="@this.upload('photo', $event.detail.file)"
+    wire:ignore
+&gt;
+    &lt;input type="file" x-ref="fileInput" @change="onFileChange" /&gt;
+    &lt;x-cropping-modal /&gt;
+&lt;/div&gt;
+
+&lt;!-- resources/views/components/cropping-modal.blade.php --&gt;
+@props([
+    'title' =&gt; 'Crop Your Profile Photo',
+    'cancelText' =&gt; 'Cancel',
+    'applyText' =&gt; 'Apply Crop'
+])
+
+&lt;template x-teleport="body"&gt;
+    &lt;div 
+        x-show="cropping &amp;&amp; imageUrl" 
+        x-transition:enter="transition ease-out duration-300"
+        x-transition:enter-start="opacity-0"
+        x-transition:enter-end="opacity-100"
+        x-transition:leave="transition ease-in duration-200"
+        x-transition:leave-start="opacity-100"
+        x-transition:leave-end="opacity-0"
+        class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/85 backdrop-blur-md"
+        style="display: none;"
+    &gt;
+        &lt;div 
+            x-show="cropping &amp;&amp; imageUrl"
+            x-transition:enter="transition ease-out duration-300"
+            x-transition:enter-start="opacity-0 scale-95 translate-y-4"
+            x-transition:enter-end="opacity-100 scale-100 translate-y-0"
+            x-transition:leave="transition ease-in duration-200"
+            x-transition:leave-start="opacity-100 scale-100 translate-y-0"
+            x-transition:leave-end="opacity-0 scale-95 translate-y-4"
+            class="bg-slate-900 border border-slate-800 rounded-2xl max-w-2xl w-full p-6 shadow-2xl flex flex-col max-h-[90vh]"
+        &gt;
+            &lt;div class="flex items-center justify-between mb-4 pb-3 border-b border-slate-800"&gt;
+                &lt;h3 class="text-lg font-bold text-white"&gt;{{ $title }}&lt;/h3&gt;
+                &lt;button @click="cancelCrop" type="button" class="text-slate-400 hover:text-white transition-colors cursor-pointer"&gt;
+                    &lt;svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"&gt;
+                        &lt;path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" /&gt;
+                    &lt;/svg&gt;
+                &lt;/button&gt;
+            &lt;/div&gt;
+            
+            &lt;div class="flex-1 overflow-hidden bg-slate-950 rounded-xl border border-slate-800 flex items-center justify-center p-4 min-h-[300px]"&gt;
+                &lt;img x-ref="cropperImage" :src="imageUrl" class="max-w-full max-h-[50vh] block"&gt;
+            &lt;/div&gt;
+            
+            &lt;div class="flex items-center justify-end gap-3 mt-6 pt-4 border-t border-slate-800"&gt;
+                &lt;button 
+                    @click="cancelCrop" 
+                    type="button" 
+                    class="px-4 py-2 text-sm font-medium text-slate-400 hover:text-white bg-slate-800 hover:bg-slate-700 rounded-xl border border-slate-700 transition-colors cursor-pointer"
+                &gt;
+                    {{ $cancelText }}
+                &lt;/button&gt;
+                &lt;button 
+                    @click="saveCrop" 
+                    type="button" 
+                    class="px-5 py-2 text-sm font-semibold text-white bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 rounded-xl transition-all shadow-lg shadow-indigo-600/20 cursor-pointer"
+                &gt;
+                    {{ $applyText }}
+                &lt;/button&gt;
+            &lt;/div&gt;
+        &lt;/div&gt;
+    &lt;/div&gt;
+&lt;/template&gt;</div>
+
+    <!-- Notification Toast -->
+    <div id="toast" class="toast">Copied to clipboard! 📋</div>
+
+    <script>
+        function copyText(text) {
+            navigator.clipboard.writeText(text).then(() => {
+                const toast = document.getElementById('toast');
+                toast.classList.add('show');
+
+                setTimeout(() => {
+                    toast.classList.remove('show');
+                }, 2000);
+            });
+        }
+
+        function copyCropCode() {
+            const el = document.getElementById('full-crop-code');
+            const html = el.innerHTML;
+            // Decode HTML entities back to raw HTML
+            const txt = document.createElement('textarea');
+            txt.innerHTML = html;
+            copyText(txt.value);
+        }
+    </script>
+</body>
+
+</html>
