@@ -494,8 +494,6 @@ PHP;
             $this->appendToEnv($key, '');
         }
 
-        $this->call('make:livewire', ['name' => 'Socialite', '--force' => $this->option('force')]);
-
         $routes = base_path('routes/web.php');
         $socialiteRoutes = <<<'PHP'
 use App\Http\Controllers\Auth\SocialiteController;
