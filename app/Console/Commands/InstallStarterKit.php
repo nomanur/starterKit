@@ -443,7 +443,7 @@ PHP;
     protected function installRbac(): void
     {
         spin(
-            callback: function () {
+            callback: function (): void {
                 $this->publishConfig('filament-shield-config');
                 $this->call('vendor:publish', [
                     '--tag' => 'filament-shield-config',
