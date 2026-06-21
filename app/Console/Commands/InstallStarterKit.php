@@ -557,11 +557,6 @@ PHP;
         $this->copyStub('EditPost.php', 'app/Filament/Resources/Posts/Pages/EditPost.php');
 
         $this->publishConfig('filament-seo-pro-config');
-
-        $this->call('make:migration', [
-            'name' => 'create_posts_table',
-            '--create' => 'posts',
-        ]);
     }
 
     protected function installQueueMonitor(): void
