@@ -76,6 +76,8 @@ class AdminPanelProvider extends PanelProvider
                 Authenticate::class,
                 TwoFactorMiddleware::class,
             ])
-            ->globalSearchKeyBindings(['command+k', 'ctrl+k']);
+            ->globalSearchKeyBindings(['command+k', 'ctrl+k'])
+            ->globalSearchFieldKeyBindingSuffix()
+            ->globalSearchDebounce('400ms');
     }
 }
