@@ -494,7 +494,15 @@ PHP;
             $this->appendToEnv($key, '');
         }
 
-        $routes = base_path('routes/web.php');
+        $routesPath = base_path('routes/web.php');
+        $existingContent = $this->filesystem->exists($routesPath)
+            ? $this->filesystem->get($routesPath)
+            : '';
+
+        if (Str::contains($existingContent, 'socialite.redirect')) {
+            return;
+        }
+
         $socialiteRoutes = <<<'PHP'
 use App\Http\Controllers\Auth\SocialiteController;
 use App\Enums\SocialiteProvider;
@@ -534,7 +542,15 @@ PHP;
 
         $this->publishConfig('media-library-config');
 
-        $routes = base_path('routes/web.php');
+        $routesPath = base_path('routes/web.php');
+        $existingContent = $this->filesystem->exists($routesPath)
+            ? $this->filesystem->get($routesPath)
+            : '';
+
+        if (Str::contains($existingContent, 'Test::class')) {
+            return;
+        }
+
         $mediaRoutes = <<<'PHP'
 use App\Livewire\Test;
 
