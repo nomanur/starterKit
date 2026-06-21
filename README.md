@@ -292,6 +292,10 @@ Open [services.php](file:///Users/nomanur/Herd/starterKit/config/services.php) a
 ---
 
 ### 🎨 Livewire Component Usage
+
+> [!IMPORTANT]
+> The `<livewire:socialite />` component automatically detects configured integrations. If you do not uncomment the provider configuration blocks in `config/services.php` and define their credentials in `.env`, the component will **not show** on the front page.
+
 To display a stunning, fully-styled list of all configured and activated social login buttons, simply drop the Livewire component into any Blade login view:
 
 ```blade

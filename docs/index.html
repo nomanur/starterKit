@@ -953,6 +953,10 @@ NavigationItem::make('Log Viewer')<br>
                     </h2>
                     <p>The starter kit is fully integrated with Laravel Socialite to enable passwordless OAuth logins. The system dynamically auto-detects active providers via the <code>SocialiteProvider</code> enum and renders a styled list of options using a premium Livewire component.</p>
                     
+                    <p style="background-color: rgba(245, 48, 3, 0.1); border-left: 4px solid #F53003; padding: 0.75rem 1rem; border-radius: 4px; margin: 1rem 0; font-size: 0.875rem; color: #f53003; line-height: 1.5;">
+                        <strong>⚠️ Important:</strong> The <code>&lt;livewire:socialite /&gt;</code> component automatically hides itself when no integrations are active. You <strong>must</strong> uncomment the provider blocks in <code>config/services.php</code> and set their credentials in <code>.env</code> for the buttons to appear in the UI.
+                    </p>
+                    
                     <div style="display: flex; gap: 1rem; align-items: center; margin-bottom: 1.5rem; flex-wrap: wrap;">
                         <span class="badge primary">Dynamic Auto-Detection</span>
                         <span class="badge">Passwordless Login Ready</span>
